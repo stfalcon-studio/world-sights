@@ -1,0 +1,14 @@
+# FtrrtfRollbarBundle
+ftrrtf_rollbar:
+    notifier:
+        server:
+            transport:
+                type: curl
+                access_token: "%rollbar_server_access_token%"
+        client:
+            access_token: "%rollbar_client_access_token%"
+            source_map_enabled: true
+            code_version: "some version string, such as a version number or git sha"
+            guess_uncaught_frames: true
+    environment:
+        environment: "%rollbar_environment%[%kernel.environment%]"

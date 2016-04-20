@@ -1,0 +1,10 @@
+fos_rest:
+    routing_loader:
+        default_format: json
+    param_fetcher_listener: true
+    body_listener: true
+    #disable_csrf_role: ROLE_USER
+    body_converter:
+        enabled: true
+    view:
+        view_response_listener: force
