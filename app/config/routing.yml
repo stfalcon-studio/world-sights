@@ -1,6 +1,7 @@
-app:
-    resource: "@AppBundle/Controller/"
-    type:     annotation
+app_api:
+    resource: "@AppBundle/Resources/config/routing.yml"
+    type:     rest
+    prefix:   /api
 
 admin_area:
     resource: "@SonataAdminBundle/Resources/config/routing/sonata_admin.xml"

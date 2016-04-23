@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Locality Entity
@@ -28,6 +29,8 @@ class Locality
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @JMS\Groups("sight")
      */
     private $id;
 
@@ -38,6 +41,8 @@ class Locality
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      *
      * @Assert\NotBlank()
+     *
+     * @JMS\Groups("sight")
      *
      * @Gedmo\Versioned
      */
@@ -72,6 +77,8 @@ class Locality
      * @Assert\NotBlank()
      * @Assert\Length(min="2", max="255")
      * @Assert\Type(type="string")
+     *
+     * @JMS\Groups("sight")
      *
      * @Gedmo\Versioned
      */

@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Sight Type Entity
@@ -28,6 +29,8 @@ class SightType
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @JMS\Groups("sight")
      */
     private $id;
 
@@ -46,6 +49,8 @@ class SightType
      * @Assert\NotBlank()
      * @Assert\Length(min="2", max="255")
      * @Assert\Type(type="string")
+     *
+     * @JMS\Groups("sight")
      *
      * @Gedmo\Versioned
      */

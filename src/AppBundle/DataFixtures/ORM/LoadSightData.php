@@ -70,7 +70,7 @@ Heredoc
             ->setWebsite('http://muzeum.in.ua/')
             ->setLatitude(48.673510)
             ->setLongitude(26.563411)
-            ->setSlug('Кам\'янець-подільська фортеця')
+            ->setSlug('kamianets-podіlska-fortess')
             ->setSightType($sightTypeCastle)
             ->setLocality($localityKamyanets);
         $this->setReference('sight-Kamianets-Podilskyi-castle', $sight1);
@@ -93,7 +93,7 @@ Heredoc
             ->setWebsite('http://www.hottur.org.ua/')
             ->setLatitude(48.522000)
             ->setLongitude(26.498382)
-            ->setSlug('Хотинська фортеця')
+            ->setSlug('hotinska-fortress')
             ->setSightType($sightTypeCastle)
             ->setLocality($localityHotin);
         $this->setReference('sight-Hotin', $sight2);
@@ -117,7 +117,7 @@ Heredoc
             ->setWebsite('http://hortica.zp.ua/')
             ->setLatitude(47.831332)
             ->setLongitude(35.087736)
-            ->setSlug('Хотин')
+            ->setSlug('hortitsa')
             ->setSightType($sightTypeIsland)
             ->setLocality($localityZaporizhia);
         $this->setReference('sight-Hortitsa', $sight3);
@@ -139,7 +139,7 @@ Heredoc
             ->setWebsite('http://www.nlb.by/')
             ->setLatitude(53.931502)
             ->setLongitude(27.646043)
-            ->setSlug('Національна бібліотека Білорусі')
+            ->setSlug('national-library-minsk')
             ->setSightType($sightTypeLibrary)
             ->setLocality($localityMinsk);
         $this->setReference('sight-Minsk-library', $sight4);
@@ -165,7 +165,7 @@ Heredoc
             ->setWebsite('https://www.zamek-krolewski.pl/')
             ->setLatitude(52.247969)
             ->setLongitude(21.015481)
-            ->setSlug('Королівський замок у Варшаві')
+            ->setSlug('warszawa-castle')
             ->setSightType($sightTypeCastle)
             ->setLocality($localityWarszawa);
         $this->setReference('sight-Warszawa-castle', $sight5);
@@ -184,7 +184,7 @@ Heredoc
             ->setWebsite('http://www.szechenyifurdo.hu/')
             ->setLatitude(47.518881)
             ->setLongitude(19.082358)
-            ->setSlug('Купальні Сечені')
+            ->setSlug('szechenyi')
             ->setSightType($sightTypeThermalBath)
             ->setLocality($localityBudapest);
         $this->setReference('sight-Szechenyi', $sight6);

@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Sight Tour Entity
@@ -27,6 +28,8 @@ class SightTour
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @JMS\Groups("sight")
      */
     private $id;
 
@@ -51,6 +54,8 @@ class SightTour
      * @Assert\Length(min="2", max="255")
      * @Assert\Type(type="string")
      *
+     * @JMS\Groups("sight")
+     *
      * @Gedmo\Versioned
      */
     private $name;
@@ -64,6 +69,8 @@ class SightTour
      * @Assert\Length(min="2", max="255")
      * @Assert\Type(type="string")
      *
+     * @JMS\Groups("sight")
+     *
      * @Gedmo\Versioned
      */
     private $companyName;
@@ -74,6 +81,8 @@ class SightTour
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @Assert\Type(type="string")
+     *
+     * @JMS\Groups("sight")
      *
      * @Gedmo\Versioned
      */
@@ -86,6 +95,8 @@ class SightTour
      *
      * @Assert\Type(type="string")
      *
+     * @JMS\Groups("sight")
+     *
      * @Gedmo\Versioned
      */
     private $tourLink;
@@ -97,6 +108,8 @@ class SightTour
      *
      * @Assert\Type(type="float")
      *
+     * @JMS\Groups("sight")
+     *
      * @Gedmo\Versioned
      */
     private $price;
@@ -105,6 +118,8 @@ class SightTour
      * @var string $slug Slug
      *
      * @ORM\Column(type="string")
+     *
+     * @JMS\Groups("sight")
      */
     private $slug;
 
@@ -296,7 +311,7 @@ class SightTour
      */
     public function setSlug($slug)
     {
-        $this->slug = strtolower(str_replace(' ', '-', $slug));
+        $this->slug = $slug;
 
         return $this;
     }

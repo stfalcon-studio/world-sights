@@ -1,0 +1,3 @@
+api_sight:
+    resource: AppBundle\Controller\SightController
+    type: rest

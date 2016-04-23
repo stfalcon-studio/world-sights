@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Sight Entity
@@ -28,6 +29,8 @@ class Sight
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @JMS\Groups("sight")
      */
     private $id;
 
@@ -38,6 +41,8 @@ class Sight
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      *
      * @Assert\NotBlank()
+     *
+     * @JMS\Groups("sight")
      *
      * @Gedmo\Versioned
      */
@@ -51,6 +56,8 @@ class Sight
      *
      * @Assert\NotBlank()
      *
+     * @JMS\Groups("sight")
+     *
      * @Gedmo\Versioned
      */
     private $locality;
@@ -59,8 +66,19 @@ class Sight
      * @var ArrayCollection|SightTour[] $sightTours Sight tours
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\SightTour", mappedBy="sight")
+     *
+     * @JMS\Groups("sight")
      */
     private $sightTours;
+
+    /**
+     * @var ArrayCollection|SightTicket[] $sightTickets Sight tickets
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\SightTicket", mappedBy="sight")
+     *
+     * @JMS\Groups("sight")
+     */
+    private $sightTickets;
 
     /**
      * @var string $name Name
@@ -71,6 +89,8 @@ class Sight
      * @Assert\Length(min="2", max="255")
      * @Assert\Type(type="string")
      *
+     * @JMS\Groups("sight")
+     *
      * @Gedmo\Versioned
      */
     private $name;
@@ -79,6 +99,8 @@ class Sight
      * @var string $description Description
      *
      * @ORM\Column(type="text", nullable=true)
+     *
+     * @JMS\Groups("sight")
      *
      * @Gedmo\Versioned
      */
@@ -89,6 +111,8 @@ class Sight
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      *
+     * @JMS\Groups("sight")
+     *
      * @Gedmo\Versioned
      */
     private $address;
@@ -97,6 +121,8 @@ class Sight
      * @var string $phone Phone
      *
      * @ORM\Column(type="string", length=50, nullable=true)
+     *
+     * @JMS\Groups("sight")
      *
      * @Gedmo\Versioned
      */
@@ -107,6 +133,8 @@ class Sight
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      *
+     * @JMS\Groups("sight")
+     *
      * @Gedmo\Versioned
      */
     private $website;
@@ -115,6 +143,8 @@ class Sight
      * @var string $tags Tags
      *
      * @ORM\Column(type="text", nullable=true)
+     *
+     * @JMS\Groups("sight")
      *
      * @Gedmo\Versioned
      */
@@ -125,6 +155,8 @@ class Sight
      *
      * @ORM\Column(type="float", nullable=true)
      *
+     * @JMS\Groups("sight")
+     *
      * @Gedmo\Versioned
      */
     private $longitude;
@@ -134,6 +166,8 @@ class Sight
      *
      * @ORM\Column(type="float", nullable=true)
      *
+     * @JMS\Groups("sight")
+     *
      * @Gedmo\Versioned
      */
     private $latitude;
@@ -142,6 +176,8 @@ class Sight
      * @var string $slug Slug
      *
      * @ORM\Column(type="string")
+     *
+     * @JMS\Groups("sight")
      */
     private $slug;
 
@@ -159,7 +195,8 @@ class Sight
      */
     public function __construct()
     {
-        $this->sightTours = new ArrayCollection();
+        $this->sightTours   = new ArrayCollection();
+        $this->sightTickets = new ArrayCollection();
     }
 
     /**
@@ -437,7 +474,7 @@ class Sight
      */
     public function setSlug($slug)
     {
-        $this->slug = strtolower(str_replace(' ', '-', $slug));
+        $this->slug = $slug;
 
         return $this;
     }
@@ -523,6 +560,57 @@ class Sight
      * @return ArrayCollection|SightTour[] Sight tours
      */
     public function getSightTours()
+    {
+        return $this->sightTours;
+    }
+
+    /**
+     * Add sight ticket
+     *
+     * @param SightTicket $sightTicket Sight ticket
+     *
+     * @return Sight
+     */
+    public function addSightTicket(SightTicket $sightTicket)
+    {
+        $this->sightTickets[] = $sightTicket;
+
+        return $this;
+    }
+
+    /**
+     * Remove sight ticket
+     *
+     * @param SightTicket $sightTicket Sight ticket
+     */
+    public function removeSightTicket(SightTicket $sightTicket)
+    {
+        $this->sightTours->removeElement($sightTicket);
+    }
+
+    /**
+     * Set sight tickets
+     *
+     * @param ArrayCollection|SightTicket[] $sightTickets Sight tickets
+     *
+     * @return $this
+     */
+    public function setSightTickets(ArrayCollection $sightTickets)
+    {
+        foreach ($sightTickets as $sightTicket) {
+            $sightTicket->setSight($this);
+        }
+        $this->sightTickets = $sightTickets;
+
+        return $this;
+    }
+
+    /**
+     * Get sight tickets
+     *
+     * @return ArrayCollection|SightTicket[] Sight tickets
+     */
+    public function getSightTickets()
     {
         return $this->sightTours;
     }
