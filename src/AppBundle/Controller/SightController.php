@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Sight;
+use AppBundle\Entity\SightTour;
 use AppBundle\Exception\ServerInternalErrorException;
 use AppBundle\Form\Type\SightType;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -94,6 +95,47 @@ class SightController extends FOSRestController
             'sight'  => $sight,
         ]);
         $view->setSerializationContext(SerializationContext::create()->setGroups(['sight']));
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * Return tours by sight
+     *
+     * @param Sight $sight Sight
+     *
+     * @return SightType
+     *
+     * @ApiDoc(
+     *     description="Return tours by sight",
+     *     requirements={
+     *          {"name"="slug", "dataType"="string", "requirement"="\w+", "description"="Slug of sight"}
+     *      },
+     *     section="Sight",
+     *     statusCodes={
+     *          200="Returned when successful",
+     *          404="Returned when sight type not found",
+     *          500="Returned when internal error on the server occurred"
+     *      }
+     * )
+     *
+     * @Rest\Get("/{slug}/tours")
+     *
+     * @ParamConverter("sight", class="AppBundle:Sight")
+     */
+    public function getToursAction(Sight $sight)
+    {
+        try {
+            $sightTour = $this->getDoctrine()->getRepository('AppBundle:SightTour')->findSightTourBySight($sight);
+            $view      = $this->createViewForHttpOkResponse([
+                'status'     => 'OK',
+                'sight_tour' => $sightTour,
+            ]);
+            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_tour']));
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
+        }
 
         return $this->handleView($view);
     }

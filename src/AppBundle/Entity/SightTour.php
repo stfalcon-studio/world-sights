@@ -29,7 +29,7 @@ class SightTour
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @JMS\Groups("sight")
+     * @JMS\Groups({"sight", "sight_tour"})
      */
     private $id;
 
@@ -54,7 +54,7 @@ class SightTour
      * @Assert\Length(min="2", max="255")
      * @Assert\Type(type="string")
      *
-     * @JMS\Groups("sight")
+     * @JMS\Groups({"sight", "sight_tour"})
      *
      * @Gedmo\Versioned
      */
@@ -69,7 +69,7 @@ class SightTour
      * @Assert\Length(min="2", max="255")
      * @Assert\Type(type="string")
      *
-     * @JMS\Groups("sight")
+     * @JMS\Groups({"sight", "sight_tour"})
      *
      * @Gedmo\Versioned
      */
@@ -82,7 +82,7 @@ class SightTour
      *
      * @Assert\Type(type="string")
      *
-     * @JMS\Groups("sight")
+     * @JMS\Groups({"sight", "sight_tour"})
      *
      * @Gedmo\Versioned
      */
@@ -95,7 +95,7 @@ class SightTour
      *
      * @Assert\Type(type="string")
      *
-     * @JMS\Groups("sight")
+     * @JMS\Groups({"sight", "sight_tour"})
      *
      * @Gedmo\Versioned
      */
@@ -108,7 +108,7 @@ class SightTour
      *
      * @Assert\Type(type="float")
      *
-     * @JMS\Groups("sight")
+     * @JMS\Groups({"sight", "sight_tour"})
      *
      * @Gedmo\Versioned
      */
@@ -119,7 +119,7 @@ class SightTour
      *
      * @ORM\Column(type="string")
      *
-     * @JMS\Groups("sight")
+     * @JMS\Groups({"sight", "sight_tour"})
      */
     private $slug;
 
