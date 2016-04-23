@@ -11,4 +11,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class LocalityRepository extends EntityRepository
 {
+    /**
+     * Find locality first result
+     *
+     * @return Sight
+     */
+    public function findLocalityFirstResult()
+    {
+        $qb = $this->createQueryBuilder('s');
+
+        return $qb->setMaxResults(1)
+                  ->getQuery()
+                  ->getOneOrNullResult();
+    }
 }
