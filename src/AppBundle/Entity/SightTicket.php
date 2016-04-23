@@ -29,7 +29,7 @@ class SightTicket
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @JMS\Groups("sight")
+     * @JMS\Groups({"sight", "sight_ticket"})
      */
     private $id;
 
@@ -53,7 +53,7 @@ class SightTicket
      *
      * @Assert\NotBlank()
      *
-     * @JMS\Groups("sight")
+     * @JMS\Groups({"sight", "sight_ticket"})
      *
      * @Gedmo\Versioned
      */
@@ -67,7 +67,7 @@ class SightTicket
      *
      * @Assert\NotBlank()
      *
-     * @JMS\Groups("sight")
+     * @JMS\Groups({"sight", "sight_ticket"})
      *
      * @Gedmo\Versioned
      */
@@ -82,7 +82,7 @@ class SightTicket
      * @Assert\Length(min="2", max="255")
      * @Assert\Type(type="string")
      *
-     * @JMS\Groups("sight")
+     * @JMS\Groups({"sight", "sight_ticket"})
      *
      * @Gedmo\Versioned
      */
@@ -95,7 +95,7 @@ class SightTicket
      *
      * @Assert\Type(type="string")
      *
-     * @JMS\Groups("sight")
+     * @JMS\Groups({"sight", "sight_ticket"})
      *
      * @Gedmo\Versioned
      */
@@ -106,7 +106,7 @@ class SightTicket
      *
      * @ORM\Column(type="string")
      *
-     * @JMS\Groups("sight")
+     * @JMS\Groups({"sight", "sight_ticket"})
      */
     private $slug;
 

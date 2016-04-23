@@ -14,13 +14,13 @@ use Doctrine\ORM\EntityRepository;
 class SightTourRepository extends EntityRepository
 {
     /**
-     * Find sight tour by sight
+     * Find sight tours by sight
      *
      * @param Sight $sight Sight
      *
      * @return SightType[]
      */
-    public function findSightTourBySight(Sight $sight)
+    public function findSightToursBySight(Sight $sight)
     {
         $qb = $this->createQueryBuilder('st');
 

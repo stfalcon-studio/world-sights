@@ -30,7 +30,7 @@ class Locality
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @JMS\Groups("sight")
+     * @JMS\Groups({"sight", "sight_ticket"})
      */
     private $id;
 
@@ -42,7 +42,7 @@ class Locality
      *
      * @Assert\NotBlank()
      *
-     * @JMS\Groups("sight")
+     * @JMS\Groups({"sight", "sight_ticket"})
      *
      * @Gedmo\Versioned
      */
@@ -78,7 +78,7 @@ class Locality
      * @Assert\Length(min="2", max="255")
      * @Assert\Type(type="string")
      *
-     * @JMS\Groups("sight")
+     * @JMS\Groups({"sight", "sight_ticket"})
      *
      * @Gedmo\Versioned
      */

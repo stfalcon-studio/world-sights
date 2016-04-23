@@ -100,6 +100,48 @@ class SightController extends FOSRestController
     }
 
     /**
+     * Return tickets by sight
+     *
+     * @param Sight $sight Sight
+     *
+     * @return SightTicket
+     *
+     * @ApiDoc(
+     *     description="Return tickets by sight",
+     *     requirements={
+     *          {"name"="slug", "dataType"="string", "requirement"="\w+", "description"="Slug of sight"}
+     *      },
+     *     section="Sight",
+     *     statusCodes={
+     *          200="Returned when successful",
+     *          404="Returned when sight type not found",
+     *          500="Returned when internal error on the server occurred"
+     *      }
+     * )
+     *
+     * @Rest\Get("/{slug}/tickets")
+     *
+     * @ParamConverter("sight", class="AppBundle:Sight")
+     */
+    public function getTicketAction(Sight $sight)
+    {
+        try {
+            $sightTickets = $this->getDoctrine()->getRepository('AppBundle:SightTicket')
+                                 ->findSightTicketsBySight($sight);
+            $view         = $this->createViewForHttpOkResponse([
+                'status'        => 'OK',
+                'sight_tickets' => $sightTickets,
+            ]);
+            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_ticket']));
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
      * Return tours by sight
      *
      * @param Sight $sight Sight
@@ -126,10 +168,10 @@ class SightController extends FOSRestController
     public function getToursAction(Sight $sight)
     {
         try {
-            $sightTour = $this->getDoctrine()->getRepository('AppBundle:SightTour')->findSightTourBySight($sight);
-            $view      = $this->createViewForHttpOkResponse([
-                'status'     => 'OK',
-                'sight_tour' => $sightTour,
+            $sightTours = $this->getDoctrine()->getRepository('AppBundle:SightTour')->findSightToursBySight($sight);
+            $view       = $this->createViewForHttpOkResponse([
+                'status'      => 'OK',
+                'sight_tours' => $sightTours,
             ]);
             $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_tour']));
         } catch (\Exception $e) {
