@@ -25,7 +25,7 @@ class SightType extends AbstractType
             ->add('latitude')
             ->add('longitude')
             ->add('sight_type', EntityType::class, [
-                'class'         => 'AppBundle\Entity\SightType',
+                'class' => 'AppBundle\Entity\SightType',
             ])
             ->add('locality', EntityType::class, [
                 'class' => 'AppBundle\Entity\Locality',

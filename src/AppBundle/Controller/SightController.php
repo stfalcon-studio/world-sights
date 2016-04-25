@@ -157,7 +157,8 @@ class SightController extends FOSRestController
         try {
             $sightTickets = $this->getDoctrine()->getRepository('AppBundle:SightTicket')
                                  ->findSightTicketsBySight($sight);
-            $view         = $this->createViewForHttpOkResponse([
+
+            $view = $this->createViewForHttpOkResponse([
                 'status'        => 'OK',
                 'sight_tickets' => $sightTickets,
             ]);
@@ -198,11 +199,12 @@ class SightController extends FOSRestController
     {
         try {
             $sightTours = $this->getDoctrine()->getRepository('AppBundle:SightTour')->findSightToursBySight($sight);
-            $view       = $this->createViewForHttpOkResponse([
+
+            $view = $this->createViewForHttpOkResponse([
                 'status'      => 'OK',
                 'sight_tours' => $sightTours,
             ]);
-            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_tour']));
+            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_tour_for_sight']));
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
             throw $this->createInternalServerErrorException();
@@ -254,6 +256,7 @@ class SightController extends FOSRestController
                 $slug = $this->get('app.slug')->createUniqueSlug($sight->getName());
                 if (false === $slug['unique']) {
                     $form->get('name')->addError(new FormError('Name should be unique'));
+
                     $view = $this->createViewForValidationErrorResponse($form);
 
                     return $this->handleView($view);
@@ -326,6 +329,7 @@ class SightController extends FOSRestController
                 $slug = $this->get('app.slug')->createUniqueSlug($sight->getName());
                 if (false === $slug['unique'] && $sight->getSlug() != $slug['value']) {
                     $form->get('name')->addError(new FormError('Name should be unique'));
+
                     $view = $this->createViewForValidationErrorResponse($form);
 
                     return $this->handleView($view);
