@@ -75,7 +75,7 @@ class MatchingService
         $expr     = $criteria->expr();
         foreach ($fields as $field => $value) {
             if ($classMetadata->hasField($field)) {
-                if (is_numeric($field)) {
+                if (is_numeric($value)) {
                     $comparison = new Comparison($field, Comparison::EQ, new Value($value));
                 } else {
                     $comparison = new Comparison($field, Comparison::CONTAINS, new Value($value));
