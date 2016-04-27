@@ -4,3 +4,8 @@ services:
         arguments:
             - '@doctrine.orm.default_entity_manager'
             - '@slugify'
+
+    app.matching:
+        class: AppBundle\Service\MatchingService
+        arguments:
+            - '@doctrine.orm.default_entity_manager'

@@ -79,6 +79,20 @@ trait ControllerHelperTrait
     }
 
     /**
+     * Create view for HTTP_NOT_FOUND (404) response
+     *
+     * @param array $data Response data
+     *
+     * @return View
+     */
+    protected function createViewForHttpNotFoundResponse(array $data)
+    {
+        $data = array_merge(['code' => Response::HTTP_NOT_FOUND], $data);
+
+        return $this->view($data, Response::HTTP_NOT_FOUND);
+    }
+
+    /**
      * Returns a ServerInternalErrorException
      *
      * This will result in a 500 response code

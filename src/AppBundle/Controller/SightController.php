@@ -6,8 +6,10 @@ use AppBundle\Entity\Sight;
 use AppBundle\Entity\SightTour;
 use AppBundle\Exception\ServerInternalErrorException;
 use AppBundle\Form\Type\SightType;
+use Doctrine\Common\Collections\Criteria;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Request\ParamFetcherInterface;
 use JMS\Serializer\SerializationContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Form\AbstractType;
@@ -44,12 +46,31 @@ class SightController extends FOSRestController
      *      }
      * )
      *
+     * @Rest\QueryParam(name="name", nullable=true, description="Name of sight")
+     * @Rest\QueryParam(name="address", nullable=true, description="Address of sight")
+     * @Rest\QueryParam(name="phone", nullable=true, description="Phone of sight")
+     * @Rest\QueryParam(name="longitude", nullable=true, description="Longitude of sight")
+     * @Rest\QueryParam(name="latitude", nullable=true, description="Latitude of sight")
+     * @Rest\QueryParam(name="locality", nullable=true, description="ID of locality of sight")
+     * @Rest\QueryParam(name="sight_type", nullable=true, description="ID of sight_type of sight")
+     * @Rest\QueryParam(name="_sort",   array=true, requirements="ASC|DESC", nullable=true,
+     *                  description="Sort (key is field, value is direction)")
+     * @Rest\QueryParam(name="_limit",  requirements="\d+", nullable=true, strict=true, description="Limit")
+     * @Rest\QueryParam(name="_offset", requirements="\d+", nullable=true, strict=true, description="Offset")
+     *
      * @Rest\Get("")
      */
-    public function getAllAction()
+    public function getAllAction(ParamFetcherInterface $paramFetcher)
     {
         try {
-            $sights = $this->getDoctrine()->getRepository('AppBundle:Sight')->findAllSights();
+            $params     = $paramFetcher->all();
+            $repository = $this->getDoctrine()->getRepository('AppBundle:Sight');
+
+            $sights = $this->get('app.matching')->matching($repository, $params,
+                function (Criteria $criteria) {
+                    $criteria->andWhere($criteria->expr()->eq('enabled', true));
+                }
+            );
 
             $view = $this->createViewForHttpOkResponse([
                 'status' => 'OK',
@@ -90,6 +111,14 @@ class SightController extends FOSRestController
      */
     public function getAction(Sight $sight)
     {
+        if (!$sight->isEnabled()) {
+            $view = $this->createViewForHttpNotFoundResponse([
+                'message' => 'Not Found',
+            ]);
+
+            return $this->handleView($view);
+        }
+
         $view = $this->createViewForHttpOkResponse([
             'status' => 'OK',
             'sight'  => $sight,
