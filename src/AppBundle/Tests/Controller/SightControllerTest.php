@@ -9,11 +9,6 @@ use Liip\FunctionalTestBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * SightControllerTest
- *
- * @author Yevgeniy Zholkevskiy <blackbullet@i.ua>
- */
 class SightControllerTest extends WebTestCase
 {
     /** @var Client $client */
@@ -22,9 +17,6 @@ class SightControllerTest extends WebTestCase
     /** @var ObjectManager */
     private $manager;
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp()
     {
         parent::setUp();
@@ -35,26 +27,19 @@ class SightControllerTest extends WebTestCase
         $this->getFixtures();
     }
 
-    /**
-     * Test get all action
-     */
     public function testGetAllAction()
     {
-        $this->client->request('GET', '/api/v1/sights');
+        $this->client->request('GET', '/api/v1/sights?limit=10&offset=0');
 
         $response = $this->client->getResponse();
         $data     = json_decode($response->getContent(), true);
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
-        $this->assertEquals('OK', $data['status']);
         $this->assertEquals(200, $data['code']);
         $this->assertCount(6, $data['sights']);
         $this->comparisonSight($data['sights'][0]);
     }
 
-    /**
-     * Test get action
-     */
     public function testGetAction()
     {
         $this->client->request('GET', '/api/v1/sights/kamianets-podіlska-fortess');
@@ -63,14 +48,10 @@ class SightControllerTest extends WebTestCase
         $data     = json_decode($response->getContent(), true);
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
-        $this->assertEquals('OK', $data['status']);
         $this->assertEquals(200, $data['code']);
         $this->comparisonSight($data['sight']);
     }
 
-    /**
-     * Test get ticket action
-     */
     public function testGetTicketAction()
     {
         $this->client->request('GET', '/api/v1/sights/kamianets-podіlska-fortess/tickets');
@@ -79,14 +60,10 @@ class SightControllerTest extends WebTestCase
         $data     = json_decode($response->getContent(), true);
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
-        $this->assertEquals('OK', $data['status']);
         $this->assertEquals(200, $data['code']);
         $this->comparisonSightTicket($data['sight_tickets'][0]);
     }
 
-    /**
-     * Test get tour action
-     */
     public function testGetTourAction()
     {
         $this->client->request('GET', '/api/v1/sights/kamianets-podіlska-fortess/tours');
@@ -95,14 +72,10 @@ class SightControllerTest extends WebTestCase
         $data     = json_decode($response->getContent(), true);
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
-        $this->assertEquals('OK', $data['status']);
         $this->assertEquals(200, $data['code']);
         $this->comparisonSightTour($data['sight_tours'][0]);
     }
 
-    /**
-     * Test create action
-     */
     public function testCreateAction()
     {
         /** @var SightType $sightType */
@@ -140,9 +113,6 @@ class SightControllerTest extends WebTestCase
         }
     }
 
-    /**
-     * Test update action
-     */
     public function testUpdateAction()
     {
         /** @var SightType $sightType */
@@ -180,9 +150,6 @@ class SightControllerTest extends WebTestCase
         }
     }
 
-    /**
-     * Test delete action
-     */
     public function testDeleteAction()
     {
         $this->client->request('DELETE', '/api/v1/sights/hortitsa');
@@ -207,11 +174,6 @@ class SightControllerTest extends WebTestCase
         $this->loadFixtures($fixtures);
     }
 
-    /**
-     * Comparison sight with data
-     *
-     * @param array $data Array of data
-     */
     private function comparisonSight(array $data)
     {
         $sight = [
@@ -231,11 +193,6 @@ class SightControllerTest extends WebTestCase
         $this->assertEquals('Кам\'янець-Подільський', $data['locality']['name']);
     }
 
-    /**
-     * Comparison sight tour with data
-     *
-     * @param array $data Array of data
-     */
     private function comparisonSightTour(array $data)
     {
         $sightTour = [
@@ -250,11 +207,6 @@ class SightControllerTest extends WebTestCase
         }
     }
 
-    /**
-     * Comparison sight ticket with data
-     *
-     * @param array $data Array of data
-     */
     private function comparisonSightTicket(array $data)
     {
         $sightTour = [

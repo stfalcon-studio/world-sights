@@ -17,6 +17,8 @@ use JMS\Serializer\Annotation as JMS;
  * @ORM\Table(name="localities")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\LocalityRepository")
  *
+ * @JMS\ExclusionPolicy("all")
+ *
  * @Gedmo\Loggable
  */
 class Locality
@@ -30,7 +32,9 @@ class Locality
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      *
+     * @JMS\Expose
      * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Since("1.0")
      */
     private $id;
 
@@ -42,7 +46,9 @@ class Locality
      *
      * @Assert\NotBlank()
      *
+     * @JMS\Expose
      * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -78,7 +84,9 @@ class Locality
      * @Assert\Length(min="2", max="255")
      * @Assert\Type(type="string")
      *
+     * @JMS\Expose
      * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */

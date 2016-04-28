@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -16,6 +17,9 @@ use JMS\Serializer\Annotation as JMS;
  *
  * @ORM\Table(name="sights")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\SightRepository")
+ * @UniqueEntity("slug")
+ *
+ * @JMS\ExclusionPolicy("all")
  *
  * @Gedmo\Loggable
  */
@@ -30,7 +34,9 @@ class Sight
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @JMS\Groups("sight")
+     * @JMS\Expose
+     * @JMS\Groups({"sight"})
+     * @JMS\Since("1.0")
      */
     private $id;
 
@@ -42,7 +48,9 @@ class Sight
      *
      * @Assert\NotBlank()
      *
-     * @JMS\Groups("sight")
+     * @JMS\Expose
+     * @JMS\Groups({"sight"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -56,7 +64,9 @@ class Sight
      *
      * @Assert\NotBlank()
      *
-     * @JMS\Groups("sight")
+     * @JMS\Expose
+     * @JMS\Groups({"sight"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -67,7 +77,9 @@ class Sight
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\SightTour", mappedBy="sight")
      *
-     * @JMS\Groups("sight")
+     * @JMS\Expose
+     * @JMS\Groups({"sight"})
+     * @JMS\Since("1.0")
      */
     private $sightTours;
 
@@ -76,7 +88,9 @@ class Sight
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\SightTicket", mappedBy="sight")
      *
-     * @JMS\Groups("sight")
+     * @JMS\Expose
+     * @JMS\Groups({"sight"})
+     * @JMS\Since("1.0")
      */
     private $sightTickets;
 
@@ -89,7 +103,9 @@ class Sight
      * @Assert\Length(min="2", max="255")
      * @Assert\Type(type="string")
      *
-     * @JMS\Groups("sight")
+     * @JMS\Expose
+     * @JMS\Groups({"sight"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -100,7 +116,9 @@ class Sight
      *
      * @ORM\Column(type="text", nullable=true)
      *
-     * @JMS\Groups("sight")
+     * @JMS\Expose
+     * @JMS\Groups({"sight"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -111,7 +129,9 @@ class Sight
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      *
-     * @JMS\Groups("sight")
+     * @JMS\Expose
+     * @JMS\Groups({"sight"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -122,7 +142,9 @@ class Sight
      *
      * @ORM\Column(type="string", length=50, nullable=true)
      *
-     * @JMS\Groups("sight")
+     * @JMS\Expose
+     * @JMS\Groups({"sight"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -133,7 +155,9 @@ class Sight
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      *
-     * @JMS\Groups("sight")
+     * @JMS\Expose
+     * @JMS\Groups({"sight"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -144,7 +168,9 @@ class Sight
      *
      * @ORM\Column(type="text", nullable=true)
      *
-     * @JMS\Groups("sight")
+     * @JMS\Expose
+     * @JMS\Groups({"sight"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -155,7 +181,9 @@ class Sight
      *
      * @ORM\Column(type="float", nullable=true)
      *
-     * @JMS\Groups("sight")
+     * @JMS\Expose
+     * @JMS\Groups({"sight"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -166,7 +194,9 @@ class Sight
      *
      * @ORM\Column(type="float", nullable=true)
      *
-     * @JMS\Groups("sight")
+     * @JMS\Expose
+     * @JMS\Groups({"sight"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -175,9 +205,11 @@ class Sight
     /**
      * @var string $slug Slug
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", unique=true)
      *
-     * @JMS\Groups("sight")
+     * @JMS\Expose
+     * @JMS\Groups({"sight"})
+     * @JMS\Since("1.0")
      */
     private $slug;
 

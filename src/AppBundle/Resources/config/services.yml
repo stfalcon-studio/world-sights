@@ -2,7 +2,6 @@ services:
     app.slug:
         class: AppBundle\Service\SlugService
         arguments:
-            - '@doctrine.orm.default_entity_manager'
             - '@slugify'
 
     app.matching:

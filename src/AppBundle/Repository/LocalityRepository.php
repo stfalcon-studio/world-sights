@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Locality;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -14,7 +15,7 @@ class LocalityRepository extends EntityRepository
     /**
      * Find locality first result
      *
-     * @return Sight
+     * @return Locality
      */
     public function findLocalityFirstResult()
     {

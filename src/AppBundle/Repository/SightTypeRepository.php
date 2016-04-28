@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\SightType;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -14,7 +15,7 @@ class SightTypeRepository extends EntityRepository
     /**
      * Find sight type first result
      *
-     * @return Sight
+     * @return SightType
      */
     public function findSightTypeFirstResult()
     {

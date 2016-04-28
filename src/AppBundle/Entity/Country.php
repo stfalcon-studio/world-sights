@@ -17,6 +17,8 @@ use JMS\Serializer\Annotation as JMS;
  * @ORM\Table(name="countries")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CountryRepository")
  *
+ * @JMS\ExclusionPolicy("all")
+ *
  * @Gedmo\Loggable
  */
 class Country
@@ -30,7 +32,9 @@ class Country
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      *
+     * @JMS\Expose
      * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Since("1.0")
      */
     private $id;
 
@@ -50,7 +54,9 @@ class Country
      * @Assert\Length(min="2", max="255")
      * @Assert\Type(type="string")
      *
+     * @JMS\Expose
      * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */

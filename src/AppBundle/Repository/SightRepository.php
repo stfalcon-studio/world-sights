@@ -43,4 +43,23 @@ class SightRepository extends EntityRepository
                   ->getQuery()
                   ->getOneOrNullResult();
     }
+
+    /**
+     * Find sight with pagination
+     *
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return Sight[]
+     */
+    public function findSightWithPagination($limit = 10, $offset = 0)
+    {
+        $qb = $this->createQueryBuilder('s');
+
+        return $qb->where($qb->expr()->eq('s.enabled', true))
+                  ->setFirstResult($offset)
+                  ->setMaxResults($limit)
+                  ->getQuery()
+                  ->getResult();
+    }
 }

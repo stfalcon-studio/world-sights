@@ -14,11 +14,6 @@ use Symfony\Component\Translation\Translator;
 class SlugService
 {
     /**
-     * @var EntityManager $manager Entity manager
-     */
-    private $manager;
-
-    /**
      * @var Slugify $slugify Slugify
      */
     protected $slugify;
@@ -26,12 +21,10 @@ class SlugService
     /**
      * Constructor
      *
-     * @param EntityManager $manager Entity manager
-     * @param Slugify       $slugify Slugify
+     * @param Slugify $slugify Slugify
      */
-    public function __construct(EntityManager $manager, Slugify $slugify)
+    public function __construct(Slugify $slugify)
     {
-        $this->manager = $manager;
         $this->slugify = $slugify;
     }
 
@@ -40,25 +33,14 @@ class SlugService
      *
      * @param string $text Text
      *
-     * @return array
+     * @return string
      */
-    public function createUniqueSlug($text)
+    public function createSlug($text)
     {
         $translator     = new Translator('en_ER');
         $textTranslated = $translator->trans($text);
         $slug           = $this->slugify->slugify($textTranslated);
 
-        $sight = $this->manager->getRepository('AppBundle:Sight')->findSightBySlug($slug);
-        if (null === $sight) {
-            return [
-                'unique' => true,
-                'value'  => $slug,
-            ];
-        }
-
-        return [
-            'unique' => false,
-            'value'  => $slug,
-        ];
+        return $slug;
     }
 }

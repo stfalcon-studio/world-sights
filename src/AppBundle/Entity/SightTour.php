@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -15,6 +16,8 @@ use JMS\Serializer\Annotation as JMS;
  *
  * @ORM\Table(name="sight_tours")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\SightTourRepository")
+ *
+ * @JMS\ExclusionPolicy("all")
  *
  * @Gedmo\Loggable
  */
@@ -54,7 +57,9 @@ class SightTour
      * @Assert\Length(min="2", max="255")
      * @Assert\Type(type="string")
      *
+     * @JMS\Expose
      * @JMS\Groups({"sight", "sight_tour"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -69,7 +74,9 @@ class SightTour
      * @Assert\Length(min="2", max="255")
      * @Assert\Type(type="string")
      *
+     * @JMS\Expose
      * @JMS\Groups({"sight", "sight_tour"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -82,7 +89,9 @@ class SightTour
      *
      * @Assert\Type(type="string")
      *
+     * @JMS\Expose
      * @JMS\Groups({"sight", "sight_tour"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -95,7 +104,9 @@ class SightTour
      *
      * @Assert\Type(type="string")
      *
+     * @JMS\Expose
      * @JMS\Groups({"sight", "sight_tour"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -108,7 +119,9 @@ class SightTour
      *
      * @Assert\Type(type="float")
      *
+     * @JMS\Expose
      * @JMS\Groups({"sight", "sight_tour"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -117,9 +130,11 @@ class SightTour
     /**
      * @var string $slug Slug
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", unique=true)
      *
+     * @JMS\Expose
      * @JMS\Groups({"sight", "sight_tour"})
+     * @JMS\Since("1.0")
      */
     private $slug;
 

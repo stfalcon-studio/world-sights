@@ -5,15 +5,14 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Sight;
 use AppBundle\Entity\SightTour;
 use AppBundle\Exception\ServerInternalErrorException;
+use AppBundle\Form\Model\Pagination;
+use AppBundle\Form\Type\PaginationType;
 use AppBundle\Form\Type\SightType;
-use Doctrine\Common\Collections\Criteria;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Request\ParamFetcherInterface;
 use JMS\Serializer\SerializationContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -46,34 +45,27 @@ class SightController extends FOSRestController
      *      }
      * )
      *
-     * @Rest\QueryParam(name="name", nullable=true, description="Name of sight")
-     * @Rest\QueryParam(name="address", nullable=true, description="Address of sight")
-     * @Rest\QueryParam(name="phone", nullable=true, description="Phone of sight")
-     * @Rest\QueryParam(name="longitude", nullable=true, description="Longitude of sight")
-     * @Rest\QueryParam(name="latitude", nullable=true, description="Latitude of sight")
-     * @Rest\QueryParam(name="locality", nullable=true, description="ID of locality of sight")
-     * @Rest\QueryParam(name="sight_type", nullable=true, description="ID of sight_type of sight")
-     * @Rest\QueryParam(name="_sort",   array=true, requirements="ASC|DESC", nullable=true,
-     *                  description="Sort (key is field, value is direction)")
-     * @Rest\QueryParam(name="_limit",  requirements="\d+", nullable=true, strict=true, description="Limit")
-     * @Rest\QueryParam(name="_offset", requirements="\d+", nullable=true, strict=true, description="Offset")
-     *
      * @Rest\Get("")
      */
-    public function getAllAction(ParamFetcherInterface $paramFetcher)
+    public function getAllAction(Request $request)
     {
         try {
-            $params     = $paramFetcher->all();
-            $repository = $this->getDoctrine()->getRepository('AppBundle:Sight');
+            $paginator       = new Pagination();
+            $sightRepository = $this->getDoctrine()->getRepository('AppBundle:Sight');
 
-            $sights = $this->get('app.matching')->matching($repository, $params,
-                function (Criteria $criteria) {
-                    $criteria->andWhere($criteria->expr()->eq('enabled', true));
-                }
-            );
+            $form = $this->createForm(PaginationType::class, $paginator);
+
+            $form->submit($request->query->all());
+            if ($form->isValid()) {
+                /** @var Pagination $paginator */
+                $paginator = $form->getData();
+
+                $sights = $sightRepository->findSightWithPagination($paginator->getLimit(), $paginator->getOffset());
+            } else {
+                $sights = $sightRepository->findAllSights();
+            }
 
             $view = $this->createViewForHttpOkResponse([
-                'status' => 'OK',
                 'sights' => $sights,
             ]);
             $view->setSerializationContext(SerializationContext::create()->setGroups(['sight']));
@@ -120,8 +112,7 @@ class SightController extends FOSRestController
         }
 
         $view = $this->createViewForHttpOkResponse([
-            'status' => 'OK',
-            'sight'  => $sight,
+            'sight' => $sight,
         ]);
         $view->setSerializationContext(SerializationContext::create()->setGroups(['sight']));
 
@@ -159,7 +150,6 @@ class SightController extends FOSRestController
                                  ->findSightTicketsBySight($sight);
 
             $view = $this->createViewForHttpOkResponse([
-                'status'        => 'OK',
                 'sight_tickets' => $sightTickets,
             ]);
             $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_ticket']));
@@ -201,10 +191,9 @@ class SightController extends FOSRestController
             $sightTours = $this->getDoctrine()->getRepository('AppBundle:SightTour')->findSightToursBySight($sight);
 
             $view = $this->createViewForHttpOkResponse([
-                'status'      => 'OK',
                 'sight_tours' => $sightTours,
             ]);
-            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_tour_for_sight']));
+            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_tour']));
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
             throw $this->createInternalServerErrorException();
@@ -245,24 +234,15 @@ class SightController extends FOSRestController
 
         $form = $this->createForm(SightType::class, $sight);
 
-        $data = $request->request->all();
-
-        $form->submit($data);
+        $form->submit($request->request->all());
         if ($form->isValid()) {
             try {
                 /** @var Sight $sight */
                 $sight = $form->getData();
 
-                $slug = $this->get('app.slug')->createUniqueSlug($sight->getName());
-                if (false === $slug['unique']) {
-                    $form->get('name')->addError(new FormError('Name should be unique'));
+                $slug = $this->get('app.slug')->createSlug($sight->getName());
 
-                    $view = $this->createViewForValidationErrorResponse($form);
-
-                    return $this->handleView($view);
-                }
-
-                $sight->setSlug($slug['value']);
+                $sight->setSlug($slug);
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($sight);
@@ -309,7 +289,6 @@ class SightController extends FOSRestController
      *      }
      * )
      *
-     * @Rest\View(serializerEnableMaxDepthChecks=true, serializerGroups="sight")
      * @Rest\Put("/{slug}")
      *
      * @ParamConverter("sight", class="AppBundle:Sight")
@@ -318,24 +297,15 @@ class SightController extends FOSRestController
     {
         $form = $this->createForm(SightType::class, $sight);
 
-        $data = $request->request->all();
-
-        $form->submit($data);
+        $form->submit($request->request->all());
         if ($form->isValid()) {
             try {
                 /** @var Sight $sight */
                 $sight = $form->getData();
 
-                $slug = $this->get('app.slug')->createUniqueSlug($sight->getName());
-                if (false === $slug['unique'] && $sight->getSlug() != $slug['value']) {
-                    $form->get('name')->addError(new FormError('Name should be unique'));
+                $slug = $this->get('app.slug')->createSlug($sight->getName());
 
-                    $view = $this->createViewForValidationErrorResponse($form);
-
-                    return $this->handleView($view);
-                }
-
-                $sight->setSlug($slug['value']);
+                $sight->setSlug($slug);
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($sight);

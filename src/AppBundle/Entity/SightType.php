@@ -17,6 +17,8 @@ use JMS\Serializer\Annotation as JMS;
  * @ORM\Table(name="sight_types")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\SightTypeRepository")
  *
+ * @JMS\ExclusionPolicy("all")
+ *
  * @Gedmo\Loggable
  */
 class SightType
@@ -30,7 +32,9 @@ class SightType
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      *
+     * @JMS\Expose
      * @JMS\Groups("sight")
+     * @JMS\Since("1.0")
      */
     private $id;
 
@@ -50,7 +54,9 @@ class SightType
      * @Assert\Length(min="2", max="255")
      * @Assert\Type(type="string")
      *
+     * @JMS\Expose
      * @JMS\Groups("sight")
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
