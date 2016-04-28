@@ -2,7 +2,9 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\DBAL\Types\SightTicketType;
 use Doctrine\ORM\Mapping as ORM;
+use Fresh\DoctrineEnumBundle\Validator\Constraints as DoctrineAssert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -33,7 +35,7 @@ class SightTicket
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Groups({"sight", "sight_ticket", "sight_tour"})
      * @JMS\Since("1.0")
      */
     private $id;
@@ -59,7 +61,7 @@ class SightTicket
      * @Assert\NotBlank()
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Groups({"sight", "sight_ticket", "sight_tour"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -75,7 +77,7 @@ class SightTicket
      * @Assert\NotBlank()
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Groups({"sight", "sight_ticket", "sight_tour"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -83,16 +85,14 @@ class SightTicket
     private $to;
 
     /**
-     * @var string $type Type
+     * @var SightTicketType $type Type
      *
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(name="type", type="SightTicketType", nullable=false)
      *
-     * @Assert\NotBlank()
-     * @Assert\Length(min="2", max="255")
-     * @Assert\Type(type="string")
+     * @DoctrineAssert\Enum(entity="AppBundle\DBAL\Types\SightTicketType")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Groups({"sight", "sight_ticket", "sight_tour"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -107,7 +107,7 @@ class SightTicket
      * @Assert\Type(type="string")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Groups({"sight", "sight_ticket", "sight_tour"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -120,7 +120,7 @@ class SightTicket
      * @ORM\Column(type="string", unique=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Groups({"sight", "sight_ticket", "sight_tour"})
      * @JMS\Since("1.0")
      */
     private $slug;
@@ -235,7 +235,7 @@ class SightTicket
     /**
      * Get type
      *
-     * @return string Type
+     * @return SightTicketType Type
      */
     public function getType()
     {
@@ -245,7 +245,7 @@ class SightTicket
     /**
      * Set type
      *
-     * @param string $type Type
+     * @param SightTicketType $type Type
      *
      * @return $this
      */

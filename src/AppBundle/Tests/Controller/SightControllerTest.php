@@ -2,6 +2,7 @@
 
 namespace AppBundle\Tests\Controller;
 
+use AppBundle\DBAL\Types\SightTicketType;
 use AppBundle\Entity\Locality;
 use AppBundle\Entity\SightType;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -210,7 +211,7 @@ class SightControllerTest extends WebTestCase
     private function comparisonSightTicket(array $data)
     {
         $sightTour = [
-            'type'     => 'залізничний квиток',
+            'type'     => SightTicketType::TRAIN_TICKET,
             'link_buy' => 'https://gd.tickets.ua/uk/railwaytracker/table/Kamenetz-Podolsk~2200260',
             'slug'     => 'kiev-kamyanets-train-ticket',
         ];

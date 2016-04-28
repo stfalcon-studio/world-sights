@@ -35,7 +35,7 @@ class Sight
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight"})
+     * @JMS\Groups({"sight", "sight_tour"})
      * @JMS\Since("1.0")
      */
     private $id;
@@ -49,7 +49,7 @@ class Sight
      * @Assert\NotBlank()
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight"})
+     * @JMS\Groups({"sight", "sight_tour"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -65,7 +65,7 @@ class Sight
      * @Assert\NotBlank()
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight"})
+     * @JMS\Groups({"sight", "sight_tour"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -78,7 +78,7 @@ class Sight
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\SightTour", mappedBy="sight")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight"})
+     * @JMS\Groups({"sight", "sight_tour"})
      * @JMS\Since("1.0")
      */
     private $sightTours;
@@ -89,7 +89,7 @@ class Sight
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\SightTicket", mappedBy="sight")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight"})
+     * @JMS\Groups({"sight", "sight_tour"})
      * @JMS\Since("1.0")
      */
     private $sightTickets;
@@ -104,7 +104,7 @@ class Sight
      * @Assert\Type(type="string")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight"})
+     * @JMS\Groups({"sight", "sight_tour"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -117,7 +117,7 @@ class Sight
      * @ORM\Column(type="text", nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight"})
+     * @JMS\Groups({"sight", "sight_tour"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -130,7 +130,7 @@ class Sight
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight"})
+     * @JMS\Groups({"sight", "sight_tour"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -143,7 +143,7 @@ class Sight
      * @ORM\Column(type="string", length=50, nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight"})
+     * @JMS\Groups({"sight", "sight_tour"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -156,7 +156,7 @@ class Sight
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight"})
+     * @JMS\Groups({"sight", "sight_tour"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -169,7 +169,7 @@ class Sight
      * @ORM\Column(type="text", nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight"})
+     * @JMS\Groups({"sight", "sight_tour"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -182,7 +182,7 @@ class Sight
      * @ORM\Column(type="float", nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight"})
+     * @JMS\Groups({"sight", "sight_tour"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -195,7 +195,7 @@ class Sight
      * @ORM\Column(type="float", nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight"})
+     * @JMS\Groups({"sight", "sight_tour"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -208,7 +208,7 @@ class Sight
      * @ORM\Column(type="string", unique=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight"})
+     * @JMS\Groups({"sight", "sight_tour"})
      * @JMS\Since("1.0")
      */
     private $slug;
