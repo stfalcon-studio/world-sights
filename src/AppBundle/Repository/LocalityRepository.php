@@ -19,7 +19,7 @@ class LocalityRepository extends EntityRepository
      */
     public function findLocalityFirstResult()
     {
-        $qb = $this->createQueryBuilder('s');
+        $qb = $this->createQueryBuilder('l');
 
         return $qb->setMaxResults(1)
                   ->getQuery()

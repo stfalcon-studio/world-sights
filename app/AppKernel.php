@@ -27,6 +27,7 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             new Cocur\Slugify\Bridge\Symfony\CocurSlugifyBundle(),
+            new Fresh\DoctrineEnumBundle\FreshDoctrineEnumBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

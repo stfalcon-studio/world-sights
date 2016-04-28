@@ -32,7 +32,9 @@ class SightTour
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @JMS\Groups({"sight", "sight_tour"})
+     * @JMS\Expose
+     * @JMS\Groups({"sight", "sight_tour","sight_tour_for_sight"})
+     * @JMS\Since("1.0")
      */
     private $id;
 
@@ -43,6 +45,10 @@ class SightTour
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      *
      * @Assert\NotBlank()
+     *
+     * @JMS\Expose
+     * @JMS\Groups({"sight_tour"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -58,7 +64,7 @@ class SightTour
      * @Assert\Type(type="string")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_tour_for_sight"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -75,7 +81,7 @@ class SightTour
      * @Assert\Type(type="string")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_tour_for_sight"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -90,7 +96,7 @@ class SightTour
      * @Assert\Type(type="string")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_tour_for_sight"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -105,7 +111,7 @@ class SightTour
      * @Assert\Type(type="string")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_tour_for_sight"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -117,10 +123,10 @@ class SightTour
      *
      * @ORM\Column(type="float", nullable=true)
      *
-     * @Assert\Type(type="float")
+     * @Assert\Type(type="numeric")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_tour_for_sight"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -133,7 +139,7 @@ class SightTour
      * @ORM\Column(type="string", unique=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_tour_for_sight"})
      * @JMS\Since("1.0")
      */
     private $slug;
