@@ -17,3 +17,7 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    rollbar_environment:         development
+    rollbar_server_access_token: RollbarServerAccessToken
+    rollbar_client_access_token: RollbarClientAccessToken

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Locality;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -11,4 +12,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class LocalityRepository extends EntityRepository
 {
+    /**
+     * Find locality first result
+     *
+     * @return Locality
+     */
+    public function findLocalityFirstResult()
+    {
+        $qb = $this->createQueryBuilder('s');
+
+        return $qb->setMaxResults(1)
+                  ->getQuery()
+                  ->getOneOrNullResult();
+    }
 }

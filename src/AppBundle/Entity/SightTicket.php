@@ -3,9 +3,11 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Sight Ticket Entity
@@ -14,6 +16,8 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  *
  * @ORM\Table(name="sight_tickets")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\SightTicketRepository")
+ *
+ * @JMS\ExclusionPolicy("all")
  *
  * @Gedmo\Loggable
  */
@@ -27,6 +31,10 @@ class SightTicket
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @JMS\Expose
+     * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Since("1.0")
      */
     private $id;
 
@@ -50,6 +58,10 @@ class SightTicket
      *
      * @Assert\NotBlank()
      *
+     * @JMS\Expose
+     * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Since("1.0")
+     *
      * @Gedmo\Versioned
      */
     private $from;
@@ -61,6 +73,10 @@ class SightTicket
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      *
      * @Assert\NotBlank()
+     *
+     * @JMS\Expose
+     * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -75,6 +91,10 @@ class SightTicket
      * @Assert\Length(min="2", max="255")
      * @Assert\Type(type="string")
      *
+     * @JMS\Expose
+     * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Since("1.0")
+     *
      * @Gedmo\Versioned
      */
     private $type;
@@ -86,6 +106,10 @@ class SightTicket
      *
      * @Assert\Type(type="string")
      *
+     * @JMS\Expose
+     * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Since("1.0")
+     *
      * @Gedmo\Versioned
      */
     private $linkBuy;
@@ -93,7 +117,11 @@ class SightTicket
     /**
      * @var string $slug Slug
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", unique=true)
+     *
+     * @JMS\Expose
+     * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Since("1.0")
      */
     private $slug;
 
@@ -261,7 +289,7 @@ class SightTicket
      */
     public function setSlug($slug)
     {
-        $this->slug = strtolower(str_replace(' ', '-', $slug));
+        $this->slug = $slug;
 
         return $this;
     }

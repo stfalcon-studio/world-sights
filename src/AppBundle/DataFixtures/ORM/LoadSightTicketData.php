@@ -55,7 +55,7 @@ class LoadSightTicketData extends AbstractFixture implements DependentFixtureInt
         $sightTicket1 = (new SightTicket())
             ->setType('залізничний квиток')
             ->setLinkBuy('https://gd.tickets.ua/uk/railwaytracker/table/Kamenetz-Podolsk~2200260')
-            ->setSlug('Київ-Кам’янець залізничний квиток')
+            ->setSlug('kiev-kamyanets-train-ticket')
             ->setSight($sightKamyanetsCastle)
             ->setFrom($localityKiev)
             ->setTo($localityKamyanets);
@@ -64,7 +64,7 @@ class LoadSightTicketData extends AbstractFixture implements DependentFixtureInt
         $sightTicket2 = (new SightTicket())
             ->setType('залізничний квиток')
             ->setLinkBuy('http://poizd.turcompas.com/raspisanie/22260')
-            ->setSlug('Запоріжжя-Кам’янець залізничний квиток')
+            ->setSlug('zaporizya-kamyanets-train-ticket')
             ->setSight($sightKamyanetsCastle)
             ->setFrom($localityZaporizhia)
             ->setTo($localityKamyanets);
@@ -73,7 +73,7 @@ class LoadSightTicketData extends AbstractFixture implements DependentFixtureInt
         $sightTicket3 = (new SightTicket())
             ->setType('авіабілет')
             ->setLinkBuy('http://www.flyuia.com/avia-ua/from-kiev-Warsaw.html')
-            ->setSlug('Київ-Варшава авіабілет')
+            ->setSlug('kiev-warszawa-flight')
             ->setSight($sightWarzavaCastle)
             ->setFrom($localityKiev)
             ->setTo($localityWarszawa);
@@ -82,7 +82,7 @@ class LoadSightTicketData extends AbstractFixture implements DependentFixtureInt
         $sightTicket4 = (new SightTicket())
             ->setType('автобус')
             ->setLinkBuy('http://ecolines.by/ru/predlozhenija/307-minsk-warszawa')
-            ->setSlug('Мінськ-Варшава автобус')
+            ->setSlug('minsk-warszawa-ticket-bus')
             ->setSight($sightWarzavaCastle)
             ->setFrom($localityMinsk)
             ->setTo($localityWarszawa);
@@ -91,7 +91,7 @@ class LoadSightTicketData extends AbstractFixture implements DependentFixtureInt
         $sightTicket5 = (new SightTicket())
             ->setType('авіабілет')
             ->setLinkBuy('http://www.flyuia.com/avia-ua/from-Kiev-to-Minsk.html')
-            ->setSlug('Київ-Мінськ авіабілет')
+            ->setSlug('kiev-minsk-flight')
             ->setSight($sightMinskLibrary)
             ->setFrom($localityKiev)
             ->setTo($localityMinsk);

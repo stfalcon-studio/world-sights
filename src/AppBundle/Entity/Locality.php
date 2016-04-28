@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Locality Entity
@@ -15,6 +16,8 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  *
  * @ORM\Table(name="localities")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\LocalityRepository")
+ *
+ * @JMS\ExclusionPolicy("all")
  *
  * @Gedmo\Loggable
  */
@@ -28,6 +31,10 @@ class Locality
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @JMS\Expose
+     * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Since("1.0")
      */
     private $id;
 
@@ -38,6 +45,10 @@ class Locality
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      *
      * @Assert\NotBlank()
+     *
+     * @JMS\Expose
+     * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -72,6 +83,10 @@ class Locality
      * @Assert\NotBlank()
      * @Assert\Length(min="2", max="255")
      * @Assert\Type(type="string")
+     *
+     * @JMS\Expose
+     * @JMS\Groups({"sight", "sight_ticket"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */

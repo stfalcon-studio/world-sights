@@ -1,0 +1,10 @@
+services:
+    app.slug:
+        class: AppBundle\Service\SlugService
+        arguments:
+            - '@slugify'
+
+    app.matching:
+        class: AppBundle\Service\MatchingService
+        arguments:
+            - '@doctrine.orm.default_entity_manager'
