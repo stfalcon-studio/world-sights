@@ -1,3 +1,7 @@
+api_country:
+    resource: AppBundle\Controller\CountryController
+    type: rest
+
 api_locality:
     resource: AppBundle\Controller\LocalityController
     type: rest
