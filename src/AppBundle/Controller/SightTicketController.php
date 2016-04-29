@@ -29,7 +29,7 @@ class SightTicketController extends FOSRestController
     use ControllerHelperTrait, RollbarHelperTrait;
 
     /**
-     * Return all sight tickets
+     * Return all sight tickets with pagination
      *
      * @param Request $request Request
      *
@@ -187,9 +187,7 @@ class SightTicketController extends FOSRestController
                 /** @var SightTicket $sightTicket */
                 $sightTicket = $form->getData();
 
-                $slug = $sightTicket->getFrom()->getName().' '.$sightTicket->getTo()->getName().' '
-                        .$sightTicket->getType();
-                $slug = $this->get('app.slug')->createSlug($slug);
+                $slug = $this->get('app.slug')->createSlugSightTicket($sightTicket);
 
                 $sightTicket->setSlug($slug);
 
@@ -250,9 +248,7 @@ class SightTicketController extends FOSRestController
                 /** @var SightTicket $sightTicket */
                 $sightTicket = $form->getData();
 
-                $slug = $sightTicket->getFrom()->getName().'-'.$sightTicket->getTo()->getName().'-'
-                        .$sightTicket->getType();
-                $slug = $this->get('app.slug')->createSlug($slug);
+                $slug = $this->get('app.slug')->createSlugSightTicket($sightTicket);
 
                 $sightTicket->setSlug($slug);
 

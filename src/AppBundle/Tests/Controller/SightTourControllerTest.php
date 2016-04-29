@@ -15,7 +15,7 @@ class SightTourControllerTest extends WebTestCase
 
     /** @var ObjectManager */
     private $manager;
-    
+
     public function setUp()
     {
         parent::setUp();
@@ -137,16 +137,31 @@ class SightTourControllerTest extends WebTestCase
         $sight = [
             'name'         => 'Екскурсійна програма по місту Кам’янець-Подільському',
             'company_name' => '7 днів',
-            'tour_link'    => 'http://www.7dniv.ua/ua/tourism-directions',
             'price'        => 500,
             'slug'         => 'sightseeing-in-the-city-kamenetz-podolsk',
+            'sight'        => [
+                'name'       => 'Кам\'янець-подільська фортеця',
+                'phone'      => '(03849)2-55-33',
+                'sight_type' => [
+                    'name' => 'Замок',
+                ],
+                'locality'   => [
+                    'name'    => 'Кам\'янець-Подільський',
+                    'country' => [
+                        'name' => 'Україна',
+                    ],
+                ],
+            ],
         ];
 
         foreach ($sight as $key => $el) {
-            $this->assertEquals($el, $data[$key]);
+            if (is_array($data[$key])) {
+                foreach ($data[$key] as $key1 => $el1) {
+                    $this->assertEquals($el1, $data[$key][$key1]);
+                }
+            } else {
+                $this->assertEquals($el, $data[$key]);
+            }
         }
-
-        $this->assertEquals('Кам\'янець-подільська фортеця', $data['sight']['name']);
-        $this->assertEquals('(03849)2-55-33', $data['sight']['phone']);
     }
 }

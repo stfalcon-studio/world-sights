@@ -150,14 +150,37 @@ class SightTicketControllerTest extends WebTestCase
             'type'     => SightTicketType::TRAIN_TICKET,
             'link_buy' => 'https://gd.tickets.ua/uk/railwaytracker/table/Kamenetz-Podolsk~2200260',
             'slug'     => 'kiev-kamyanets-train-ticket',
+            'sight'    => [
+                'name'     => 'Кам\'янець-подільська фортеця',
+                'locality' => [
+                    'name'    => 'Кам\'янець-Подільський',
+                    'country' => [
+                        'name' => 'Україна',
+                    ],
+                ],
+            ],
+            'from'     => [
+                'name'    => 'Київ',
+                'country' => [
+                    'name' => 'Україна',
+                ],
+            ],
+            'to'       => [
+                'name'    => 'Кам\'янець-Подільський',
+                'country' => [
+                    'name' => 'Україна',
+                ],
+            ],
         ];
 
         foreach ($sightTicket as $key => $el) {
-            $this->assertEquals($el, $data[$key]);
+            if (is_array($data[$key])) {
+                foreach ($data[$key] as $key1 => $el1) {
+                    $this->assertEquals($el1, $data[$key][$key1]);
+                }
+            } else {
+                $this->assertEquals($el, $data[$key]);
+            }
         }
-
-        $this->assertEquals('Кам\'янець-подільська фортеця', $data['sight']['name']);
-        $this->assertEquals('Київ', $data['from']['name']);
-        $this->assertEquals('Кам\'янець-Подільський', $data['to']['name']);
     }
 }

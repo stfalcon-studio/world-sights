@@ -178,20 +178,30 @@ class SightControllerTest extends WebTestCase
     private function comparisonSight(array $data)
     {
         $sight = [
-            'name'      => 'Кам\'янець-подільська фортеця',
-            'phone'     => '(03849)2-55-33',
-            'website'   => 'http://muzeum.in.ua/',
-            'longitude' => 26.563411,
-            'latitude'  => 48.67351,
-            'slug'      => 'kamianets-podіlska-fortess',
+            'name'       => 'Кам\'янець-подільська фортеця',
+            'phone'      => '(03849)2-55-33',
+            'website'    => 'http://muzeum.in.ua/',
+            'slug'       => 'kamianets-podіlska-fortess',
+            'sight_type' => [
+                'name' => 'Замок',
+            ],
+            'locality'   => [
+                'name'    => 'Кам\'янець-Подільський',
+                'country' => [
+                    'name' => 'Україна',
+                ],
+            ],
         ];
 
         foreach ($sight as $key => $el) {
-            $this->assertEquals($el, $data[$key]);
+            if (is_array($data[$key])) {
+                foreach ($data[$key] as $key1 => $el1) {
+                    $this->assertEquals($el1, $data[$key][$key1]);
+                }
+            } else {
+                $this->assertEquals($el, $data[$key]);
+            }
         }
-
-        $this->assertEquals('Замок', $data['sight_type']['name']);
-        $this->assertEquals('Кам\'янець-Подільський', $data['locality']['name']);
     }
 
     private function comparisonSightTour(array $data)

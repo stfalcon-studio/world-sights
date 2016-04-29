@@ -30,7 +30,7 @@ class SightController extends FOSRestController
     use ControllerHelperTrait, RollbarHelperTrait;
 
     /**
-     * Return all sights
+     * Return all sights with pagination
      *
      * @param Request $request Request
      *

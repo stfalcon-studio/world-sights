@@ -1,3 +1,7 @@
+api_locality:
+    resource: AppBundle\Controller\LocalityController
+    type: rest
+
 api_sight:
     resource: AppBundle\Controller\SightController
     type: rest
