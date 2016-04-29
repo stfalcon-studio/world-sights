@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -16,6 +17,7 @@ use JMS\Serializer\Annotation as JMS;
  *
  * @ORM\Table(name="localities")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\LocalityRepository")
+ * @UniqueEntity("slug")
  *
  * @JMS\ExclusionPolicy("all")
  *
@@ -91,6 +93,16 @@ class Locality
      * @Gedmo\Versioned
      */
     private $name;
+
+    /**
+     * @var string $slug Slug
+     *
+     * @ORM\Column(type="string", unique=true)
+     *
+     * @JMS\Expose
+     * @JMS\Since("1.0")
+     */
+    private $slug;
 
     /**
      * @var boolean $enabled Enabled
@@ -183,6 +195,30 @@ class Locality
         $this->name = $name;
 
         return $this;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug Slug
+     *
+     * @return $this
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string Slug
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 
     /**

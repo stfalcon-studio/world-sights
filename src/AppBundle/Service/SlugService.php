@@ -2,8 +2,8 @@
 
 namespace AppBundle\Service;
 
+use AppBundle\Entity\SightTicket;
 use Cocur\Slugify\Slugify;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -40,6 +40,24 @@ class SlugService
         $translator     = new Translator('en_ER');
         $textTranslated = $translator->trans($text);
         $slug           = $this->slugify->slugify($textTranslated);
+
+        return $slug;
+    }
+
+    /**
+     * Created slug by sight ticket
+     *
+     * @param SightTicket $sightTicket Sight ticket
+     *
+     * @return string
+     */
+    public function createSlugSightTicket(SightTicket $sightTicket)
+    {
+        $from = $sightTicket->getFrom()->getName();
+        $to   = $sightTicket->getTo()->getName();
+        $type = $sightTicket->getType();
+
+        $slug = $this->createSlug($from.'-'.$to.'-'.$type);
 
         return $slug;
     }

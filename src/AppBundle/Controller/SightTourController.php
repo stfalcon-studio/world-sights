@@ -26,7 +26,7 @@ class SightTourController extends FOSRestController
     use ControllerHelperTrait, RollbarHelperTrait;
 
     /**
-     * Return all sight tours
+     * Return all sight tours with pagination
      *
      * @param Request $request Request
      *

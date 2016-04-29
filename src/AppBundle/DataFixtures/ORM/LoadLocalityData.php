@@ -41,43 +41,50 @@ class LoadLocalityData extends AbstractFixture implements DependentFixtureInterf
 
         $locality1 = (new Locality())
             ->setName('Кам\'янець-Подільський')
-            ->setCountry($countryUkraine);
+            ->setCountry($countryUkraine)
+            ->setSlug('kamyanets');
         $this->setReference('locality-Kamyanets', $locality1);
         $manager->persist($locality1);
 
         $locality2 = (new Locality())
             ->setName('Хотин')
-            ->setCountry($countryUkraine);
+            ->setCountry($countryUkraine)
+            ->setSlug('hotin');
         $this->setReference('locality-Hotin', $locality2);
         $manager->persist($locality2);
 
         $locality3 = (new Locality())
             ->setName('Запоріжжя')
-            ->setCountry($countryUkraine);
+            ->setCountry($countryUkraine)
+            ->setSlug('zaporizha');
         $this->setReference('locality-Zaporizhia', $locality3);
         $manager->persist($locality3);
 
         $locality4 = (new Locality())
             ->setName('Мінськ')
-            ->setCountry($countryBelarus);
+            ->setCountry($countryBelarus)
+            ->setSlug('minsk');
         $this->setReference('locality-Minsk', $locality4);
         $manager->persist($locality4);
 
         $locality5 = (new Locality())
             ->setName('Варшава')
-            ->setCountry($countryPoland);
+            ->setCountry($countryPoland)
+            ->setSlug('warzava');
         $this->setReference('locality-Warszawa', $locality5);
         $manager->persist($locality5);
 
         $locality6 = (new Locality())
             ->setName('Будапешт')
-            ->setCountry($countryHungary);
+            ->setCountry($countryHungary)
+            ->setSlug('budapest');
         $this->setReference('locality-Budapest', $locality6);
         $manager->persist($locality6);
 
         $locality7 = (new Locality())
             ->setName('Київ')
-            ->setCountry($countryUkraine);
+            ->setCountry($countryUkraine)
+            ->setSlug('kiev');
         $this->setReference('locality-Kiev', $locality7);
         $manager->persist($locality7);
 
