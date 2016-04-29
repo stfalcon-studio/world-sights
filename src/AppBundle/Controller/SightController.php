@@ -32,6 +32,8 @@ class SightController extends FOSRestController
     /**
      * Return all sights
      *
+     * @param Request $request Request
+     *
      * @return Sight[]
      *
      * @throws ServerInternalErrorException
@@ -50,17 +52,16 @@ class SightController extends FOSRestController
     public function getAllAction(Request $request)
     {
         try {
-            $paginator       = new Pagination();
             $sightRepository = $this->getDoctrine()->getRepository('AppBundle:Sight');
 
-            $form = $this->createForm(PaginationType::class, $paginator);
+            $form = $this->createForm(PaginationType::class);
 
             $form->submit($request->query->all());
             if ($form->isValid()) {
                 /** @var Pagination $paginator */
                 $paginator = $form->getData();
 
-                $sights = $sightRepository->findSightsWithPagination($paginator->getLimit(), $paginator->getOffset());
+                $sights = $sightRepository->findSightsWithPagination($paginator);
             } else {
                 $sights = $sightRepository->findAllSights();
             }
@@ -152,7 +153,7 @@ class SightController extends FOSRestController
             $view = $this->createViewForHttpOkResponse([
                 'sight_tickets' => $sightTickets,
             ]);
-            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_ticket']));
+            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_ticket_for_sight']));
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
             throw $this->createInternalServerErrorException();
@@ -230,9 +231,7 @@ class SightController extends FOSRestController
      */
     public function createAction(Request $request)
     {
-        $sight = new Sight();
-
-        $form = $this->createForm(SightType::class, $sight);
+        $form = $this->createForm(SightType::class);
 
         $form->submit($request->request->all());
         if ($form->isValid()) {

@@ -8,11 +8,6 @@ use Liip\FunctionalTestBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * SightTourControllerTest
- *
- * @author Yevgeniy Zholkevskiy <blackbullet@i.ua>
- */
 class SightTourControllerTest extends WebTestCase
 {
     /** @var Client $client */
@@ -20,10 +15,7 @@ class SightTourControllerTest extends WebTestCase
 
     /** @var ObjectManager */
     private $manager;
-
-    /**
-     * {@inheritdoc}
-     */
+    
     public function setUp()
     {
         parent::setUp();
@@ -34,9 +26,6 @@ class SightTourControllerTest extends WebTestCase
         $this->getFixtures();
     }
 
-    /**
-     * Load fixtures for tests
-     */
     private function getFixtures()
     {
         $fixtures = [
@@ -51,9 +40,6 @@ class SightTourControllerTest extends WebTestCase
         $this->loadFixtures($fixtures);
     }
 
-    /**
-     * Test get all action
-     */
     public function testGetAllAction()
     {
         $this->client->request('GET', '/api/v1/sight-tours');
@@ -67,9 +53,6 @@ class SightTourControllerTest extends WebTestCase
         $this->comparisonSightTour($data['sight_tours'][0]);
     }
 
-    /**
-     * Test get action
-     */
     public function testGetAction()
     {
         $this->client->request('GET', '/api/v1/sight-tours/sightseeing-in-the-city-kamenetz-podolsk');
@@ -82,9 +65,6 @@ class SightTourControllerTest extends WebTestCase
         $this->comparisonSightTour($data['sight_tour']);
     }
 
-    /**
-     * Test create action
-     */
     public function testCreateAction()
     {
         /** @var Sight $sight */
@@ -118,9 +98,6 @@ class SightTourControllerTest extends WebTestCase
         }
     }
 
-    /**
-     * Test update action
-     */
     public function testUpdateAction()
     {
         /** @var Sight $sight */
@@ -155,11 +132,6 @@ class SightTourControllerTest extends WebTestCase
         }
     }
 
-    /**
-     * Comparison sight tour with data
-     *
-     * @param array $data Array of data
-     */
     private function comparisonSightTour(array $data)
     {
         $sight = [

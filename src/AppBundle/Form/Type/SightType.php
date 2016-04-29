@@ -3,8 +3,6 @@
 namespace AppBundle\Form\Type;
 
 use AppBundle\Entity\Sight;
-use AppBundle\EventListener\SightConvertListener;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

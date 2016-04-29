@@ -3,6 +3,7 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Entity\Sight;
+use AppBundle\Form\Model\Pagination;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -47,18 +48,17 @@ class SightRepository extends EntityRepository
     /**
      * Find sights with pagination
      *
-     * @param int $limit
-     * @param int $offset
+     * Pagination $paginator Paginator
      *
      * @return Sight[]
      */
-    public function findSightsWithPagination($limit = 10, $offset = 0)
+    public function findSightsWithPagination(Pagination $paginator)
     {
         $qb = $this->createQueryBuilder('s');
 
         return $qb->where($qb->expr()->eq('s.enabled', true))
-                  ->setFirstResult($offset)
-                  ->setMaxResults($limit)
+                  ->setFirstResult($paginator->getOffset())
+                  ->setMaxResults($paginator->getLimit())
                   ->getQuery()
                   ->getResult();
     }
@@ -66,7 +66,7 @@ class SightRepository extends EntityRepository
     /**
      * Find sight first result
      *
-     * @return Sight
+     * @return Sight|null
      */
     public function findSightFirstResult()
     {

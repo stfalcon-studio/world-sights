@@ -28,6 +28,8 @@ class SightTourController extends FOSRestController
     /**
      * Return all sight tours
      *
+     * @param Request $request Request
+     *
      * @return SightTour[]
      *
      * @throws ServerInternalErrorException
@@ -46,17 +48,16 @@ class SightTourController extends FOSRestController
     public function getAllAction(Request $request)
     {
         try {
-            $paginator           = new Pagination();
             $sightTourRepository = $this->getDoctrine()->getRepository('AppBundle:SightTour');
 
-            $form = $this->createForm(PaginationType::class, $paginator);
+            $form = $this->createForm(PaginationType::class);
 
             $form->submit($request->query->all());
             if ($form->isValid()) {
                 /** @var Pagination $paginator */
                 $paginator = $form->getData();
 
-                $sightTours = $sightTourRepository->findSightToursWithPagination($paginator->getLimit(), $paginator->getOffset());
+                $sightTours = $sightTourRepository->findSightToursWithPagination($paginator);
             } else {
                 $sightTours = $sightTourRepository->findAllSightTours();
             }
@@ -110,7 +111,6 @@ class SightTourController extends FOSRestController
         }
 
         $view = $this->createViewForHttpOkResponse([
-            'status'     => 'OK',
             'sight_tour' => $sightTour,
         ]);
         $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_tour']));
@@ -146,13 +146,9 @@ class SightTourController extends FOSRestController
      */
     public function createAction(Request $request)
     {
-        $sightTour = new SightTour();
+        $form = $this->createForm(SightTourType::class);
 
-        $form = $this->createForm(SightTourType::class, $sightTour);
-
-        $data = $request->request->all();
-
-        $form->submit($data);
+        $form->submit($request->request->all());
         if ($form->isValid()) {
             try {
                 /** @var SightTour $sightTour */
@@ -213,9 +209,7 @@ class SightTourController extends FOSRestController
     {
         $form = $this->createForm(SightTourType::class, $sightTour);
 
-        $data = $request->request->all();
-
-        $form->submit($data);
+        $form->submit($request->request->all());
         if ($form->isValid()) {
             try {
                 /** @var SightTour $sightTour */
