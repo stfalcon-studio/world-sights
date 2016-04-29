@@ -4,6 +4,7 @@ namespace AppBundle\Repository;
 
 use AppBundle\Entity\Sight;
 use AppBundle\Entity\SightTour;
+use AppBundle\Form\Model\Pagination;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -49,18 +50,17 @@ class SightTourRepository extends EntityRepository
     /**
      * Find sight tours with pagination
      *
-     * @param int $limit
-     * @param int $offset
+     * Pagination $paginator Paginator
      *
-     * @return array
+     * @return SightTour[]
      */
-    public function findSightToursWithPagination($limit = 10, $offset = 0)
+    public function findSightToursWithPagination(Pagination $paginator)
     {
         $qb = $this->createQueryBuilder('s');
 
         return $qb->where($qb->expr()->eq('s.enabled', true))
-                  ->setFirstResult($offset)
-                  ->setMaxResults($limit)
+                  ->setFirstResult($paginator->getOffset())
+                  ->setMaxResults($paginator->getLimit())
                   ->getQuery()
                   ->getResult();
     }

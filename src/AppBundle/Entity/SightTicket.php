@@ -35,7 +35,7 @@ class SightTicket
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_ticket", "sight_tour"})
+     * @JMS\Groups({"sight", "sight_ticket_for_sight", "sight_tour", "sight_ticket"})
      * @JMS\Since("1.0")
      */
     private $id;
@@ -47,6 +47,10 @@ class SightTicket
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      *
      * @Assert\NotBlank()
+     *
+     * @JMS\Expose
+     * @JMS\Groups({"sight_ticket"})
+     * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
@@ -61,7 +65,7 @@ class SightTicket
      * @Assert\NotBlank()
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_ticket", "sight_tour"})
+     * @JMS\Groups({"sight", "sight_ticket_for_sight", "sight_tour", "sight_ticket"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -77,7 +81,7 @@ class SightTicket
      * @Assert\NotBlank()
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_ticket", "sight_tour"})
+     * @JMS\Groups({"sight", "sight_ticket_for_sight", "sight_tour", "sight_ticket"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -92,7 +96,7 @@ class SightTicket
      * @DoctrineAssert\Enum(entity="AppBundle\DBAL\Types\SightTicketType")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_ticket", "sight_tour"})
+     * @JMS\Groups({"sight", "sight_ticket_for_sight", "sight_tour", "sight_ticket"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -107,7 +111,7 @@ class SightTicket
      * @Assert\Type(type="string")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_ticket", "sight_tour"})
+     * @JMS\Groups({"sight", "sight_ticket_for_sight", "sight_tour", "sight_ticket"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -120,7 +124,7 @@ class SightTicket
      * @ORM\Column(type="string", unique=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_ticket", "sight_tour"})
+     * @JMS\Groups({"sight", "sight_ticket_for_sight", "sight_tour", "sight_ticket"})
      * @JMS\Since("1.0")
      */
     private $slug;
