@@ -7,7 +7,7 @@ use Liip\FunctionalTestBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\HttpFoundation\Response;
 
-class LocalityControllerTest extends WebTestCase
+class CountryControllerTest extends WebTestCase
 {
     /** @var Client $client */
     private $client;
@@ -27,27 +27,27 @@ class LocalityControllerTest extends WebTestCase
 
     public function testGetAll()
     {
-        $this->client->request('GET', '/api/v1/localities?limit=10&offset=0');
+        $this->client->request('GET', '/api/v1/countries?limit=10&offset=0');
 
         $response = $this->client->getResponse();
         $data     = json_decode($response->getContent(), true);
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $this->assertEquals(200, $data['code']);
-        $this->assertCount(7, $data['localities']);
-        $this->comparisonLocality($data['localities'][0]);
+        $this->assertCount(4, $data['countries']);
+        $this->comparisonCountries($data['countries'][0]);
     }
 
     public function testGet()
     {
-        $this->client->request('GET', '/api/v1/localities/kamyanets');
+        $this->client->request('GET', '/api/v1/countries/ukraine');
 
         $response = $this->client->getResponse();
         $data     = json_decode($response->getContent(), true);
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $this->assertEquals(200, $data['code']);
-        $this->comparisonLocality($data['locality']);
+        $this->comparisonCountries($data['country']);
     }
 
     public function getFixtures()
@@ -64,18 +64,14 @@ class LocalityControllerTest extends WebTestCase
         $this->loadFixtures($fixtures);
     }
 
-    private function comparisonLocality(array $data)
+    private function comparisonCountries(array $data)
     {
-        $locality = [
-            'name'    => 'Кам\'янець-Подільський',
-            'slug'    => 'kamyanets',
-            'country' => [
-                'name' => 'Україна',
-                'slug' => 'kamyanets',
-            ],
+        $countries = [
+            'name' => 'Україна',
+            'slug' => 'ukraine',
         ];
 
-        foreach ($locality as $key => $el) {
+        foreach ($countries as $key => $el) {
             if (is_array($data[$key])) {
                 foreach ($data[$key] as $key1 => $el1) {
                     $this->assertEquals($el1, $data[$key][$key1]);
