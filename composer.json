@@ -1,6 +1,6 @@
 {
-    "name": "zenmate/my_project",
-    "license": "proprietary",
+    "name": "stfalcon/world-sights",
+    "license": "MIT",
     "type": "project",
     "autoload": {
         "psr-4": {

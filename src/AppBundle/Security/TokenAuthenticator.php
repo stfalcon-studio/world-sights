@@ -44,8 +44,8 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         $route = $request->get('_route');
         if ('api_users_registration' === $route
             || 'api_users_login' === $route
-            || 'nelmio_api_doc_index' === $route
             || 'api_users_update_token' === $route
+            || 'nelmio_api_doc_index' === $route
         ) {
             return null;
         }
@@ -72,9 +72,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     {
         $accessToken = $credentials['token'];
 
-        return $this->em->getRepository('AppBundle:User')->findOneBy([
-            'accessToken' => $accessToken,
-        ]);
+        return $this->em->getRepository('AppBundle:User')->findUserByAccessToken($accessToken);
     }
 
     /**

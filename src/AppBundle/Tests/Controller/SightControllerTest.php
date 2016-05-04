@@ -20,18 +20,21 @@ class SightControllerTest extends WebTestCase
 
     public function setUp()
     {
+        $this->getFixtures();
+
         parent::setUp();
 
-        $this->client  = static::makeClient();
-        $this->manager = $this->client->getContainer()->get('doctrine')->getManager();
+        $this->client = static::makeClient();
+        $this->client->setServerParameter('HTTP_X_AUTH_TOKEN', '1e5008f3677f7ba2a8bd8e47b8c0c6');
 
-        $this->getFixtures();
+        $this->manager = $this->client->getContainer()->get('doctrine')->getManager();
     }
 
     public function testGetAllAction()
     {
         $this->client->request('GET', '/api/v1/sights?limit=10&offset=0');
-
+        var_dump($this->client->getResponse());
+        var_dump($this->client->getServerParameter('HTTP_X_AUTH_TOKEN'));
         $response = $this->client->getResponse();
         $data     = json_decode($response->getContent(), true);
 
@@ -170,6 +173,7 @@ class SightControllerTest extends WebTestCase
             'AppBundle\DataFixtures\ORM\LoadSightData',
             'AppBundle\DataFixtures\ORM\LoadSightTourData',
             'AppBundle\DataFixtures\ORM\LoadSightTicketData',
+            'AppBundle\DataFixtures\ORM\LoadUserData',
         ];
 
         $this->loadFixtures($fixtures);
