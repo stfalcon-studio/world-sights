@@ -33,8 +33,7 @@ class SightControllerTest extends WebTestCase
     public function testGetAllAction()
     {
         $this->client->request('GET', '/api/v1/sights?limit=10&offset=0');
-        var_dump($this->client->getResponse());
-        var_dump($this->client->getServerParameter('HTTP_X_AUTH_TOKEN'));
+
         $response = $this->client->getResponse();
         $data     = json_decode($response->getContent(), true);
 

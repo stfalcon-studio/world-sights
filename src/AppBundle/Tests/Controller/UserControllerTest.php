@@ -47,8 +47,8 @@ class UserControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $data     = json_decode($response->getContent(), true);
 
-        $this->assertStatusCode(Response::HTTP_OK, $this->client);
-        $this->assertEquals(200, $data['code']);
+        $this->assertStatusCode(Response::HTTP_CREATED, $this->client);
+        $this->assertEquals(201, $data['code']);
         $this->assertEquals($data['user']['username'], 'zenmate');
         $this->assertEquals($data['user']['email'], 'zenmate@gmail.com');
     }

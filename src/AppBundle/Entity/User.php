@@ -243,4 +243,14 @@ class User extends BaseUser
 
         return $this;
     }
+
+    /**
+     * Get salt
+     *
+     * @return null
+     */
+    public function getSalt()
+    {
+        return null;
+    }
 }
