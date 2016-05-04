@@ -17,3 +17,7 @@ api_sight_tour:
 api_sight_ticket:
     resource: AppBundle\Controller\SightTicketController
     type: rest
+
+api_sight_user:
+    resource: AppBundle\Controller\UserController
+    type: rest

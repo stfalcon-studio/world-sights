@@ -10,3 +10,6 @@ admin_area:
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /api/doc
+
+api_users_login:
+    path: /api/v1/users/login

@@ -30,7 +30,7 @@ class CountryController extends FOSRestController
      *
      * @param Request $request Request
      *
-     * @return Country[]
+     * @return Response
      *
      * @throws ServerInternalErrorException
      *
@@ -78,7 +78,7 @@ class CountryController extends FOSRestController
      *
      * @param Country $country Country
      *
-     * @return Country
+     * @return Response
      *
      * @ApiDoc(
      *     description="Return country by slug",

@@ -30,7 +30,7 @@ class SightTourController extends FOSRestController
      *
      * @param Request $request Request
      *
-     * @return SightTour[]
+     * @return Response
      *
      * @throws ServerInternalErrorException
      *
@@ -79,7 +79,7 @@ class SightTourController extends FOSRestController
      *
      * @param SightTour $sightTour Sight tour
      *
-     * @return SightTour
+     * @return Response
      *
      * @throws ServerInternalErrorException
      *
@@ -123,7 +123,7 @@ class SightTourController extends FOSRestController
      *
      * @param Request $request Request
      *
-     * @return SightTour
+     * @return Response
      *
      * @throws ServerInternalErrorException
      *
@@ -181,7 +181,7 @@ class SightTourController extends FOSRestController
      * @param Request   $request   Request
      * @param SightTour $sightTour Sight Tour
      *
-     * @return SightTour
+     * @return Response
      *
      * @ApiDoc(
      *      section="Sight Tour",

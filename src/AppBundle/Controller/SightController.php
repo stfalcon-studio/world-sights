@@ -34,7 +34,7 @@ class SightController extends FOSRestController
      *
      * @param Request $request Request
      *
-     * @return Sight[]
+     * @return Response
      *
      * @throws ServerInternalErrorException
      *
@@ -83,7 +83,7 @@ class SightController extends FOSRestController
      *
      * @param Sight $sight Sight
      *
-     * @return Sight
+     * @return Response
      *
      * @ApiDoc(
      *     description="Return sight by slug",
@@ -125,7 +125,7 @@ class SightController extends FOSRestController
      *
      * @param Sight $sight Sight
      *
-     * @return SightTicket
+     * @return Response
      *
      * @ApiDoc(
      *     description="Return tickets by sight",
@@ -167,7 +167,7 @@ class SightController extends FOSRestController
      *
      * @param Sight $sight Sight
      *
-     * @return SightType
+     * @return Response
      *
      * @ApiDoc(
      *     description="Return tours by sight",
@@ -208,7 +208,7 @@ class SightController extends FOSRestController
      *
      * @param Request $request Request
      *
-     * @return Sight
+     * @return Response
      *
      * @throws ServerInternalErrorException
      *
@@ -266,7 +266,7 @@ class SightController extends FOSRestController
      * @param Request $request Request
      * @param Sight   $sight   Sight
      *
-     * @return Sight
+     * @return Response
      *
      * @throws ServerInternalErrorException
      *
