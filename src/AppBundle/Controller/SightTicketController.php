@@ -33,7 +33,7 @@ class SightTicketController extends FOSRestController
      *
      * @param Request $request Request
      *
-     * @return SightTicket[]
+     * @return Response
      *
      * @throws ServerInternalErrorException
      *
@@ -82,7 +82,7 @@ class SightTicketController extends FOSRestController
      *
      * @param SightTicket $sightTicket SightTicket
      *
-     * @return SightTicket
+     * @return Response
      *
      * @ApiDoc(
      *     description="Return sight ticket by slug",
@@ -122,7 +122,7 @@ class SightTicketController extends FOSRestController
     /**
      * Return sight ticket types
      *
-     * @return SightTicketTypeDBAL[]
+     * @return Response
      *
      * @ApiDoc(
      *     description="Return sight ticket types",
@@ -156,7 +156,7 @@ class SightTicketController extends FOSRestController
      *
      * @param Request $request Request
      *
-     * @return SightTicket
+     * @return Response
      *
      * @throws ServerInternalErrorException
      *
@@ -214,7 +214,7 @@ class SightTicketController extends FOSRestController
      * @param Request     $request     Request
      * @param SightTicket $sightTicket Sight Ticket
      *
-     * @return SightTicket
+     * @return Response
      *
      * @ApiDoc(
      *      section="Sight Ticket",

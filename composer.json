@@ -1,6 +1,6 @@
 {
-    "name": "zenmate/my_project",
-    "license": "proprietary",
+    "name": "stfalcon/world-sights",
+    "license": "MIT",
     "type": "project",
     "autoload": {
         "psr-4": {
@@ -30,7 +30,8 @@
         "jms/serializer-bundle": "^1.1",
         "nelmio/api-doc-bundle": "^2.12",
         "cocur/slugify": "^1.4",
-        "fresh/doctrine-enum-bundle": "4.5"
+        "fresh/doctrine-enum-bundle": "4.5",
+        "friendsofsymfony/user-bundle": "~2.0@dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",

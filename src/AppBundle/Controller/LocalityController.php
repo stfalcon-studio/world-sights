@@ -30,7 +30,7 @@ class LocalityController extends FOSRestController
      *
      * @param Request $request Request
      *
-     * @return Locality[]
+     * @return Response
      *
      * @throws ServerInternalErrorException
      *
@@ -78,7 +78,7 @@ class LocalityController extends FOSRestController
      *
      * @param Locality $locality Locality
      *
-     * @return Locality
+     * @return Response
      *
      * @ApiDoc(
      *     description="Return locality by slug",

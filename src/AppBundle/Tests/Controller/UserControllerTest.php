@@ -7,7 +7,7 @@ use Liip\FunctionalTestBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\HttpFoundation\Response;
 
-class CountryControllerTest extends WebTestCase
+class UserControllerTest extends WebTestCase
 {
     /** @var Client $client */
     private $client;
@@ -22,37 +22,65 @@ class CountryControllerTest extends WebTestCase
         parent::setUp();
 
         $this->client = static::makeClient();
-        $this->client->setServerParameter('HTTP_X_AUTH_TOKEN', '1e5008f3677f7ba2a8bd8e47b8c0c6');
 
         $this->manager = $this->client->getContainer()->get('doctrine')->getManager();
+        $this->client->setServerParameter('HTTP_X_AUTH_TOKEN', '1e5008f3677f7ba2a8bd8e47b8c0c6');
     }
 
-    public function testGetAll()
+    public function testRegistrationAction()
     {
-        $this->client->request('GET', '/api/v1/countries?limit=10&offset=0');
+        $data = [
+            'email'    => 'zenmate@gmail.com',
+            'username' => 'zenmate',
+            'password' => '1234',
+        ];
+
+        $this->client->request(
+            'POST',
+            '/api/v1/users/registration',
+            $data,
+            [],
+            ['Content-Type' => 'application/json'],
+            []
+        );
+
+        $response = $this->client->getResponse();
+        $data     = json_decode($response->getContent(), true);
+
+        $this->assertStatusCode(Response::HTTP_CREATED, $this->client);
+        $this->assertEquals(201, $data['code']);
+        $this->assertEquals($data['user']['username'], 'zenmate');
+        $this->assertEquals($data['user']['email'], 'zenmate@gmail.com');
+    }
+
+    public function testLoginAction()
+    {
+        $data = [
+            'username' => 'user',
+            'password' => '1234',
+        ];
+
+        $this->client->request(
+            'POST',
+            '/api/v1/users/login',
+            $data,
+            [],
+            ['Content-Type' => 'application/json'],
+            []
+        );
 
         $response = $this->client->getResponse();
         $data     = json_decode($response->getContent(), true);
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
-        $this->assertEquals(200, $data['code']);
-        $this->assertCount(4, $data['countries']);
-        $this->comparisonCountries($data['countries'][0]);
+        $this->assertArrayHasKey('accessToken', $data);
+        $this->assertArrayHasKey('refreshToken', $data);
     }
 
-    public function testGet()
-    {
-        $this->client->request('GET', '/api/v1/countries/ukraine');
-
-        $response = $this->client->getResponse();
-        $data     = json_decode($response->getContent(), true);
-
-        $this->assertStatusCode(Response::HTTP_OK, $this->client);
-        $this->assertEquals(200, $data['code']);
-        $this->comparisonCountries($data['country']);
-    }
-
-    public function getFixtures()
+    /**
+     * Load fixtures for tests
+     */
+    private function getFixtures()
     {
         $fixtures = [
             'AppBundle\DataFixtures\ORM\LoadCountryData',
@@ -65,23 +93,5 @@ class CountryControllerTest extends WebTestCase
         ];
 
         $this->loadFixtures($fixtures);
-    }
-
-    private function comparisonCountries(array $data)
-    {
-        $countries = [
-            'name' => 'Україна',
-            'slug' => 'ukraine',
-        ];
-
-        foreach ($countries as $key => $el) {
-            if (is_array($data[$key])) {
-                foreach ($data[$key] as $key1 => $el1) {
-                    $this->assertEquals($el1, $data[$key][$key1]);
-                }
-            } else {
-                $this->assertEquals($el, $data[$key]);
-            }
-        }
     }
 }
