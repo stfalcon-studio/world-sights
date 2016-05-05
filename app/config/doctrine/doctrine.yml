@@ -12,6 +12,7 @@ doctrine:
             enum: string
         types:
             SightTicketType: AppBundle\DBAL\Types\SightTicketType
+            FriendStatusType: AppBundle\DBAL\Types\FriendStatusType
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
