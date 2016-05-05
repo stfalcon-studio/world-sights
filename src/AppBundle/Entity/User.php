@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\DBAL\Types\FriendStatusType;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -41,7 +42,7 @@ class User extends BaseUser
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @JMS\Expose
-     * @JMS\Groups({"user"})
+     * @JMS\Groups({"user", "friend"})
      * @JMS\Since("1.0")
      */
     protected $id;
@@ -70,7 +71,7 @@ class User extends BaseUser
      * @var string $username Username
      *
      * @JMS\Expose
-     * @JMS\Groups({"user"})
+     * @JMS\Groups({"user", "friend"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -81,7 +82,7 @@ class User extends BaseUser
      * @var string $email Email
      *
      * @JMS\Expose
-     * @JMS\Groups({"user"})
+     * @JMS\Groups({"user", "friend"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -124,6 +125,15 @@ class User extends BaseUser
      * @Gedmo\Versioned
      */
     private $expiredAt;
+
+    /**
+     * @var FriendStatusType $status Friend status type
+     *
+     * @JMS\Expose
+     * @JMS\Groups({"friend"})
+     * @JMS\Since("1.0")
+     */
+    private $status;
 
     /**
      * Constructor
@@ -261,6 +271,30 @@ class User extends BaseUser
     public function setExpiredAt($expiredAt)
     {
         $this->expiredAt = $expiredAt;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return FriendStatusType Status
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set status
+     *
+     * @param FriendStatusType $status Status
+     *
+     * @return $this
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
 
         return $this;
     }
