@@ -70,7 +70,7 @@ class LoadUserData extends AbstractFixture
             ->setUsername('user6')
             ->setPlainPassword('1234')
             ->setEnabled(true);
-        $this->setReference('user-6', $user5);
+        $this->setReference('user-6', $user6);
         $manager->persist($user6);
 
         $manager->flush();

@@ -107,14 +107,14 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * Find friend user by user and friend
+     * Find user by user and friend
      *
      * @param User $user   User
      * @param User $friend Friend
      *
      * @return User|null
      */
-    public function findFriendUserByUser(User $user, User $friend)
+    public function findUserByUserFriend(User $user, User $friend)
     {
         $qb = $this->createQueryBuilder('u');
 

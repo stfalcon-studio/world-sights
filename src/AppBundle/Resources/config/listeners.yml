@@ -9,6 +9,6 @@ services:
     app.friend.listener:
         class: AppBundle\EntityListener\FriendListener
         tags:
-            -  { name: doctrine.orm.entity_listener, event: onFlush }
+            -  { name: doctrine.orm.entity_listener }
         arguments:
             - "@security.token_storage"

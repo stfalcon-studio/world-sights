@@ -30,21 +30,63 @@ class FriendListener
         $this->tokenStorage = $tokenStorage;
     }
 
+    /**
+     * Post persist
+     *
+     * @param Friend             $friend Friend
+     * @param LifecycleEventArgs $args   Arguments
+     */
     public function postPersist(Friend $friend, LifecycleEventArgs $args)
     {
         if ($friend instanceof Friend) {
-            /** @var User $user */
-            $user = $this->tokenStorage->getToken()->getUser();
-            if ($user === $friend->getUser()) {
-                $em = $args->getEntityManager();
+            if ($token = $this->tokenStorage->getToken()) {
+                /** @var User $user */
+                $user = $token->getUser();
+                if ($user === $friend->getUser()) {
+                    $em = $args->getEntityManager();
 
-                $associatedFriend = (new Friend())
-                    ->setUser($friend->getFriend())
-                    ->setFriend($friend->getUser())
-                    ->setStatus(FriendStatusType::RECEIVED);
+                    $associatedFriend = $em->getRepository('AppBundle:Friend')
+                                           ->findFriendByUserFriend($user, $friend->getFriend());
 
-                $em->persist($associatedFriend);
-                $em->flush();
+                    $associatedFriend->setStatus(FriendStatusType::RECEIVED);
+
+                    $em->persist($associatedFriend);
+                    $em->flush();
+                }
+            }
+        }
+    }
+
+    /**
+     * Post update
+     *
+     * @param Friend             $friend Friend
+     * @param LifecycleEventArgs $args   Arguments
+     */
+    public function postUpdate(Friend $friend, LifecycleEventArgs $args)
+    {
+        if ($friend instanceof Friend) {
+            if ($token = $this->tokenStorage->getToken()) {
+                /** @var User $user */
+                $user = $token->getUser();
+                if ($user === $friend->getUser()) {
+                    $em = $args->getEntityManager();
+
+                    $associatedFriend = $em->getRepository('AppBundle:Friend')
+                                           ->findFriendByUserFriend($user, $friend->getFriend());
+
+                    $status = $friend->getStatus();
+                    if (FriendStatusType::RECEIVED === $status) {
+                        $associatedFriend->setStatus(FriendStatusType::SENT);
+                    }
+
+                    if (FriendStatusType::ACCEPTED === $status) {
+                        $associatedFriend->setStatus(FriendStatusType::ACCEPTED);
+                    }
+
+                    $em->persist($associatedFriend);
+                    $em->flush();
+                }
             }
         }
     }

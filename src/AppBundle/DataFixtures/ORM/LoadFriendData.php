@@ -78,6 +78,18 @@ class LoadFriendData extends AbstractFixture implements DependentFixtureInterfac
             ->setStatus(FriendStatusType::ACCEPTED);
         $manager->persist($friend6);
 
+        $friend7 = (new Friend())
+            ->setUser($user4)
+            ->setFriend($user1)
+            ->setStatus(FriendStatusType::SENT);
+        $manager->persist($friend7);
+
+        $friend8 = (new Friend())
+            ->setUser($user5)
+            ->setFriend($user1)
+            ->setStatus(FriendStatusType::RECEIVED);
+        $manager->persist($friend8);
+
         $manager->flush();
     }
 }

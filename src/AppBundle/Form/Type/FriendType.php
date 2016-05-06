@@ -2,10 +2,12 @@
 
 namespace AppBundle\Form\Type;
 
+use AppBundle\DBAL\Types\FriendStatusType;
 use AppBundle\Event\AddUserEvent;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -47,13 +49,17 @@ class FriendType extends AbstractType
             ])
             ->add('friend', EntityType::class, [
                 'class' => 'AppBundle\Entity\User',
+            ])
+            ->add('status', ChoiceType::class, [
+                'choices' => FriendStatusType::getChoices(),
+                'empty_data'    => FriendStatusType::SENT,
             ]);
 
         $token = $this->tokenStorage;
 
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($token) {
             $friend = $event->getData();
-            $this->eventDispatcher->dispatch(FormEvents::SUBMIT , new AddUserEvent($token, $friend));
+            $this->eventDispatcher->dispatch(FormEvents::SUBMIT, new AddUserEvent($token, $friend));
         });
     }
 
