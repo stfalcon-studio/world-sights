@@ -431,7 +431,6 @@ class FriendController extends FOSRestController
             $form = $this->createForm(FriendType::class, $friend);
 
             $form->submit($request->request->all(), false);
-            $form->get('friend')->setData($userFriend);
             if ($form->isValid()) {
                 /** @var Friend $friend */
                 $friend = $form->getData();
@@ -441,6 +440,56 @@ class FriendController extends FOSRestController
                 $view->setSerializationContext(SerializationContext::create()->setGroups(['friend']));
             } else {
                 $view = $this->createViewForValidationErrorResponse($form);
+            }
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * Delete friend
+     *
+     * @param User $friend Friend
+     *
+     * @return Response
+     *
+     * @throws ServerInternalErrorException
+     *
+     * @ApiDoc(
+     *       requirements={
+     *          {"name"="id", "dataType"="int", "requirement"="\d+", "description"="ID of friend"}
+     *      },
+     *      section="Friend",
+     *      statusCodes={
+     *          204="Returned when successful",
+     *          500="Returned when an error has occurred",
+     *      }
+     * )
+     *
+     * @Rest\Delete("/{id}")
+     *
+     * @ParamConverter("id", class="AppBundle:User")
+     */
+    public function deleteAction(User $friend)
+    {
+        $user   = $this->getUser();
+        $friend = $this->getDoctrine()->getRepository('AppBundle:Friend')->findFriendByUserFriend($user, $friend);
+
+        if (null === $friend) {
+            $view = $this->createViewForHttpNotFoundResponse([
+                'message' => 'Not Found',
+            ]);
+        } else {
+            if (FriendStatusType::SENT === $friend->getStatus()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($friend);
+                $em->flush();
+
+                $view = $this->createViewForHttpNoContentResponse();
+            } else {
+                $view = $this->createViewForInvalidErrorResponse([
+                    'message' => 'For delete friend status must be sent',
+                ]);
             }
         }
 

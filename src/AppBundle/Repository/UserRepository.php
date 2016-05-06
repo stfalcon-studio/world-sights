@@ -136,7 +136,7 @@ class UserRepository extends EntityRepository
     /**
      * Find friend status by user and friend
      *
-     * @param User $user User
+     * @param User $user   User
      * @param User $friend Friend
      *
      * @return User|null

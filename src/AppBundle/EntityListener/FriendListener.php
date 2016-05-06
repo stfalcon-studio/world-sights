@@ -45,10 +45,10 @@ class FriendListener
                 if ($user === $friend->getUser()) {
                     $em = $args->getEntityManager();
 
-                    $associatedFriend = $em->getRepository('AppBundle:Friend')
-                                           ->findFriendByUserFriend($user, $friend->getFriend());
-
-                    $associatedFriend->setStatus(FriendStatusType::RECEIVED);
+                    $associatedFriend = (new Friend())
+                        ->setUser($friend->getFriend())
+                        ->setFriend($friend->getUser())
+                        ->setStatus(FriendStatusType::RECEIVED);
 
                     $em->persist($associatedFriend);
                     $em->flush();
@@ -73,18 +73,45 @@ class FriendListener
                     $em = $args->getEntityManager();
 
                     $associatedFriend = $em->getRepository('AppBundle:Friend')
-                                           ->findFriendByUserFriend($user, $friend->getFriend());
+                                           ->findFriendByUserFriend($friend->getFriend(), $user);
 
                     $status = $friend->getStatus();
-                    if (FriendStatusType::RECEIVED === $status) {
-                        $associatedFriend->setStatus(FriendStatusType::SENT);
-                    }
-
-                    if (FriendStatusType::ACCEPTED === $status) {
-                        $associatedFriend->setStatus(FriendStatusType::ACCEPTED);
+                    switch ($status) {
+                        case FriendStatusType::REJECTED:
+                        case FriendStatusType::RECEIVED:
+                            $associatedFriend->setStatus(FriendStatusType::SENT);
+                            break;
+                        case FriendStatusType::ACCEPTED:
+                            $associatedFriend->setStatus(FriendStatusType::ACCEPTED);
+                            break;
                     }
 
                     $em->persist($associatedFriend);
+                    $em->flush();
+                }
+            }
+        }
+    }
+
+    /**
+     * Post remove
+     *
+     * @param Friend             $friend Friend
+     * @param LifecycleEventArgs $args   Arguments
+     */
+    public function postRemove(Friend $friend, LifecycleEventArgs $args)
+    {
+        if ($friend instanceof Friend) {
+            if ($token = $this->tokenStorage->getToken()) {
+                /** @var User $user */
+                $user = $token->getUser();
+                if ($user === $friend->getUser()) {
+                    $em = $args->getEntityManager();
+
+                    $associatedFriend = $em->getRepository('AppBundle:Friend')
+                                           ->findFriendByUserFriend($friend->getFriend(), $user);
+
+                    $em->remove($associatedFriend);
                     $em->flush();
                 }
             }
