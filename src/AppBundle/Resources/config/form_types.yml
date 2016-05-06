@@ -1,0 +1,8 @@
+services:
+    app.form.friend:
+        class: AppBundle\Form\Type\FriendType
+        tags:
+            - { name: form.type, alias: friend }
+        arguments:
+            - "@security.token_storage"
+            - "@event_dispatcher"

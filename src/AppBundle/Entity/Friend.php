@@ -17,6 +17,7 @@ use JMS\Serializer\Annotation as JMS;
  *
  * @ORM\Table(name="friends")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\FriendRepository")
+ * @ORM\EntityListeners({"AppBundle\EntityListener\FriendListener"})
  *
  * @JMS\ExclusionPolicy("all")
  *
@@ -34,6 +35,7 @@ class Friend
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @JMS\Expose
+     * @JMS\Groups({"friend"})
      * @JMS\Since("1.0")
      */
     private $id;
@@ -47,6 +49,7 @@ class Friend
      * @Assert\NotBlank()
      *
      * @JMS\Expose
+     * @JMS\Groups({"friend"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -62,6 +65,7 @@ class Friend
      * @Assert\NotBlank()
      *
      * @JMS\Expose
+     * @JMS\Groups({"friend"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -74,8 +78,12 @@ class Friend
      * @ORM\Column(name="status", type="FriendStatusType", nullable=false)
      *
      * @DoctrineAssert\Enum(entity="AppBundle\DBAL\Types\FriendStatusType")
+     *
+     * @JMS\Expose
+     * @JMS\Groups({"friend"})
+     * @JMS\Since("1.0")
      */
-    private $status;
+    private $status = FriendStatusType::SENT;
 
     /**
      * Get ID

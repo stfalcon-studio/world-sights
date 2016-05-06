@@ -3,9 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\DBAL\Types\FriendStatusType;
+use AppBundle\Entity\Friend;
 use AppBundle\Entity\User;
 use AppBundle\Exception\ServerInternalErrorException;
 use AppBundle\Form\Model\Pagination;
+use AppBundle\Form\Type\FriendType;
 use AppBundle\Form\Type\PaginationType;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -269,6 +271,59 @@ class FriendController extends FOSRestController
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
             throw $this->createInternalServerErrorException();
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * Create friend
+     *
+     * @param Request $request Request
+     *
+     * @return Response
+     *
+     * @throws ServerInternalErrorException
+     *
+     * @ApiDoc(
+     *      section="Friend",
+     *      description="Create a new friend",
+     *      input="AppBundle\Form\Type\FriendType",
+     *      output={
+     *          "class"="AppBundle\Entity\Friend",
+     *          "groups"={"friend"}
+     *      },
+     *      statusCodes={
+     *          201="Returned when successful",
+     *          400="Returned when the form has errors or invalid data",
+     *          500="Returned when internal error on the server occurred"
+     *      }
+     * )
+     *
+     * @Rest\Post("")
+     */
+    public function createAction(Request $request)
+    {
+        $form = $this->createForm(FriendType::class);
+
+        $form->submit($request->request->all());
+        if ($form->isValid()) {
+            try {
+                /** @var Friend $friend */
+                $friend = $form->getData();
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($friend);
+                $em->flush();
+
+                $view = $this->createViewForHttpCreatedResponse(['friend' => $friend]);
+                $view->setSerializationContext(SerializationContext::create()->setGroups(['friend']));
+            } catch (\Exception $e) {
+                $this->sendExceptionToRollbar($e);
+                throw $this->createInternalServerErrorException();
+            }
+        } else {
+            $view = $this->createViewForValidationErrorResponse($form);
         }
 
         return $this->handleView($view);

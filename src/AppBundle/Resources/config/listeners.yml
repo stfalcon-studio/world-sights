@@ -1,0 +1,14 @@
+services:
+    app.add_user.listener:
+        class: AppBundle\EventListener\AddUserListener
+        tags:
+            - { name: kernel.event_listener, event: form.bind, method: onUserAdd}
+        arguments:
+            - "@doctrine.orm.default_entity_manager"
+
+    app.friend.listener:
+        class: AppBundle\EntityListener\FriendListener
+        tags:
+            -  { name: doctrine.orm.entity_listener, event: onFlush }
+        arguments:
+            - "@security.token_storage"
