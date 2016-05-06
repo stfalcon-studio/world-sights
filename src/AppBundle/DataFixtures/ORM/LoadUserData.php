@@ -73,6 +73,14 @@ class LoadUserData extends AbstractFixture
         $this->setReference('user-6', $user6);
         $manager->persist($user6);
 
+        $user7 = (new User())
+            ->setEmail('user7@gmail.com')
+            ->setUsername('user7')
+            ->setPlainPassword('1234')
+            ->setEnabled(true);
+        $this->setReference('user-7', $user7);
+        $manager->persist($user7);
+
         $manager->flush();
     }
 }

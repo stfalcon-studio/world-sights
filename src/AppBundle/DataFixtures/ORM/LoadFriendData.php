@@ -36,11 +36,13 @@ class LoadFriendData extends AbstractFixture implements DependentFixtureInterfac
         /** @var User $user3 */
         /** @var User $user4 */
         /** @var User $user5 */
+        /** @var User $user6 */
         $user1 = $this->getReference('user-1');
         $user2 = $this->getReference('user-2');
         $user3 = $this->getReference('user-3');
         $user4 = $this->getReference('user-4');
         $user5 = $this->getReference('user-5');
+        $user6 = $this->getReference('user-6');
 
         $friend1 = (new Friend())
             ->setUser($user1)
@@ -89,6 +91,18 @@ class LoadFriendData extends AbstractFixture implements DependentFixtureInterfac
             ->setFriend($user1)
             ->setStatus(FriendStatusType::RECEIVED);
         $manager->persist($friend8);
+
+        $friend9 = (new Friend())
+            ->setUser($user6)
+            ->setFriend($user1)
+            ->setStatus(FriendStatusType::SENT);
+        $manager->persist($friend9);
+
+        $friend10 = (new Friend())
+            ->setUser($user1)
+            ->setFriend($user6)
+            ->setStatus(FriendStatusType::RECEIVED);
+        $manager->persist($friend10);
 
         $manager->flush();
     }
