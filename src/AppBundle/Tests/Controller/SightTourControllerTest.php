@@ -58,7 +58,7 @@ class SightTourControllerTest extends WebTestCase
 
     public function testGetAction()
     {
-        $this->client->request('GET', '/api/v1/sight-tours/sightseeing-in-the-city-kamenetz-podolsk');
+        $this->client->request('GET', '/api/v1/sight-tours/ekskursiyna-programa-po-mistu-kam-yanec-podilskomu');
 
         $response = $this->client->getResponse();
         $data     = json_decode($response->getContent(), true);
@@ -117,7 +117,7 @@ class SightTourControllerTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            '/api/v1/sight-tours/sightseeing-in-the-city-kamenetz-podolsk',
+            '/api/v1/sight-tours/ekskursiyna-programa-po-mistu-kam-yanec-podilskomu',
             $data,
             [],
             ['Content-Type' => 'application/json'],
@@ -141,7 +141,7 @@ class SightTourControllerTest extends WebTestCase
             'name'         => 'Екскурсійна програма по місту Кам’янець-Подільському',
             'company_name' => '7 днів',
             'price'        => 500,
-            'slug'         => 'sightseeing-in-the-city-kamenetz-podolsk',
+            'slug'         => 'ekskursiyna-programa-po-mistu-kam-yanec-podilskomu',
             'sight'        => [
                 'name'       => 'Кам\'янець-подільська фортеця',
                 'phone'      => '(03849)2-55-33',

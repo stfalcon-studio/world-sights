@@ -45,7 +45,7 @@ class SightTicketControllerTest extends WebTestCase
 
     public function testGetAction()
     {
-        $this->client->request('GET', '/api/v1/sight-tickets/kiev-kamyanets-train-ticket');
+        $this->client->request('GET', '/api/v1/sight-tickets/kijiv-kam-yanec-podilskiy-tt');
 
         $response = $this->client->getResponse();
         $data     = json_decode($response->getContent(), true);
@@ -107,7 +107,7 @@ class SightTicketControllerTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            '/api/v1/sight-tickets/kiev-kamyanets-train-ticket',
+            '/api/v1/sight-tickets/kijiv-kam-yanec-podilskiy-tt',
             $data,
             [],
             ['Content-Type' => 'application/json'],
@@ -127,7 +127,7 @@ class SightTicketControllerTest extends WebTestCase
 
     public function testDeleteAction()
     {
-        $this->client->request('DELETE', '/api/v1/sight-tickets/kiev-kamyanets-train-ticket');
+        $this->client->request('DELETE', '/api/v1/sight-tickets/kijiv-kam-yanec-podilskiy-tt');
 
         $this->assertStatusCode(Response::HTTP_NO_CONTENT, $this->client);
     }
@@ -152,7 +152,7 @@ class SightTicketControllerTest extends WebTestCase
         $sightTicket = [
             'type'     => SightTicketType::TRAIN_TICKET,
             'link_buy' => 'https://gd.tickets.ua/uk/railwaytracker/table/Kamenetz-Podolsk~2200260',
-            'slug'     => 'kiev-kamyanets-train-ticket',
+            'slug'     => 'kijiv-kam-yanec-podilskiy-tt',
             'sight'    => [
                 'name'     => 'Кам\'янець-подільська фортеця',
                 'locality' => [

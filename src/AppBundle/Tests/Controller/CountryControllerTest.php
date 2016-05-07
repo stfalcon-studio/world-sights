@@ -42,7 +42,7 @@ class CountryControllerTest extends WebTestCase
 
     public function testGet()
     {
-        $this->client->request('GET', '/api/v1/countries/ukraine');
+        $this->client->request('GET', '/api/v1/countries/ukrajina');
 
         $response = $this->client->getResponse();
         $data     = json_decode($response->getContent(), true);
@@ -71,7 +71,7 @@ class CountryControllerTest extends WebTestCase
     {
         $countries = [
             'name' => 'Україна',
-            'slug' => 'ukraine',
+            'slug' => 'ukrajina',
         ];
 
         foreach ($countries as $key => $el) {

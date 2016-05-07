@@ -18,6 +18,7 @@ use JMS\Serializer\Annotation as JMS;
  *
  * @ORM\Table(name="sight_tickets")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\SightTicketRepository")
+ * @UniqueEntity("slug")
  *
  * @JMS\ExclusionPolicy("all")
  *

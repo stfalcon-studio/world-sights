@@ -45,7 +45,7 @@ class SightControllerTest extends WebTestCase
 
     public function testGetAction()
     {
-        $this->client->request('GET', '/api/v1/sights/kamianets-podіlska-fortess');
+        $this->client->request('GET', '/api/v1/sights/kam-yanec-podilska-fortecya');
 
         $response = $this->client->getResponse();
         $data     = json_decode($response->getContent(), true);
@@ -57,7 +57,7 @@ class SightControllerTest extends WebTestCase
 
     public function testGetTicketAction()
     {
-        $this->client->request('GET', '/api/v1/sights/kamianets-podіlska-fortess/tickets');
+        $this->client->request('GET', '/api/v1/sights/kam-yanec-podilska-fortecya/tickets');
 
         $response = $this->client->getResponse();
         $data     = json_decode($response->getContent(), true);
@@ -69,7 +69,7 @@ class SightControllerTest extends WebTestCase
 
     public function testGetTourAction()
     {
-        $this->client->request('GET', '/api/v1/sights/kamianets-podіlska-fortess/tours');
+        $this->client->request('GET', '/api/v1/sights/kam-yanec-podilska-fortecya/tours');
 
         $response = $this->client->getResponse();
         $data     = json_decode($response->getContent(), true);
@@ -135,7 +135,7 @@ class SightControllerTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            '/api/v1/sights/hotinska-fortress',
+            '/api/v1/sights/hotinska-fortecya',
             $data,
             [],
             ['Content-Type' => 'application/json'],
@@ -155,7 +155,7 @@ class SightControllerTest extends WebTestCase
 
     public function testDeleteAction()
     {
-        $this->client->request('DELETE', '/api/v1/sights/hortitsa');
+        $this->client->request('DELETE', '/api/v1/sights/hotinska-fortecya');
 
         $this->assertStatusCode(Response::HTTP_NO_CONTENT, $this->client);
     }
@@ -184,7 +184,7 @@ class SightControllerTest extends WebTestCase
             'name'       => 'Кам\'янець-подільська фортеця',
             'phone'      => '(03849)2-55-33',
             'website'    => 'http://muzeum.in.ua/',
-            'slug'       => 'kamianets-podіlska-fortess',
+            'slug'       => 'kam-yanec-podilska-fortecya',
             'sight_type' => [
                 'name' => 'Замок',
             ],
@@ -213,7 +213,7 @@ class SightControllerTest extends WebTestCase
             'name'         => 'Екскурсійна програма по місту Кам’янець-Подільському',
             'company_name' => '7 днів',
             'tour_link'    => 'http://www.7dniv.ua/ua/tourism-directions',
-            'slug'         => 'sightseeing-in-the-city-kamenetz-podolsk',
+            'slug'         => 'ekskursiyna-programa-po-mistu-kam-yanec-podilskomu',
         ];
 
         foreach ($sightTour as $key => $el) {
@@ -226,7 +226,7 @@ class SightControllerTest extends WebTestCase
         $sightTour = [
             'type'     => SightTicketType::TRAIN_TICKET,
             'link_buy' => 'https://gd.tickets.ua/uk/railwaytracker/table/Kamenetz-Podolsk~2200260',
-            'slug'     => 'kiev-kamyanets-train-ticket',
+            'slug'     => 'kijiv-kam-yanec-podilskiy-tt',
         ];
 
         foreach ($sightTour as $key => $el) {

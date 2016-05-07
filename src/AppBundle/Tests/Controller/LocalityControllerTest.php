@@ -42,7 +42,7 @@ class LocalityControllerTest extends WebTestCase
 
     public function testGet()
     {
-        $this->client->request('GET', '/api/v1/localities/kamyanets');
+        $this->client->request('GET', '/api/v1/localities/kam-yanec-podilskiy');
 
         $response = $this->client->getResponse();
         $data     = json_decode($response->getContent(), true);
@@ -71,7 +71,7 @@ class LocalityControllerTest extends WebTestCase
     {
         $locality = [
             'name'    => 'Кам\'янець-Подільський',
-            'slug'    => 'kamyanets',
+            'slug'    => 'kam-yanec-podilskiy',
             'country' => [
                 'name' => 'Україна',
                 'slug' => 'kamyanets',

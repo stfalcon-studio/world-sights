@@ -239,10 +239,6 @@ class SightController extends FOSRestController
                 /** @var Sight $sight */
                 $sight = $form->getData();
 
-                $slug = $this->get('app.slug')->createSlug($sight->getName());
-
-                $sight->setSlug($slug);
-
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($sight);
                 $em->flush();
@@ -301,10 +297,6 @@ class SightController extends FOSRestController
             try {
                 /** @var Sight $sight */
                 $sight = $form->getData();
-
-                $slug = $this->get('app.slug')->createSlug($sight->getName());
-
-                $sight->setSlug($slug);
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($sight);

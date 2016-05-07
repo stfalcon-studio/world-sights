@@ -45,7 +45,6 @@ class LoadSightTourData extends AbstractFixture implements DependentFixtureInter
             ->setCompanyName('7 днів')
             ->setTourLink('http://www.7dniv.ua/ua/tourism-directions')
             ->setPrice(500)
-            ->setSlug('sightseeing-in-the-city-kamenetz-podolsk')
             ->setSight($sightKamyanetsCastle);
         $manager->persist($sightTour1);
 
@@ -54,7 +53,6 @@ class LoadSightTourData extends AbstractFixture implements DependentFixtureInter
             ->setCompanyName('Аккорд-тур')
             ->setTourLink('http://www.akkord-tour.com.ua/product.php/product_id/8152/category_id/109/land_id/42/lang/ua')
             ->setPrice(1900)
-            ->setSlug('weekend-in-minsk')
             ->setSight($sightMinskLibrary);
         $manager->persist($sightTour2);
 
@@ -63,7 +61,6 @@ class LoadSightTourData extends AbstractFixture implements DependentFixtureInter
             ->setCompanyName('Тамтур')
             ->setTourLink('http://tamtour.com.ua/7')
             ->setPrice(2100)
-            ->setSlug('travel-back-in-time-in-minsk')
             ->setSight($sightMinskLibrary);
         $manager->persist($sightTour3);
 
@@ -72,7 +69,6 @@ class LoadSightTourData extends AbstractFixture implements DependentFixtureInter
             ->setCompanyName('Rich tour')
             ->setTourLink('http://rich-tour.com/publ/ekskursijni_turi/korolivskij_shljakh/5-1-0-134')
             ->setPrice(4500)
-            ->setSlug('king-way-in-warszawa')
             ->setSight($sightWarzavaCastle);
         $manager->persist($sightTour4);
 

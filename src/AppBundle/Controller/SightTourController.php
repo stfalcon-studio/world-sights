@@ -154,10 +154,6 @@ class SightTourController extends FOSRestController
                 /** @var SightTour $sightTour */
                 $sightTour = $form->getData();
 
-                $slug = $this->get('app.slug')->createSlug($sightTour->getName());
-
-                $sightTour->setSlug($slug);
-
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($sightTour);
                 $em->flush();
@@ -214,10 +210,6 @@ class SightTourController extends FOSRestController
             try {
                 /** @var SightTour $sightTour */
                 $sightTour = $form->getData();
-
-                $slug = $this->get('app.slug')->createSlug($sightTour->getName());
-
-                $sightTour->setSlug($slug);
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($sightTour);
