@@ -29,6 +29,8 @@ class SlugListener
     }
 
     /**
+     * Pre persist
+     *
      * @param LifecycleEventArgs $args Arguments
      */
     public function prePersist(LifecycleEventArgs $args)
@@ -37,6 +39,8 @@ class SlugListener
     }
 
     /**
+     * Pre update
+     *
      * @param LifecycleEventArgs $args Arguments
      */
     public function preUpdate(LifecycleEventArgs $args)
