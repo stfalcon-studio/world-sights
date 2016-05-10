@@ -6,3 +6,11 @@ services:
         arguments:
             - "@security.token_storage"
             - "@event_dispatcher"
+
+    app.form.sight_visit:
+        class: AppBundle\Form\Type\SightVisitType
+        tags:
+            - { name: form.type, alias: sight_visit }
+        arguments:
+            - "@security.token_storage"
+            - "@event_dispatcher"

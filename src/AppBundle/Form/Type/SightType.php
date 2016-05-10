@@ -8,6 +8,11 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Sight Type
+ *
+ * @author Yevgeniy Zholkevskiy <blackbullet@i.ua>
+ */
 class SightType extends AbstractType
 {
     /**

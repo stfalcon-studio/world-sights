@@ -7,6 +7,11 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Pagination Type
+ *
+ * @author Yevgeniy Zholkevskiy <blackbullet@i.ua>
+ */
 class PaginationType extends AbstractType
 {
     /**

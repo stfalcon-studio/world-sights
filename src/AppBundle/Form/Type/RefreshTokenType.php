@@ -7,6 +7,11 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Refresh Token Type
+ *
+ * @author Yevgeniy Zholkevskiy <blackbullet@i.ua>
+ */
 class RefreshTokenType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
