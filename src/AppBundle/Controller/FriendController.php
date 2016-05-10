@@ -67,14 +67,25 @@ class FriendController extends FOSRestController
                 $paginator = $form->getData();
 
                 $friends = $userRepository->findFriendUsersByUserWithPagination($user, $statusFriend, $paginator);
+
+                $view = $this->createViewForHttpOkResponse([
+                    'friends'            => $friends,
+                    'friend_status_type' => $statusFriend,
+                    '_metadata'          => [
+                        'total'  => count($friends),
+                        'limit'  => $paginator->getLimit(),
+                        'offset' => $paginator->getOffset(),
+                    ],
+                ]);
             } else {
                 $friends = $userRepository->findFriendUsersByUser($user, $statusFriend);
+
+                $view = $this->createViewForHttpOkResponse([
+                    'friends'            => $friends,
+                    'friend_status_type' => $statusFriend,
+                ]);
             }
 
-            $view = $this->createViewForHttpOkResponse([
-                'friends'            => $friends,
-                'friend_status_type' => $statusFriend,
-            ]);
             $view->setSerializationContext(SerializationContext::create()->setGroups(['friend']));
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);

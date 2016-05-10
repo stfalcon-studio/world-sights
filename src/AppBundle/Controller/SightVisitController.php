@@ -63,14 +63,25 @@ class SightVisitController extends FOSRestController
                 $paginator = $form->getData();
 
                 $sights = $sightRepository->findSightBySightVisitUserWithPagination($user, $paginator);
+
+                $view = $this->createViewForHttpOkResponse([
+                    'sight_visits' => $sights,
+                    'user'         => $user,
+                    '_metadata' => [
+                        'total'  => count($sights),
+                        'limit'  => $paginator->getLimit(),
+                        'offset' => $paginator->getOffset(),
+                    ],
+                ]);
             } else {
                 $sights = $sightRepository->findSightBySightVisitUser($user);
+
+                $view = $this->createViewForHttpOkResponse([
+                    'sight_visits' => $sights,
+                    'user'         => $user,
+                ]);
             }
 
-            $view = $this->createViewForHttpOkResponse([
-                'sight_visits' => $sights,
-                'user'         => $user,
-            ]);
             $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_visits']));
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
