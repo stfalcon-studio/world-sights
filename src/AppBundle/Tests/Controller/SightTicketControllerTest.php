@@ -32,7 +32,7 @@ class SightTicketControllerTest extends WebTestCase
 
     public function testGetAllAction()
     {
-        $this->client->request('GET', '/api/v1/sight-tickets');
+        $this->client->request('GET', '/api/v1/sight-tickets?limit=10&offset=0');
 
         $response = $this->client->getResponse();
         $data     = json_decode($response->getContent(), true);
@@ -41,6 +41,9 @@ class SightTicketControllerTest extends WebTestCase
         $this->assertEquals(200, $data['code']);
         $this->assertCount(5, $data['sight_tickets']);
         $this->comparisonSightTicket($data['sight_tickets'][0]);
+        $this->assertEquals(5, $data['_metadata']['total']);
+        $this->assertEquals(10, $data['_metadata']['limit']);
+        $this->assertEquals(0, $data['_metadata']['offset']);
     }
 
     public function testGetAction()

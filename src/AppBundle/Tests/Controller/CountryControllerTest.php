@@ -38,6 +38,9 @@ class CountryControllerTest extends WebTestCase
         $this->assertEquals(200, $data['code']);
         $this->assertCount(4, $data['countries']);
         $this->comparisonCountries($data['countries'][0]);
+        $this->assertEquals(4, $data['_metadata']['total']);
+        $this->assertEquals(10, $data['_metadata']['limit']);
+        $this->assertEquals(0, $data['_metadata']['offset']);
     }
 
     public function testGet()

@@ -58,13 +58,22 @@ class CountryController extends FOSRestController
                 $paginator = $form->getData();
 
                 $countires = $countryRepository->findCountriesWithPagination($paginator);
+
+                $view = $this->createViewForHttpOkResponse([
+                    'countries' => $countires,
+                    '_metadata' => [
+                        'total'  => count($countires),
+                        'limit'  => $paginator->getLimit(),
+                        'offset' => $paginator->getOffset(),
+                    ],
+                ]);
             } else {
                 $countires = $countryRepository->findAllCountries();
-            }
 
-            $view = $this->createViewForHttpOkResponse([
-                'countries' => $countires,
-            ]);
+                $view = $this->createViewForHttpOkResponse([
+                    'countries' => $countires,
+                ]);
+            }
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
             throw $this->createInternalServerErrorException();

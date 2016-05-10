@@ -58,13 +58,23 @@ class SightTourController extends FOSRestController
                 $paginator = $form->getData();
 
                 $sightTours = $sightTourRepository->findSightToursWithPagination($paginator);
+
+                $view = $this->createViewForHttpOkResponse([
+                    'sight_tours' => $sightTours,
+                    '_metadata' => [
+                        'total'  => count($sightTours),
+                        'limit'  => $paginator->getLimit(),
+                        'offset' => $paginator->getOffset(),
+                    ],
+                ]);
             } else {
                 $sightTours = $sightTourRepository->findAllSightTours();
+
+                $view = $this->createViewForHttpOkResponse([
+                    'sight_tours' => $sightTours,
+                ]);
             }
 
-            $view = $this->createViewForHttpOkResponse([
-                'sight_tours' => $sightTours,
-            ]);
             $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_tour']));
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
