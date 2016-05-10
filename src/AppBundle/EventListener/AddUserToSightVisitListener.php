@@ -2,15 +2,15 @@
 
 namespace AppBundle\EventListener;
 
-use AppBundle\Event\AddUserEvent;
+use AppBundle\Event\AddUserToSightVisitEvent;
 use Doctrine\ORM\EntityManager;
 
 /**
- * Add User Listener
+ * Add User to Sight Visit Listener
  *
  * @author Yevgeniy Zholkevskiy <blackbullet@i.ua>
  */
-class AddUserListener
+class AddUserToSightVisitListener
 {
     /**
      * @var EntityManager $em Entity manager
@@ -28,15 +28,15 @@ class AddUserListener
     }
 
     /**
-     * On user add
+     * On user add to sight visit
      *
-     * @param AddUserEvent $args
+     * @param AddUserToSightVisitEvent $args
      */
-    public function onUserAdd(AddUserEvent $args)
+    public function onUserAddToSightVisit(AddUserToSightVisitEvent $args)
     {
-        $user   = $args->getTokenStorage()->getToken()->getUser();
-        $friend = $args->getFriend();
+        $user       = $args->getTokenStorage()->getToken()->getUser();
+        $sightVisit = $args->getSightVisit();
 
-        $friend->setUser($user);
+        $sightVisit->setUser($user);
     }
 }

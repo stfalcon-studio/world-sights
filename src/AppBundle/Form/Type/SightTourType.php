@@ -7,6 +7,11 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Sight Tour Type
+ *
+ * @author Yevgeniy Zholkevskiy <blackbullet@i.ua>
+ */
 class SightTourType extends AbstractType
 {
     /**

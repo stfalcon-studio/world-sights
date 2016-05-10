@@ -7,11 +7,11 @@ use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
- * Add User Event
+ * Add User to Friend Event
  *
  * @author Yevgeniy Zholkevskiy <blackbullet@i.ua>
  */
-class AddUserEvent extends Event
+class AddUserToFriendEvent extends Event
 {
     /**
      * @var TokenStorageInterface $tokenStorage Token storage
@@ -27,12 +27,12 @@ class AddUserEvent extends Event
      * Constructor
      *
      * @param TokenStorageInterface $tokenStorage Token storage
-     * @param Friend                  $friend         Friend
+     * @param Friend                $friend       Friend
      */
     public function __construct(TokenStorageInterface $tokenStorage, Friend $friend)
     {
         $this->tokenStorage = $tokenStorage;
-        $this->friend         = $friend;
+        $this->friend       = $friend;
     }
 
     /**

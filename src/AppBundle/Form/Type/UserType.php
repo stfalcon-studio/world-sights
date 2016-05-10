@@ -8,6 +8,11 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * User Type
+ *
+ * @author Yevgeniy Zholkevskiy <blackbullet@i.ua>
+ */
 class UserType extends AbstractType
 {
     /**
