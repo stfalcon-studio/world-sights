@@ -1,4 +1,8 @@
 services:
+    app.friend_status:
+        class: AppBundle\Service\FriendStatusService
+        arguments: ['@doctrine.orm.entity_manager']
+
     app.security.authentication_rest_handler:
         class: AppBundle\Handler\AuthenticationRestHandler
         arguments: ['@doctrine.orm.entity_manager']

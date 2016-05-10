@@ -278,7 +278,7 @@ class SightController extends FOSRestController
      *          {"name"="slug", "dataType"="string", "requirement"="\w+", "description"="Slug of sight"}
      *      },
      *      statusCodes={
-     *          201="Returned when successful",
+     *          200="Returned when successful",
      *          400="Returned when the form has errors or invalid data",
      *          500="Returned when internal error on the server occurred"
      *      }

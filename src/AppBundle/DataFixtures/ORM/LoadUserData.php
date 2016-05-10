@@ -41,6 +41,46 @@ class LoadUserData extends AbstractFixture
         $this->setReference('user-2', $user2);
         $manager->persist($user2);
 
+        $user3 = (new User())
+            ->setEmail('user3@gmail.com')
+            ->setUsername('user3')
+            ->setPlainPassword('1234')
+            ->setEnabled(true);
+        $this->setReference('user-3', $user3);
+        $manager->persist($user3);
+
+        $user4 = (new User())
+            ->setEmail('user4@gmail.com')
+            ->setUsername('user4')
+            ->setPlainPassword('1234')
+            ->setEnabled(true);
+        $this->setReference('user-4', $user4);
+        $manager->persist($user4);
+
+        $user5 = (new User())
+            ->setEmail('user5@gmail.com')
+            ->setUsername('user5')
+            ->setPlainPassword('1234')
+            ->setEnabled(true);
+        $this->setReference('user-5', $user5);
+        $manager->persist($user5);
+
+        $user6 = (new User())
+            ->setEmail('user6@gmail.com')
+            ->setUsername('user6')
+            ->setPlainPassword('1234')
+            ->setEnabled(true);
+        $this->setReference('user-6', $user6);
+        $manager->persist($user6);
+
+        $user7 = (new User())
+            ->setEmail('user7@gmail.com')
+            ->setUsername('user7')
+            ->setPlainPassword('1234')
+            ->setEnabled(true);
+        $this->setReference('user-7', $user7);
+        $manager->persist($user7);
+
         $manager->flush();
     }
 }
