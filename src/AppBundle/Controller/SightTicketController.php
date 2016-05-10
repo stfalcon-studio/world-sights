@@ -187,10 +187,6 @@ class SightTicketController extends FOSRestController
                 /** @var SightTicket $sightTicket */
                 $sightTicket = $form->getData();
 
-                $slug = $this->get('app.slug')->createSlugSightTicket($sightTicket);
-
-                $sightTicket->setSlug($slug);
-
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($sightTicket);
                 $em->flush();
@@ -247,10 +243,6 @@ class SightTicketController extends FOSRestController
             try {
                 /** @var SightTicket $sightTicket */
                 $sightTicket = $form->getData();
-
-                $slug = $this->get('app.slug')->createSlugSightTicket($sightTicket);
-
-                $sightTicket->setSlug($slug);
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($sightTicket);
