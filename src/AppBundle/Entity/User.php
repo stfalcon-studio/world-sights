@@ -2,7 +2,9 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\DBAL\Types\FriendStatusType;
 use FOS\UserBundle\Model\User as BaseUser;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -40,16 +42,36 @@ class User extends BaseUser
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @JMS\Expose
-     * @JMS\Groups({"user"})
+     * @JMS\Groups({"user", "friend"})
      * @JMS\Since("1.0")
      */
     protected $id;
 
     /**
+     * @var ArrayCollection|Friend[] $userFriends User friends
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Friend", mappedBy="user")
+     *
+     * @JMS\Expose
+     * @JMS\Since("1.0")
+     */
+    private $userFriends;
+
+    /**
+     * @var ArrayCollection|Friend[] $friendUsers Friend users
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Friend", mappedBy="friend")
+     *
+     * @JMS\Expose
+     * @JMS\Since("1.0")
+     */
+    private $friendUsers;
+
+    /**
      * @var string $username Username
      *
      * @JMS\Expose
-     * @JMS\Groups({"user"})
+     * @JMS\Groups({"user", "friend"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -60,7 +82,7 @@ class User extends BaseUser
      * @var string $email Email
      *
      * @JMS\Expose
-     * @JMS\Groups({"user"})
+     * @JMS\Groups({"user", "friend"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -103,6 +125,15 @@ class User extends BaseUser
      * @Gedmo\Versioned
      */
     private $expiredAt;
+
+    /**
+     * @var FriendStatusType $status Friend status type
+     *
+     * @JMS\Expose
+     * @JMS\Groups({"friend"})
+     * @JMS\Since("1.0")
+     */
+    private $status;
 
     /**
      * Constructor
@@ -245,6 +276,30 @@ class User extends BaseUser
     }
 
     /**
+     * Get status
+     *
+     * @return FriendStatusType Status
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set status
+     *
+     * @param FriendStatusType $status Status
+     *
+     * @return $this
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
      * Get salt
      *
      * @return null
@@ -252,5 +307,107 @@ class User extends BaseUser
     public function getSalt()
     {
         return null;
+    }
+
+    /**
+     * Add user friend
+     *
+     * @param Friend $userFriend User friend
+     *
+     * @return $this
+     */
+    public function addUserFriend(Friend $userFriend)
+    {
+        $this->userFriends[] = $userFriend;
+
+        return $this;
+    }
+
+    /**
+     * Remove user friend
+     *
+     * @param Friend $userFriend User friend
+     */
+    public function removeUserFriend(Friend $userFriend)
+    {
+        $this->userFriends->removeElement($userFriend);
+    }
+
+    /**
+     * Set user friends
+     *
+     * @param ArrayCollection|Friend[] $userFriends User friends
+     *
+     * @return $this
+     */
+    public function setUserFriends(ArrayCollection $userFriends)
+    {
+        foreach ($userFriends as $userFriend) {
+            $userFriend->setUser($this);
+        }
+        $this->userFriends = $userFriends;
+
+        return $this;
+    }
+
+    /**
+     * Get user friends
+     *
+     * @return ArrayCollection|Friend[] User friends
+     */
+    public function getUserFriends()
+    {
+        return $this->userFriends;
+    }
+
+    /**
+     * Add friend user
+     *
+     * @param Friend $friendUser Friend user
+     *
+     * @return User
+     */
+    public function addFriendUser(Friend $friendUser)
+    {
+        $this->friendUsers[] = $friendUser;
+
+        return $this;
+    }
+
+    /**
+     * Remove friend user
+     *
+     * @param Friend $friendUser Friend user
+     */
+    public function removeFriendUser(Friend $friendUser)
+    {
+        $this->friendUsers->removeElement($friendUser);
+    }
+
+    /**
+     * Set friend users
+     *
+     * @param ArrayCollection|Friend[] $friendUsers Friend users
+     *
+     * @return $this
+     */
+    public function setFriendUsers(ArrayCollection $friendUsers)
+    {
+        foreach ($friendUsers as $friendUser) {
+            $friendUser->setUser($this);
+        }
+        $this->friendUsers = $friendUsers;
+
+        return $this;
+    }
+
+    /**
+     * Get friend users
+     *
+     * @return ArrayCollection|Friend[] Friend users
+     */
+    public function getFriendUsers()
+    {
+        return $this->friendUsers;
     }
 }
