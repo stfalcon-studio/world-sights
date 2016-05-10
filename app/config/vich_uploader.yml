@@ -1,0 +1,8 @@
+vich_uploader:
+    db_driver: orm
+
+    mappings:
+        product_image:
+            uri_prefix:         /images/sights
+            upload_destination: "%kernel.root_dir%/../web/images/sights"
+
