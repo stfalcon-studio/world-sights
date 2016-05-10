@@ -128,9 +128,57 @@ class SightVisitController extends FOSRestController
             }
 
             $view = $this->createViewForHttpOkResponse([
-                'sight_visits_friends' => $sights,
+                'sight_visits' => $sights,
             ]);
             $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_visits_friends']));
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * Return sight visit by user
+     *
+     * @param Sight $sight Sight
+     *
+     * @return Response
+     *
+     * @ApiDoc(
+     *     description="Return sight visit by id",
+     *     requirements={
+     *          {"name"="id", "dataType"="integer", "requirement"="\d+", "description"="ID of sight visit"}
+     *      },
+     *     section="Sight Visit",
+     *     statusCodes={
+     *          200="Returned when successful",
+     *          404="Returned when sight not found",
+     *          500="Returned when internal error on the server occurred"
+     *      }
+     * )
+     *
+     * @Rest\Get("/{id}", requirements = {"id" = "^(?!friends).*"})
+     *
+     * @ParamConverter("sight", class="AppBundle:Sight")
+     */
+    public function getAction(Sight $sight)
+    {
+        try {
+            $user       = $this->getUser();
+            $sightVisit = $this->getDoctrine()->getRepository('AppBundle:SightVisit')
+                               ->findSightVisitBySightAndUser($sight, $user);
+            if (null === $sightVisit) {
+                $view = $this->createViewForHttpNotFoundResponse([
+                    'message' => 'Not Found',
+                ]);
+            } else {
+                $view = $this->createViewForHttpOkResponse([
+                    'sight_visit' => $sight,
+                ]);
+                $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_visits']));
+            }
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
             throw $this->createInternalServerErrorException();
@@ -205,54 +253,6 @@ class SightVisitController extends FOSRestController
     }
 
     /**
-     * Return sight visit by user
-     *
-     * @param Sight $sight Sight
-     *
-     * @return Response
-     *
-     * @ApiDoc(
-     *     description="Return sight visit by id",
-     *     requirements={
-     *          {"name"="id", "dataType"="integer", "requirement"="\d+", "description"="ID of sight visit"}
-     *      },
-     *     section="Sight Visit",
-     *     statusCodes={
-     *          200="Returned when successful",
-     *          404="Returned when sight not found",
-     *          500="Returned when internal error on the server occurred"
-     *      }
-     * )
-     *
-     * @Rest\Get("/{id}", requirements = {"id" = "^(?!friends).*"})
-     *
-     * @ParamConverter("sight", class="AppBundle:Sight")
-     */
-    public function getAction(Sight $sight)
-    {
-        try {
-            $user       = $this->getUser();
-            $sightVisit = $this->getDoctrine()->getRepository('AppBundle:SightVisit')
-                               ->findSightVisitBySightAndUser($sight, $user);
-            if (null === $sightVisit) {
-                $view = $this->createViewForHttpNotFoundResponse([
-                    'message' => 'Not Found',
-                ]);
-            } else {
-                $view = $this->createViewForHttpOkResponse([
-                    'sight_visit' => $sight,
-                ]);
-                $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_visits']));
-            }
-        } catch (\Exception $e) {
-            $this->sendExceptionToRollbar($e);
-            throw $this->createInternalServerErrorException();
-        }
-
-        return $this->handleView($view);
-    }
-
-    /**
      * Create sight visit
      *
      * @param Request $request Request
@@ -292,8 +292,8 @@ class SightVisitController extends FOSRestController
                 $em->persist($sightVisit);
                 $em->flush();
 
-                $view = $this->createViewForHttpOkResponse([
-                    'sight_visits' => $sightVisit->getSight(),
+                $view = $this->createViewForHttpCreatedResponse([
+                    'sight_visit' => $sightVisit->getSight(),
                     'user'         => $this->getUser(),
                 ]);
                 $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_visits']));
@@ -365,7 +365,7 @@ class SightVisitController extends FOSRestController
                 $em->flush();
 
                 $view = $this->createViewForHttpOkResponse([
-                    'sight_visits' => $sightVisit->getSight(),
+                    'sight_visit' => $sightVisit->getSight(),
                     'user'         => $this->getUser(),
                 ]);
                 $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_visits']));

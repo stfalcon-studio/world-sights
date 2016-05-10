@@ -143,7 +143,7 @@ class SightRepository extends EntityRepository
                   ->join('sv.user', 'u')
                   ->join('u.userFriends', 'uf')
                   ->join('uf.friend', 'uff')
-                  ->orderBy('s.id', 'DESC')
+                  ->orderBy('sv.date', 'DESC')
                   ->setParameter('user', $user)
                   ->getQuery()
                   ->getResult();
@@ -170,7 +170,7 @@ class SightRepository extends EntityRepository
                   ->join('uf.friend', 'uff')
                   ->setFirstResult($paginator->getOffset())
                   ->setMaxResults($paginator->getLimit())
-                  ->orderBy('s.id', 'DESC')
+                  ->orderBy('sv.date', 'DESC')
                   ->setParameter('user', $user)
                   ->getQuery()
                   ->getResult();

@@ -87,7 +87,7 @@ class Locality
      * @Assert\Type(type="string")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_ticket", "sight_tour", "sight_ticket_for_sight", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_ticket", "sight_tour", "sight_ticket_for_sight", "sight_visits", "sight_visits_friends"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned

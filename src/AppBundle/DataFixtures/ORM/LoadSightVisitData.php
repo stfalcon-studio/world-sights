@@ -47,7 +47,7 @@ class LoadSightVisitData extends AbstractFixture implements DependentFixtureInte
         $sightVisit1 = (new SightVisit())
             ->setUser($user1)
             ->setSight($sightKamyanetsCastle)
-            ->setDate((new \DateTime())->modify('-15 day'));
+            ->setDate((new \DateTime())->modify('-5 day'));
         $manager->persist($sightVisit1);
 
         $sightVisit2 = (new SightVisit())
