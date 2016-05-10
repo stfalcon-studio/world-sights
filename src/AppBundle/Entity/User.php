@@ -3,8 +3,8 @@
 namespace AppBundle\Entity;
 
 use AppBundle\DBAL\Types\FriendStatusType;
-use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\Common\Collections\ArrayCollection;
+use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -42,7 +42,7 @@ class User extends BaseUser
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @JMS\Expose
-     * @JMS\Groups({"user", "friend"})
+     * @JMS\Groups({"user", "friend", "sight_visits"})
      * @JMS\Since("1.0")
      */
     protected $id;
@@ -68,10 +68,20 @@ class User extends BaseUser
     private $friendUsers;
 
     /**
+     * @var ArrayCollection|SightVisit[] $sightVisits Sight visits
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\SightVisit", mappedBy="user")
+     *
+     * @JMS\Expose
+     * @JMS\Since("1.0")
+     */
+    private $sightVisits;
+
+    /**
      * @var string $username Username
      *
      * @JMS\Expose
-     * @JMS\Groups({"user", "friend"})
+     * @JMS\Groups({"user", "friend", "sight_visits"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -82,7 +92,7 @@ class User extends BaseUser
      * @var string $email Email
      *
      * @JMS\Expose
-     * @JMS\Groups({"user", "friend"})
+     * @JMS\Groups({"user", "friend", "sight_visits"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -409,5 +419,56 @@ class User extends BaseUser
     public function getFriendUsers()
     {
         return $this->friendUsers;
+    }
+
+    /**
+     * Add sight visit
+     *
+     * @param SightVisit $sightVisit Sight visit
+     *
+     * @return $this
+     */
+    public function addSightVisit(SightVisit $sightVisit)
+    {
+        $this->sightVisits[] = $sightVisit;
+
+        return $this;
+    }
+
+    /**
+     * Remove sight visit
+     *
+     * @param SightVisit $sightVisit Sight visit
+     */
+    public function removeSightVisit(SightVisit $sightVisit)
+    {
+        $this->sightVisits->removeElement($sightVisit);
+    }
+
+    /**
+     * Get sight visits
+     *
+     * @return ArrayCollection|SightVisit[] Sight visits
+     */
+    public function getSightVisits()
+    {
+        return $this->sightVisits;
+    }
+
+    /**
+     * Set sight visits
+     *
+     * @param ArrayCollection|SightVisit[] $sightVisits Sight visits
+     *
+     * @return $this
+     */
+    public function setSightVisits(ArrayCollection $sightVisits)
+    {
+        foreach ($sightVisits as $sightVisit) {
+            $sightVisit->setUser($this);
+        }
+        $this->sightVisits = $sightVisits;
+
+        return $this;
     }
 }
