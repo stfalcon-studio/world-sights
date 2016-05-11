@@ -7,6 +7,14 @@ services:
             - "@security.token_storage"
             - "@event_dispatcher"
 
+    app.form.sight_photo:
+        class: AppBundle\Form\Type\SightPhotoType
+        tags:
+            - { name: form.type, alias: sight_photo }
+        arguments:
+            - "@security.token_storage"
+            - "@event_dispatcher"
+
     app.form.sight_visit:
         class: AppBundle\Form\Type\SightVisitType
         tags:
