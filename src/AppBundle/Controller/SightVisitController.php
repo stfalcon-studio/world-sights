@@ -30,16 +30,14 @@ class SightVisitController extends FOSRestController
     use ControllerHelperTrait, RollbarHelperTrait;
 
     /**
-     * Return all visited sights by user with pagination
+     * Get all visited sights by user with pagination
      *
      * @param Request $request Request
      *
      * @return Response
      *
-     * @throws ServerInternalErrorException
-     *
      * @ApiDoc(
-     *     description="Return all visited sights by user",
+     *     description="Get all visited sights by user",
      *     section="Sight Visit",
      *     statusCodes={
      *          200="Returned when successful",
@@ -92,16 +90,14 @@ class SightVisitController extends FOSRestController
     }
 
     /**
-     * Return all visited sights by all friends with pagination
+     * Get all visited sights by all friends with pagination
      *
      * @param Request $request Request
      *
      * @return Response
      *
-     * @throws ServerInternalErrorException
-     *
      * @ApiDoc(
-     *     description="Return all visited sights by all friends",
+     *     description="Get all visited sights by all friends",
      *     section="Sight Visit",
      *     statusCodes={
      *          200="Returned when successful",
@@ -151,14 +147,14 @@ class SightVisitController extends FOSRestController
     }
 
     /**
-     * Return sight visit by user
+     * Get sight visit by user
      *
      * @param Sight $sight Sight
      *
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return sight visit by id",
+     *     description="Get sight visit by id",
      *     requirements={
      *          {"name"="id", "dataType"="integer", "requirement"="\d+", "description"="ID of sight visit"}
      *      },
@@ -199,7 +195,7 @@ class SightVisitController extends FOSRestController
     }
 
     /**
-     * Return sight visit by friend
+     * Get sight visit by friend
      *
      * @param User    $friend  User
      * @param Request $request Request
@@ -207,7 +203,7 @@ class SightVisitController extends FOSRestController
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return sight visit by id",
+     *     description="Get sight visit by id",
      *     requirements={
      *          {"name"="id", "dataType"="integer", "requirement"="\d+", "description"="ID of friend"}
      *      },
@@ -269,8 +265,6 @@ class SightVisitController extends FOSRestController
      * @param Request $request Request
      *
      * @return Response
-     *
-     * @throws ServerInternalErrorException
      *
      * @ApiDoc(
      *      section="Sight Visit",
@@ -398,13 +392,11 @@ class SightVisitController extends FOSRestController
      *
      * @return Response
      *
-     * @throws ServerInternalErrorException
-     *
      * @ApiDoc(
      *      section="Sight Visit",
      *      statusCodes={
      *          204="Returned when successful",
-     *          400="Validation error",
+     *          400="Returned when validation error",
      *          500="Returned when an error has occurred",
      *      }
      * )

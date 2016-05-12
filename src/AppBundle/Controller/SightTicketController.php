@@ -29,16 +29,14 @@ class SightTicketController extends FOSRestController
     use ControllerHelperTrait, RollbarHelperTrait;
 
     /**
-     * Return all sight tickets with pagination
+     * Get all sight tickets with pagination
      *
      * @param Request $request Request
      *
      * @return Response
      *
-     * @throws ServerInternalErrorException
-     *
      * @ApiDoc(
-     *     description="Return all sight ticket",
+     *     description="Get all sight ticket",
      *     section="Sight Ticket",
      *     statusCodes={
      *          200="Returned when successful",
@@ -88,14 +86,14 @@ class SightTicketController extends FOSRestController
     }
 
     /**
-     * Return sight ticket by slug
+     * Get sight ticket by slug
      *
      * @param SightTicket $sightTicket SightTicket
      *
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return sight ticket by slug",
+     *     description="Get sight ticket by slug",
      *     requirements={
      *          {"name"="slug", "dataType"="string", "requirement"="\w+", "description"="Slug of sight ticket"}
      *      },
@@ -130,12 +128,12 @@ class SightTicketController extends FOSRestController
     }
 
     /**
-     * Return sight ticket types
+     * Get sight ticket types
      *
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return sight ticket types",
+     *     description="Get sight ticket types",
      *     section="Sight Ticket",
      *     statusCodes={
      *          200="Returned when successful",
@@ -167,8 +165,6 @@ class SightTicketController extends FOSRestController
      * @param Request $request Request
      *
      * @return Response
-     *
-     * @throws ServerInternalErrorException
      *
      * @ApiDoc(
      *      section="Sight Ticket",
@@ -278,8 +274,6 @@ class SightTicketController extends FOSRestController
      *
      * @return Response
      *
-     * @throws ServerInternalErrorException
-     *
      * @ApiDoc(
      *       requirements={
      *          {"name"="slug", "dataType"="string", "requirement"="\w+", "description"="Slug of sight ticket"}
@@ -307,8 +301,6 @@ class SightTicketController extends FOSRestController
             throw $this->createInternalServerErrorException();
         }
 
-        $view = $this->createViewForHttpNoContentResponse();
-
-        return $view;
+        return $this->createViewForHttpNoContentResponse();
     }
 }

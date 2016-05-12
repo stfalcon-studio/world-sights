@@ -39,7 +39,9 @@ class FriendListener
     public function postPersist(Friend $friend, LifecycleEventArgs $args)
     {
         if ($friend instanceof Friend) {
-            if ($token = $this->tokenStorage->getToken()) {
+            $token = $this->tokenStorage->getToken();
+
+            if (null !== $token) {
                 /** @var User $user */
                 $user = $token->getUser();
                 if ($user === $friend->getUser()) {

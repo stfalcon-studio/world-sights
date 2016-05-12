@@ -12,6 +12,7 @@ use JMS\Serializer\SerializationContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Sight Tour Controller
@@ -26,16 +27,14 @@ class SightTourController extends FOSRestController
     use ControllerHelperTrait, RollbarHelperTrait;
 
     /**
-     * Return all sight tours with pagination
+     * Get all sight tours with pagination
      *
      * @param Request $request Request
      *
      * @return Response
      *
-     * @throws ServerInternalErrorException
-     *
      * @ApiDoc(
-     *     description="Return all sight tours",
+     *     description="Get all sight tours",
      *     section="Sight Tour",
      *     statusCodes={
      *          200="Returned when successful",
@@ -85,16 +84,14 @@ class SightTourController extends FOSRestController
     }
 
     /**
-     * Return sight tour by slug
+     * Get sight tour by slug
      *
      * @param SightTour $sightTour Sight tour
      *
      * @return Response
      *
-     * @throws ServerInternalErrorException
-     *
      * @ApiDoc(
-     *     description="Return sight tour by slug",
+     *     description="Get sight tour by slug",
      *     requirements={
      *          {"name"="slug", "dataType"="string", "requirement"="\w+", "description"="Slug of sight tour"}
      *      },
@@ -134,8 +131,6 @@ class SightTourController extends FOSRestController
      * @param Request $request Request
      *
      * @return Response
-     *
-     * @throws ServerInternalErrorException
      *
      * @ApiDoc(
      *      section="Sight Tour",
@@ -245,8 +240,6 @@ class SightTourController extends FOSRestController
      *
      * @return Response
      *
-     * @throws ServerInternalErrorException
-     *
      * @ApiDoc(
      *       requirements={
      *          {"name"="slug", "dataType"="string", "requirement"="\w+", "description"="Slug of sight tour"}
@@ -274,8 +267,6 @@ class SightTourController extends FOSRestController
             throw $this->createInternalServerErrorException();
         }
 
-        $view = $this->createViewForHttpNoContentResponse();
-
-        return $view;
+        return $this->createViewForHttpNoContentResponse();
     }
 }

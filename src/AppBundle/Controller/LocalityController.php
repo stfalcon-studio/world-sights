@@ -7,11 +7,10 @@ use AppBundle\Form\Type\PaginationType;
 use AppBundle\Form\Model\Pagination;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use JMS\Serializer\SerializationContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Locality Controller
@@ -31,8 +30,6 @@ class LocalityController extends FOSRestController
      * @param Request $request Request
      *
      * @return Response
-     *
-     * @throws ServerInternalErrorException
      *
      * @ApiDoc(
      *     description="Return all localities",
@@ -54,17 +51,17 @@ class LocalityController extends FOSRestController
 
             $form->submit($request->query->all());
             if ($form->isValid()) {
-                /** @var Pagination $paginator */
-                $paginator = $form->getData();
+                /** @var Pagination $pagination */
+                $pagination = $form->getData();
 
-                $localities = $localityRepository->findLocalitiesWithPagination($paginator);
+                $localities = $localityRepository->findLocalitiesWithPagination($pagination);
 
                 $view = $this->createViewForHttpOkResponse([
                     'localities' => $localities,
                     '_metadata'  => [
                         'total'  => count($localities),
-                        'limit'  => $paginator->getLimit(),
-                        'offset' => $paginator->getOffset(),
+                        'limit'  => $pagination->getLimit(),
+                        'offset' => $pagination->getOffset(),
                     ],
                 ]);
             } else {

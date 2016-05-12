@@ -139,9 +139,9 @@ class UserRepository extends EntityRepository
      * @param User $user   User
      * @param User $friend Friend
      *
-     * @return User|null
+     * @return string Status
      */
-    public function findFriendStatusByUserAndFriend(User $user, User $friend)
+    public function getFriendStatusByUserAndFriend(User $user, User $friend)
     {
         $qb = $this->createQueryBuilder('u');
 
@@ -156,6 +156,6 @@ class UserRepository extends EntityRepository
                       'friend' => $friend,
                   ])
                   ->getQuery()
-                  ->getOneOrNullResult();
+                  ->getSingleScalarResult();
     }
 }

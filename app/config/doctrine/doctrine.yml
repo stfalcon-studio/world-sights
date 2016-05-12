@@ -1,12 +1,13 @@
 # Doctrine Configuration
 doctrine:
     dbal:
-        driver:   pdo_mysql
-        host:     "%database_host%"
-        port:     "%database_port%"
-        dbname:   "%database_name%"
-        user:     "%database_user%"
-        password: "%database_password%"
+        driver:         pdo_mysql
+        host:           "%database_host%"
+        port:           "%database_port%"
+        dbname:         "%database_name%"
+        user:           "%database_user%"
+        password:       "%database_password%"
+        server_version: "%database_server_version%"
         charset:  UTF8
         mapping_types:
             enum: string

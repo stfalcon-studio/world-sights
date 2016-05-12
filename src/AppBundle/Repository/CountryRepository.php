@@ -30,18 +30,33 @@ class CountryRepository extends EntityRepository
     /**
      * Find countries with pagination
      *
-     * @param Pagination $paginator Pagination
+     * @param Pagination $pagination Pagination
      *
      * @return Country[]
      */
-    public function findCountriesWithPagination(Pagination $paginator)
+    public function findCountriesWithPagination(Pagination $pagination)
     {
         $qb = $this->createQueryBuilder('c');
 
         return $qb->where($qb->expr()->eq('c.enabled', true))
-                  ->setFirstResult($paginator->getOffset())
-                  ->setMaxResults($paginator->getLimit())
+                  ->setFirstResult($pagination->getOffset())
+                  ->setMaxResults($pagination->getLimit())
                   ->getQuery()
                   ->getResult();
+    }
+
+    /**
+     * Get total number of enabled countries
+     *
+     * @return int
+     */
+    public function getTotalNumberOfEnabledCountries()
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        return (int) $qb->select('COUNT(c)')
+                        ->where($qb->expr()->eq('c.enabled', true))
+                        ->getQuery()
+                        ->getSingleScalarResult();
     }
 }

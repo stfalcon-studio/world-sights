@@ -11,7 +11,6 @@ use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * User Controller
@@ -29,8 +28,6 @@ class UserController extends FOSRestController
      * Registration new user
      *
      * @param Request $request Request
-     *
-     * @throws ServerInternalErrorException
      *
      * @return Response
      *
@@ -86,8 +83,6 @@ class UserController extends FOSRestController
      *
      * @param Request $request Request
      *
-     * @throws ServerInternalErrorException
-     *
      * @return Response
      *
      * @ApiDoc(
@@ -116,7 +111,7 @@ class UserController extends FOSRestController
             try {
                 $refreshToken = $form->getData()['refresh_token'];
 
-                $em = $this->getDoctrine()->getEntityManager();
+                $em = $this->getDoctrine()->getManager();
 
                 /** @var User $user */
                 $user = $em->getRepository('AppBundle:User')->findUserByRefreshToken($refreshToken);

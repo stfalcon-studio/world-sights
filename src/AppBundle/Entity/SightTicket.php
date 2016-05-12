@@ -250,7 +250,7 @@ class SightTicket
     /**
      * Set type
      *
-     * @param SightTicketType $type Type
+     * @param string $type Type
      *
      * @return $this
      */

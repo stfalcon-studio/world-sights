@@ -30,6 +30,9 @@ class LoadSightVisitData extends AbstractFixture implements DependentFixtureInte
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function load(ObjectManager $manager)
     {
         /** @var User $user1 */

@@ -73,7 +73,7 @@ class Friend
     private $friend;
 
     /**
-     * @var FriendStatusType $status Friend status type
+     * @var string $status Friend status type
      *
      * @ORM\Column(name="status", type="FriendStatusType", nullable=false)
      *
@@ -146,7 +146,7 @@ class Friend
     /**
      * Get status
      *
-     * @return FriendStatusType Status
+     * @return string Status
      */
     public function getStatus()
     {
@@ -156,7 +156,7 @@ class Friend
     /**
      * Set status
      *
-     * @param FriendStatusType $status Status
+     * @param string $status Status
      *
      * @return $this
      */

@@ -58,17 +58,17 @@ class SightController extends FOSRestController
 
             $form->submit($request->query->all());
             if ($form->isValid()) {
-                /** @var Pagination $paginator */
-                $paginator = $form->getData();
+                /** @var Pagination $pagination */
+                $pagination = $form->getData();
 
-                $sights = $sightRepository->findSightsWithPagination($paginator);
+                $sights = $sightRepository->findSightsWithPagination($pagination);
 
                 $view = $this->createViewForHttpOkResponse([
                     'sights'    => $sights,
                     '_metadata' => [
                         'total'  => count($sights),
-                        'limit'  => $paginator->getLimit(),
-                        'offset' => $paginator->getOffset(),
+                        'limit'  => $pagination->getLimit(),
+                        'offset' => $pagination->getOffset(),
                     ],
                 ]);
             } else {
@@ -89,14 +89,14 @@ class SightController extends FOSRestController
     }
 
     /**
-     * Return sight by slug
+     * Get sight by slug
      *
      * @param Sight $sight Sight
      *
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return sight by slug",
+     *     description="Get sight by slug",
      *     requirements={
      *          {"name"="slug", "dataType"="string", "requirement"="\w+", "description"="Slug of sight"}
      *      },
@@ -131,14 +131,14 @@ class SightController extends FOSRestController
     }
 
     /**
-     * Return tickets by sight
+     * Get tickets by sight
      *
      * @param Sight $sight Sight
      *
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return tickets by sight",
+     *     description="Get tickets by sight",
      *     requirements={
      *          {"name"="slug", "dataType"="string", "requirement"="\w+", "description"="Slug of sight"}
      *      },
@@ -173,14 +173,14 @@ class SightController extends FOSRestController
     }
 
     /**
-     * Return tours by sight
+     * Get tours by sight
      *
      * @param Sight $sight Sight
      *
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return tours by sight",
+     *     description="Get tours by sight",
      *     requirements={
      *          {"name"="slug", "dataType"="string", "requirement"="\w+", "description"="Slug of sight"}
      *      },
@@ -219,8 +219,6 @@ class SightController extends FOSRestController
      * @param Request $request Request
      *
      * @return Response
-     *
-     * @throws ServerInternalErrorException
      *
      * @ApiDoc(
      *      section="Sight",
@@ -273,8 +271,6 @@ class SightController extends FOSRestController
      * @param Sight   $sight   Sight
      *
      * @return Response
-     *
-     * @throws ServerInternalErrorException
      *
      * @ApiDoc(
      *      section="Sight",
@@ -332,8 +328,6 @@ class SightController extends FOSRestController
      *
      * @return Response
      *
-     * @throws ServerInternalErrorException
-     *
      * @ApiDoc(
      *       requirements={
      *          {"name"="slug", "dataType"="string", "requirement"="\w+", "description"="Slug of sight"}
@@ -361,8 +355,6 @@ class SightController extends FOSRestController
             throw $this->createInternalServerErrorException();
         }
 
-        $view = $this->createViewForHttpNoContentResponse();
-
-        return $view;
+        return $this->createViewForHttpNoContentResponse();
     }
 }

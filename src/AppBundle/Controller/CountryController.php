@@ -7,11 +7,10 @@ use AppBundle\Form\Type\PaginationType;
 use AppBundle\Form\Model\Pagination;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use JMS\Serializer\SerializationContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Country Controller
@@ -31,8 +30,6 @@ class CountryController extends FOSRestController
      * @param Request $request Request
      *
      * @return Response
-     *
-     * @throws ServerInternalErrorException
      *
      * @ApiDoc(
      *     description="Return all countries",
@@ -54,25 +51,22 @@ class CountryController extends FOSRestController
 
             $form->submit($request->query->all());
             if ($form->isValid()) {
-                /** @var Pagination $paginator */
-                $paginator = $form->getData();
+                /** @var Pagination $pagination */
+                $pagination = $form->getData();
 
-                $countires = $countryRepository->findCountriesWithPagination($paginator);
+                $countries = $countryRepository->findCountriesWithPagination($pagination);
+                $total = $countryRepository->getTotalNumberOfEnabledCountries();
 
                 $view = $this->createViewForHttpOkResponse([
-                    'countries' => $countires,
+                    'countries' => $countries,
                     '_metadata' => [
-                        'total'  => count($countires),
-                        'limit'  => $paginator->getLimit(),
-                        'offset' => $paginator->getOffset(),
+                        'total'  => count($countries),
+                        'limit'  => $pagination->getLimit(),
+                        'offset' => $pagination->getOffset(),
                     ],
                 ]);
             } else {
-                $countires = $countryRepository->findAllCountries();
-
-                $view = $this->createViewForHttpOkResponse([
-                    'countries' => $countires,
-                ]);
+                $view = $this->createViewForValidationErrorResponse($form);
             }
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
@@ -97,7 +91,7 @@ class CountryController extends FOSRestController
      *     section="Country",
      *     statusCodes={
      *          200="Returned when successful",
-     *          404="Returned when sight not found",
+     *          404="Returned when countries not found",
      *          500="Returned when internal error on the server occurred"
      *      }
      * )
@@ -111,7 +105,7 @@ class CountryController extends FOSRestController
         try {
             if (!$country->isEnabled()) {
                 $view = $this->createViewForHttpNotFoundResponse([
-                    'message' => 'Not Found',
+                    'message' => 'Country not Found',
                 ]);
 
                 return $this->handleView($view);
@@ -120,11 +114,11 @@ class CountryController extends FOSRestController
             $view = $this->createViewForHttpOkResponse([
                 'country' => $country,
             ]);
-
-            return $this->handleView($view);
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
             throw $this->createInternalServerErrorException();
         }
+
+        return $this->handleView($view);
     }
 }
