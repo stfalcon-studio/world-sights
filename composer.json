@@ -31,7 +31,8 @@
         "nelmio/api-doc-bundle": "^2.12",
         "cocur/slugify": "^1.4",
         "fresh/doctrine-enum-bundle": "4.5",
-        "friendsofsymfony/user-bundle": "~2.0@dev"
+        "friendsofsymfony/user-bundle": "~2.0@dev",
+        "vich/uploader-bundle": "^0.14.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
