@@ -50,18 +50,33 @@ class SightTicketRepository extends EntityRepository
     /**
      * Find sight tickets with pagination
      *
-     * Pagination $paginator Paginator
+     * @param Pagination $pagination Pagination
      *
      * @return SightTicket[]
      */
-    public function findSightTicketsWithPagination(Pagination $paginator)
+    public function findSightTicketsWithPagination(Pagination $pagination)
     {
         $qb = $this->createQueryBuilder('st');
 
         return $qb->where($qb->expr()->eq('st.enabled', true))
-                  ->setFirstResult($paginator->getOffset())
-                  ->setMaxResults($paginator->getLimit())
+                  ->setFirstResult($pagination->getOffset())
+                  ->setMaxResults($pagination->getLimit())
                   ->getQuery()
                   ->getResult();
+    }
+
+    /**
+     * Get total number of enabled sight tickets
+     *
+     * @return int
+     */
+    public function getTotalNumberOfEnabledSightTickets()
+    {
+        $qb = $this->createQueryBuilder('st');
+
+        return (int) $qb->select('COUNT(st)')
+                        ->where($qb->expr()->eq('st.enabled', true))
+                        ->getQuery()
+                        ->getSingleScalarResult();
     }
 }

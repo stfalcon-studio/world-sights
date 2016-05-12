@@ -77,7 +77,7 @@ class Country
     /**
      * @var bool $enabled Enabled
      *
-     * @ORM\Column(type="bool")
+     * @ORM\Column(type="boolean")
      *
      * @Gedmo\Versioned
      */

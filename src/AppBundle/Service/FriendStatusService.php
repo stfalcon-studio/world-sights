@@ -45,7 +45,7 @@ class FriendStatusService
 
         $status   = $friend->getStatus();
         $statusBD = $this->em->getRepository('AppBundle:User')
-                             ->findFriendStatusByUserAndFriend($friend->getUser(), $friend->getFriend())['status'];
+                             ->getFriendStatusByUserAndFriend($friend->getUser(), $friend->getFriend());
 
         switch ($statusBD) {
             case FriendStatusType::SENT:

@@ -50,11 +50,11 @@ class UserController extends FOSRestController
      */
     public function registrationAction(Request $request)
     {
-        $form = $this->createForm(UserType::class);
+        try {
+            $form = $this->createForm(UserType::class);
 
-        $form->submit($request->request->all());
-        if ($form->isValid()) {
-            try {
+            $form->submit($request->request->all());
+            if ($form->isValid()) {
                 /** @var User $user */
                 $user = $form->getData();
 
@@ -67,12 +67,12 @@ class UserController extends FOSRestController
 
                 $view = $this->createViewForHttpCreatedResponse(['user' => $user]);
                 $view->setSerializationContext(SerializationContext::create()->setGroups(['user']));
-            } catch (\Exception $e) {
-                $this->sendExceptionToRollbar($e);
-                throw $this->createInternalServerErrorException();
+            } else {
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-        } else {
-            $view = $this->createViewForValidationErrorResponse($form);
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
         }
 
         return $this->handleView($view);
@@ -104,11 +104,11 @@ class UserController extends FOSRestController
      */
     public function updateTokenAction(Request $request)
     {
-        $form = $this->createForm(RefreshTokenType::class);
+        try {
+            $form = $this->createForm(RefreshTokenType::class);
 
-        $form->submit($request->request->all());
-        if ($form->isValid()) {
-            try {
+            $form->submit($request->request->all());
+            if ($form->isValid()) {
                 $refreshToken = $form->getData()['refresh_token'];
 
                 $em = $this->getDoctrine()->getManager();
@@ -117,7 +117,7 @@ class UserController extends FOSRestController
                 $user = $em->getRepository('AppBundle:User')->findUserByRefreshToken($refreshToken);
                 if (null === $user) {
                     $view = $this->createViewForInvalidErrorResponse([
-                        'message' => 'refresh token is invalid',
+                        'message' => 'Refresh token is invalid',
                     ]);
 
                     return $this->handleView($view);
@@ -133,12 +133,12 @@ class UserController extends FOSRestController
                     'user' => $user,
                 ]);
                 $view->setSerializationContext(SerializationContext::create()->setGroups(['user']));
-            } catch (\Exception $e) {
-                $this->sendExceptionToRollbar($e);
-                throw $this->createInternalServerErrorException();
+            } else {
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-        } else {
-            $view = $this->createViewForValidationErrorResponse($form);
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
         }
 
         return $this->handleView($view);

@@ -9,8 +9,8 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
-use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Response;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 /**
  * Country Controller
@@ -25,14 +25,14 @@ class CountryController extends FOSRestController
     use ControllerHelperTrait, RollbarHelperTrait;
 
     /**
-     * Return all countries with pagination
+     * Get all countries
      *
      * @param Request $request Request
      *
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return all countries",
+     *     description="Get all countries",
      *     section="Country",
      *     statusCodes={
      *          200="Returned when successful",
@@ -55,12 +55,12 @@ class CountryController extends FOSRestController
                 $pagination = $form->getData();
 
                 $countries = $countryRepository->findCountriesWithPagination($pagination);
-                $total = $countryRepository->getTotalNumberOfEnabledCountries();
+                $total     = $countryRepository->getTotalNumberOfEnabledCountries();
 
                 $view = $this->createViewForHttpOkResponse([
                     'countries' => $countries,
                     '_metadata' => [
-                        'total'  => count($countries),
+                        'total'  => $total,
                         'limit'  => $pagination->getLimit(),
                         'offset' => $pagination->getOffset(),
                     ],
@@ -84,14 +84,14 @@ class CountryController extends FOSRestController
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return country by slug",
+     *     description="Get country by slug",
      *     requirements={
      *          {"name"="slug", "dataType"="string", "requirement"="\w+", "description"="Slug of country"}
      *      },
      *     section="Country",
      *     statusCodes={
      *          200="Returned when successful",
-     *          404="Returned when countries not found",
+     *          404="Returned when country not found",
      *          500="Returned when internal error on the server occurred"
      *      }
      * )
@@ -105,7 +105,7 @@ class CountryController extends FOSRestController
         try {
             if (!$country->isEnabled()) {
                 $view = $this->createViewForHttpNotFoundResponse([
-                    'message' => 'Country not Found',
+                    'message' => 'Country not found',
                 ]);
 
                 return $this->handleView($view);

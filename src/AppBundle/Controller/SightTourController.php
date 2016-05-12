@@ -27,7 +27,7 @@ class SightTourController extends FOSRestController
     use ControllerHelperTrait, RollbarHelperTrait;
 
     /**
-     * Get all sight tours with pagination
+     * Get all sight tours
      *
      * @param Request $request Request
      *
@@ -57,24 +57,20 @@ class SightTourController extends FOSRestController
                 $paginator = $form->getData();
 
                 $sightTours = $sightTourRepository->findSightToursWithPagination($paginator);
+                $total      = $sightTourRepository->getTotalNumberOfEnabledSightTours();
 
                 $view = $this->createViewForHttpOkResponse([
                     'sight_tours' => $sightTours,
-                    '_metadata' => [
-                        'total'  => count($sightTours),
+                    '_metadata'   => [
+                        'total'  => $total,
                         'limit'  => $paginator->getLimit(),
                         'offset' => $paginator->getOffset(),
                     ],
                 ]);
+                $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_tour']));
             } else {
-                $sightTours = $sightTourRepository->findAllSightTours();
-
-                $view = $this->createViewForHttpOkResponse([
-                    'sight_tours' => $sightTours,
-                ]);
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-
-            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_tour']));
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
             throw $this->createInternalServerErrorException();
@@ -98,7 +94,7 @@ class SightTourController extends FOSRestController
      *     section="Sight Tour",
      *     statusCodes={
      *          200="Returned when successful",
-     *          404="Returned when sight not found",
+     *          404="Returned when sight tour not found",
      *          500="Returned when internal error on the server occurred"
      *      }
      * )
@@ -109,18 +105,23 @@ class SightTourController extends FOSRestController
      */
     public function getAction(SightTour $sightTour)
     {
-        if (!$sightTour->isEnabled()) {
-            $view = $this->createViewForHttpNotFoundResponse([
-                'message' => 'Not Found',
+        try {
+            if (!$sightTour->isEnabled()) {
+                $view = $this->createViewForHttpNotFoundResponse([
+                    'message' => 'Sight tour not Found',
+                ]);
+
+                return $this->handleView($view);
+            }
+
+            $view = $this->createViewForHttpOkResponse([
+                'sight_tour' => $sightTour,
             ]);
-
-            return $this->handleView($view);
+            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_tour']));
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
         }
-
-        $view = $this->createViewForHttpOkResponse([
-            'sight_tour' => $sightTour,
-        ]);
-        $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_tour']));
 
         return $this->handleView($view);
     }
@@ -208,11 +209,11 @@ class SightTourController extends FOSRestController
      */
     public function updateAction(Request $request, SightTour $sightTour)
     {
-        $form = $this->createForm(SightTourType::class, $sightTour);
+        try {
+            $form = $this->createForm(SightTourType::class, $sightTour);
 
-        $form->submit($request->request->all());
-        if ($form->isValid()) {
-            try {
+            $form->submit($request->request->all());
+            if ($form->isValid()) {
                 /** @var SightTour $sightTour */
                 $sightTour = $form->getData();
 
@@ -222,12 +223,12 @@ class SightTourController extends FOSRestController
 
                 $view = $this->createViewForHttpOkResponse(['sight_tour' => $sightTour]);
                 $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_tour']));
-            } catch (\Exception $e) {
-                $this->sendExceptionToRollbar($e);
-                throw $this->createInternalServerErrorException();
+            } else {
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-        } else {
-            $view = $this->createViewForValidationErrorResponse($form);
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
         }
 
         return $this->handleView($view);

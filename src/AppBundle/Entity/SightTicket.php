@@ -90,7 +90,7 @@ class SightTicket
     private $to;
 
     /**
-     * @var SightTicketType $type Type
+     * @var string $type Type
      *
      * @ORM\Column(name="type", type="SightTicketType", nullable=false)
      *
@@ -131,7 +131,7 @@ class SightTicket
     private $slug;
 
     /**
-     * @var boolean $enabled Enabled
+     * @var bool $enabled Enabled
      *
      * @ORM\Column(type="boolean")
      *
@@ -240,7 +240,7 @@ class SightTicket
     /**
      * Get type
      *
-     * @return SightTicketType Type
+     * @return string Type
      */
     public function getType()
     {
@@ -312,7 +312,7 @@ class SightTicket
     /**
      * Is enabled?
      *
-     * @return boolean Is enabled?
+     * @return bool Is enabled?
      */
     public function isEnabled()
     {
@@ -322,7 +322,7 @@ class SightTicket
     /**
      * Set enabled
      *
-     * @param boolean $enabled Enabled
+     * @param bool $enabled Enabled
      *
      * @return $this
      */

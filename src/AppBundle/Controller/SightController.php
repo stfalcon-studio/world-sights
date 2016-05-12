@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Sight;
 use AppBundle\Entity\SightTour;
-use AppBundle\Exception\ServerInternalErrorException;
 use AppBundle\Form\Model\Pagination;
 use AppBundle\Form\Type\PaginationType;
 use AppBundle\Form\Type\SightType;
@@ -29,16 +28,14 @@ class SightController extends FOSRestController
     use ControllerHelperTrait, RollbarHelperTrait;
 
     /**
-     * Return all sights with pagination
+     * Get all sights
      *
      * @param Request $request Request
      *
      * @return Response
      *
-     * @throws ServerInternalErrorException
-     *
      * @ApiDoc(
-     *     description="Return all sights",
+     *     description="Get all sights",
      *     section="Sight",
      *     statusCodes={
      *          200="Returned when successful",
@@ -61,24 +58,20 @@ class SightController extends FOSRestController
                 $pagination = $form->getData();
 
                 $sights = $sightRepository->findSightsWithPagination($pagination);
+                $total  = $sightRepository->getTotalNumberOfEnabledSights();
 
                 $view = $this->createViewForHttpOkResponse([
                     'sights'    => $sights,
                     '_metadata' => [
-                        'total'  => count($sights),
+                        'total'  => $total,
                         'limit'  => $pagination->getLimit(),
                         'offset' => $pagination->getOffset(),
                     ],
                 ]);
+                $view->setSerializationContext(SerializationContext::create()->setGroups(['sight']));
             } else {
-                $sights = $sightRepository->findAllSights();
-
-                $view = $this->createViewForHttpOkResponse([
-                    'sights' => $sights,
-                ]);
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-
-            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight']));
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
             throw $this->createInternalServerErrorException();
@@ -113,18 +106,23 @@ class SightController extends FOSRestController
      */
     public function getAction(Sight $sight)
     {
-        if (!$sight->isEnabled()) {
-            $view = $this->createViewForHttpNotFoundResponse([
-                'message' => 'Not Found',
+        try {
+            if (!$sight->isEnabled()) {
+                $view = $this->createViewForHttpNotFoundResponse([
+                    'message' => 'Sight not Found',
+                ]);
+
+                return $this->handleView($view);
+            }
+
+            $view = $this->createViewForHttpOkResponse([
+                'sight' => $sight,
             ]);
-
-            return $this->handleView($view);
+            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight']));
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
         }
-
-        $view = $this->createViewForHttpOkResponse([
-            'sight' => $sight,
-        ]);
-        $view->setSerializationContext(SerializationContext::create()->setGroups(['sight']));
 
         return $this->handleView($view);
     }
@@ -238,11 +236,11 @@ class SightController extends FOSRestController
      */
     public function createAction(Request $request)
     {
-        $form = $this->createForm(SightType::class);
+        try {
+            $form = $this->createForm(SightType::class);
 
-        $form->submit($request->request->all());
-        if ($form->isValid()) {
-            try {
+            $form->submit($request->request->all());
+            if ($form->isValid()) {
                 /** @var Sight $sight */
                 $sight = $form->getData();
 
@@ -252,12 +250,12 @@ class SightController extends FOSRestController
 
                 $view = $this->createViewForHttpCreatedResponse(['sight' => $sight]);
                 $view->setSerializationContext(SerializationContext::create()->setGroups(['sight']));
-            } catch (\Exception $e) {
-                $this->sendExceptionToRollbar($e);
-                throw $this->createInternalServerErrorException();
+            } else {
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-        } else {
-            $view = $this->createViewForValidationErrorResponse($form);
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
         }
 
         return $this->handleView($view);
@@ -295,11 +293,11 @@ class SightController extends FOSRestController
      */
     public function updateAction(Request $request, Sight $sight)
     {
-        $form = $this->createForm(SightType::class, $sight);
+        try {
+            $form = $this->createForm(SightType::class, $sight);
 
-        $form->submit($request->request->all());
-        if ($form->isValid()) {
-            try {
+            $form->submit($request->request->all());
+            if ($form->isValid()) {
                 /** @var Sight $sight */
                 $sight = $form->getData();
 
@@ -309,12 +307,12 @@ class SightController extends FOSRestController
 
                 $view = $this->createViewForHttpOkResponse(['sight' => $sight]);
                 $view->setSerializationContext(SerializationContext::create()->setGroups(['sight']));
-            } catch (\Exception $e) {
-                $this->sendExceptionToRollbar($e);
-                throw $this->createInternalServerErrorException();
+            } else {
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-        } else {
-            $view = $this->createViewForValidationErrorResponse($form);
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
         }
 
         return $this->handleView($view);

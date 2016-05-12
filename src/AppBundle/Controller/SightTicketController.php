@@ -29,7 +29,7 @@ class SightTicketController extends FOSRestController
     use ControllerHelperTrait, RollbarHelperTrait;
 
     /**
-     * Get all sight tickets with pagination
+     * Get all sight tickets
      *
      * @param Request $request Request
      *
@@ -55,28 +55,24 @@ class SightTicketController extends FOSRestController
 
             $form->submit($request->query->all());
             if ($form->isValid()) {
-                /** @var Pagination $paginator */
-                $paginator = $form->getData();
+                /** @var Pagination $pagination */
+                $pagination = $form->getData();
 
-                $sightTickets = $sightTicketRepository->findSightTicketsWithPagination($paginator);
+                $sightTickets = $sightTicketRepository->findSightTicketsWithPagination($pagination);
+                $total        = $sightTicketRepository->getTotalNumberOfEnabledSightTickets();
 
                 $view = $this->createViewForHttpOkResponse([
                     'sight_tickets' => $sightTickets,
-                    '_metadata' => [
-                        'total'  => count($sightTickets),
-                        'limit'  => $paginator->getLimit(),
-                        'offset' => $paginator->getOffset(),
+                    '_metadata'     => [
+                        'total'  => $total,
+                        'limit'  => $pagination->getLimit(),
+                        'offset' => $pagination->getOffset(),
                     ],
                 ]);
+                $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_ticket']));
             } else {
-                $sightTickets = $sightTicketRepository->findAllSightTickets();
-
-                $view = $this->createViewForHttpOkResponse([
-                    'sight_tickets' => $sightTickets,
-                ]);
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-
-            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_ticket']));
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
             throw $this->createInternalServerErrorException();
@@ -100,7 +96,7 @@ class SightTicketController extends FOSRestController
      *     section="Sight Ticket",
      *     statusCodes={
      *          200="Returned when successful",
-     *          404="Returned when sight not found",
+     *          404="Returned when sight ticket not found",
      *          500="Returned when internal error on the server occurred"
      *      }
      * )
@@ -113,16 +109,14 @@ class SightTicketController extends FOSRestController
     {
         if (!$sightTicket->isEnabled()) {
             $view = $this->createViewForHttpNotFoundResponse([
-                'message' => 'Not Found',
+                'message' => 'Sight ticket not Found',
             ]);
-
-            return $this->handleView($view);
+        } else {
+            $view = $this->createViewForHttpOkResponse([
+                'sight_ticket' => $sightTicket,
+            ]);
+            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_ticket']));
         }
-
-        $view = $this->createViewForHttpOkResponse([
-            'sight_ticket' => $sightTicket,
-        ]);
-        $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_ticket']));
 
         return $this->handleView($view);
     }
@@ -185,11 +179,11 @@ class SightTicketController extends FOSRestController
      */
     public function createAction(Request $request)
     {
-        $form = $this->createForm(SightTicketType::class);
+        try {
+            $form = $this->createForm(SightTicketType::class);
 
-        $form->submit($request->request->all());
-        if ($form->isValid()) {
-            try {
+            $form->submit($request->request->all());
+            if ($form->isValid()) {
                 /** @var SightTicket $sightTicket */
                 $sightTicket = $form->getData();
 
@@ -199,12 +193,12 @@ class SightTicketController extends FOSRestController
 
                 $view = $this->createViewForHttpCreatedResponse(['sight_ticket' => $sightTicket]);
                 $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_ticket']));
-            } catch (\Exception $e) {
-                $this->sendExceptionToRollbar($e);
-                throw $this->createInternalServerErrorException();
+            } else {
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-        } else {
-            $view = $this->createViewForValidationErrorResponse($form);
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
         }
 
         return $this->handleView($view);
@@ -242,11 +236,11 @@ class SightTicketController extends FOSRestController
      */
     public function updateAction(Request $request, SightTicket $sightTicket)
     {
-        $form = $this->createForm(SightTicketType::class, $sightTicket);
+        try {
+            $form = $this->createForm(SightTicketType::class, $sightTicket);
 
-        $form->submit($request->request->all());
-        if ($form->isValid()) {
-            try {
+            $form->submit($request->request->all());
+            if ($form->isValid()) {
                 /** @var SightTicket $sightTicket */
                 $sightTicket = $form->getData();
 
@@ -256,12 +250,12 @@ class SightTicketController extends FOSRestController
 
                 $view = $this->createViewForHttpOkResponse(['sight_ticket' => $sightTicket]);
                 $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_ticket']));
-            } catch (\Exception $e) {
-                $this->sendExceptionToRollbar($e);
-                throw $this->createInternalServerErrorException();
+            } else {
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-        } else {
-            $view = $this->createViewForValidationErrorResponse($form);
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
         }
 
         return $this->handleView($view);

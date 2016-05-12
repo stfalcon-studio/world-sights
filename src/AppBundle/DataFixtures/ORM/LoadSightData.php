@@ -55,7 +55,7 @@ class LoadSightData extends AbstractFixture implements DependentFixtureInterface
         $sightTypeLibrary     = $this->getReference('sight-type-library');
         $sightTypeIsland      = $this->getReference('sight-type-island');
 
-        $sight1 = (new Sight())
+        $sight = (new Sight())
             ->setName('Кам\'янець-подільська фортеця')
             ->setDescription(<<<TEXT
     Кам'яне́ць-Поді́льська форте́ця — фортеця у місті Кам'янець-Подільський (Хмельницької області України).
@@ -71,10 +71,10 @@ TEXT
             ->setLongitude(26.563411)
             ->setSightType($sightTypeCastle)
             ->setLocality($localityKamyanets);
-        $this->setReference('sight-Kamianets-Podilskyi-castle', $sight1);
-        $manager->persist($sight1);
+        $this->setReference('sight-Kamianets-Podilskyi-castle', $sight);
+        $manager->persist($sight);
 
-        $sight2 = (new Sight())
+        $sight = (new Sight())
             ->setName('Хотинська фортеця')
             ->setDescription(<<<TEXT
     Хотинська фортеця (рум. Cetatea Hotinului) — фортеця XIII–XVIII століть у місті Хотині на Дністрі,
@@ -92,10 +92,10 @@ TEXT
             ->setLongitude(26.498382)
             ->setSightType($sightTypeCastle)
             ->setLocality($localityHotin);
-        $this->setReference('sight-Hotin', $sight2);
-        $manager->persist($sight2);
+        $this->setReference('sight-Hotin', $sight);
+        $manager->persist($sight);
 
-        $sight3 = (new Sight())
+        $sight = (new Sight())
             ->setName('острів Хортиця')
             ->setDescription(<<<TEXT
     Хо́ртиця — найбільший острів на Дніпрі, розташований у районі міста Запоріжжя, нижче Дніпрогесу.
@@ -114,10 +114,10 @@ TEXT
             ->setLongitude(35.087736)
             ->setSightType($sightTypeIsland)
             ->setLocality($localityZaporizhia);
-        $this->setReference('sight-Hortitsa', $sight3);
-        $manager->persist($sight3);
+        $this->setReference('sight-Hortitsa', $sight);
+        $manager->persist($sight);
 
-        $sight4 = (new Sight())
+        $sight = (new Sight())
             ->setName('Національна бібліотека Білорусі')
             ->setDescription(<<<TEXT
 Національна бібліотека Білорусі (біл. Нацыянальная бібліятэка Беларусі) — найбільша наукова бібліотека
@@ -134,10 +134,10 @@ TEXT
             ->setLongitude(27.646043)
             ->setSightType($sightTypeLibrary)
             ->setLocality($localityMinsk);
-        $this->setReference('sight-Minsk-library', $sight4);
-        $manager->persist($sight4);
+        $this->setReference('sight-Minsk-library', $sight);
+        $manager->persist($sight);
 
-        $sight5 = (new Sight())
+        $sight = (new Sight())
             ->setName('Королівський замок у Варшаві')
             ->setDescription(<<<TEXT
 Королі́вський за́мок у Варша́ві — бароко-класичний королівський замок, розташований на Замковій площі у Варшаві.
@@ -158,10 +158,10 @@ TEXT
             ->setLongitude(21.015481)
             ->setSightType($sightTypeCastle)
             ->setLocality($localityWarszawa);
-        $this->setReference('sight-Warszawa-castle', $sight5);
-        $manager->persist($sight5);
+        $this->setReference('sight-Warszawa-castle', $sight);
+        $manager->persist($sight);
 
-        $sight6 = (new Sight())
+        $sight = (new Sight())
             ->setName('Купальні Сечені')
             ->setDescription(<<<TEXT
 Купальня Сечені - це найбільша у всій Європі термальна купальня. Знаходиться вона в самому центрі мальовничого
@@ -175,8 +175,8 @@ TEXT
             ->setLongitude(19.082358)
             ->setSightType($sightTypeThermalBath)
             ->setLocality($localityBudapest);
-        $this->setReference('sight-Szechenyi', $sight6);
-        $manager->persist($sight6);
+        $this->setReference('sight-Szechenyi', $sight);
+        $manager->persist($sight);
 
         $manager->flush();
     }

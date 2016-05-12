@@ -30,7 +30,7 @@ class SightVisitController extends FOSRestController
     use ControllerHelperTrait, RollbarHelperTrait;
 
     /**
-     * Get all visited sights by user with pagination
+     * Get all visited sights by user
      *
      * @param Request $request Request
      *
@@ -57,30 +57,25 @@ class SightVisitController extends FOSRestController
 
             $form->submit($request->query->all());
             if ($form->isValid()) {
-                /** @var Pagination $paginator */
-                $paginator = $form->getData();
+                /** @var Pagination $pagination */
+                $pagination = $form->getData();
 
-                $sights = $sightRepository->findSightBySightVisitUserWithPagination($user, $paginator);
+                $sights = $sightRepository->findSightBySightVisitUserWithPagination($user, $pagination);
+                $total  = $sightRepository->getTotalNumberOfVisitedSightsByUser($user);
 
                 $view = $this->createViewForHttpOkResponse([
                     'sight_visits' => $sights,
                     'user'         => $user,
-                    '_metadata' => [
-                        'total'  => count($sights),
-                        'limit'  => $paginator->getLimit(),
-                        'offset' => $paginator->getOffset(),
+                    '_metadata'    => [
+                        'total'  => $total,
+                        'limit'  => $pagination->getLimit(),
+                        'offset' => $pagination->getOffset(),
                     ],
                 ]);
+                $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_visits']));
             } else {
-                $sights = $sightRepository->findSightBySightVisitUser($user);
-
-                $view = $this->createViewForHttpOkResponse([
-                    'sight_visits' => $sights,
-                    'user'         => $user,
-                ]);
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-
-            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_visits']));
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
             throw $this->createInternalServerErrorException();
@@ -90,7 +85,7 @@ class SightVisitController extends FOSRestController
     }
 
     /**
-     * Get all visited sights by all friends with pagination
+     * Get all visited sights by all friends
      *
      * @param Request $request Request
      *
@@ -117,27 +112,27 @@ class SightVisitController extends FOSRestController
 
             $form->submit($request->query->all());
             if ($form->isValid()) {
-                /** @var Pagination $paginator */
-                $paginator = $form->getData();
+                /** @var Pagination $pagination */
+                $pagination = $form->getData();
 
-                $resultSights = $sightRepository->findSightBySightVisitByFriendsWithPagination($user, $paginator);
+                $resultSights = $sightRepository->findSightBySightVisitByFriendsWithPagination($user, $pagination);
+
+                $sights = [];
+                foreach ($resultSights as $resultSight) {
+                    /** @var Sight $sight */
+                    $sight = $resultSight[0];
+                    $sight->setUser($resultSight['user']);
+
+                    $sights[] = $sight;
+                }
+
+                $view = $this->createViewForHttpOkResponse([
+                    'sight_visits' => $sights,
+                ]);
+                $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_visits_friends']));
             } else {
-                $resultSights = $sightRepository->findSightBySightVisitByFriends($user);
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-
-            $sights = [];
-            foreach ($resultSights as $resultSight) {
-                /** @var Sight $sight */
-                $sight = $resultSight[0];
-                $sight->setUser($resultSight['user']);
-
-                $sights[] = $sight;
-            }
-
-            $view = $this->createViewForHttpOkResponse([
-                'sight_visits' => $sights,
-            ]);
-            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_visits_friends']));
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
             throw $this->createInternalServerErrorException();
@@ -161,7 +156,7 @@ class SightVisitController extends FOSRestController
      *     section="Sight Visit",
      *     statusCodes={
      *          200="Returned when successful",
-     *          404="Returned when sight not found",
+     *          404="Returned when sight visit not found",
      *          500="Returned when internal error on the server occurred"
      *      }
      * )
@@ -178,7 +173,7 @@ class SightVisitController extends FOSRestController
                                ->findSightVisitBySightAndUser($sight, $user);
             if (null === $sightVisit) {
                 $view = $this->createViewForHttpNotFoundResponse([
-                    'message' => 'Not Found',
+                    'message' => 'Sight visit not Found',
                 ]);
             } else {
                 $view = $this->createViewForHttpOkResponse([
@@ -210,7 +205,7 @@ class SightVisitController extends FOSRestController
      *     section="Sight Visit",
      *     statusCodes={
      *          200="Returned when successful",
-     *          404="Returned when sight not found",
+     *          404="Returned when sight visit not found",
      *          500="Returned when internal error on the server occurred"
      *      }
      * )
@@ -228,18 +223,18 @@ class SightVisitController extends FOSRestController
                                ->findFriendByUserFriend($user, $friend);
             if (null === $userFriend) {
                 $view = $this->createViewForHttpNotFoundResponse([
-                    'message' => 'Not Found',
+                    'message' => 'Friend not Found',
                 ]);
             } else {
                 $form = $this->createForm(PaginationType::class);
 
                 $form->submit($request->query->all());
                 if ($form->isValid()) {
-                    /** @var Pagination $paginator */
-                    $paginator = $form->getData();
+                    /** @var Pagination $pagination */
+                    $pagination = $form->getData();
 
                     $sights = $this->getDoctrine()->getRepository('AppBundle:Sight')
-                                   ->findSightBySightVisitUserWithPagination($user, $paginator);
+                                   ->findSightBySightVisitUserWithPagination($user, $pagination);
                 } else {
                     $sights = $this->getDoctrine()->getRepository('AppBundle:Sight')
                                    ->findSightBySightVisitUser($friend);
@@ -285,11 +280,11 @@ class SightVisitController extends FOSRestController
      */
     public function createAction(Request $request)
     {
-        $form = $this->createForm(SightVisitType::class);
+        try {
+            $form = $this->createForm(SightVisitType::class);
 
-        $form->submit($request->request->all());
-        if ($form->isValid()) {
-            try {
+            $form->submit($request->request->all());
+            if ($form->isValid()) {
                 /** @var SightVisit $sightVisit */
                 $sightVisit = $form->getData();
 
@@ -299,15 +294,15 @@ class SightVisitController extends FOSRestController
 
                 $view = $this->createViewForHttpCreatedResponse([
                     'sight_visit' => $sightVisit->getSight(),
-                    'user'         => $this->getUser(),
+                    'user'        => $this->getUser(),
                 ]);
                 $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_visits']));
-            } catch (\Exception $e) {
-                $this->sendExceptionToRollbar($e);
-                throw $this->createInternalServerErrorException();
+            } else {
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-        } else {
-            $view = $this->createViewForValidationErrorResponse($form);
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
         }
 
         return $this->handleView($view);
@@ -345,23 +340,23 @@ class SightVisitController extends FOSRestController
      */
     public function updateAction(Request $request, Sight $sight)
     {
-        $user = $this->getUser();
+        try {
+            $user = $this->getUser();
 
-        $sightVisit = $this->getDoctrine()->getRepository('AppBundle:SightVisit')
-                           ->findSightVisitBySightAndUser($sight, $user);
-        if (null === $sightVisit) {
-            $view = $this->createViewForHttpNotFoundResponse([
-                'message' => 'Not Found',
-            ]);
+            $sightVisit = $this->getDoctrine()->getRepository('AppBundle:SightVisit')
+                               ->findSightVisitBySightAndUser($sight, $user);
+            if (null === $sightVisit) {
+                $view = $this->createViewForHttpNotFoundResponse([
+                    'message' => 'Sight visit not Found',
+                ]);
 
-            return $view;
-        }
+                return $view;
+            }
 
-        $form = $this->createForm(SightVisitType::class, $sightVisit);
+            $form = $this->createForm(SightVisitType::class, $sightVisit);
 
-        $form->submit($request->request->all(), null);
-        if ($form->isValid()) {
-            try {
+            $form->submit($request->request->all(), null);
+            if ($form->isValid()) {
                 /** @var SightVisit $sightVisit */
                 $sightVisit = $form->getData();
 
@@ -371,15 +366,15 @@ class SightVisitController extends FOSRestController
 
                 $view = $this->createViewForHttpOkResponse([
                     'sight_visit' => $sightVisit->getSight(),
-                    'user'         => $this->getUser(),
+                    'user'        => $this->getUser(),
                 ]);
                 $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_visits']));
-            } catch (\Exception $e) {
-                $this->sendExceptionToRollbar($e);
-                throw $this->createInternalServerErrorException();
+            } else {
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-        } else {
-            $view = $this->createViewForValidationErrorResponse($form);
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
         }
 
         return $this->handleView($view);
@@ -413,7 +408,7 @@ class SightVisitController extends FOSRestController
                                ->findSightVisitBySightAndUser($sight, $user);
             if (null === $sightVisit) {
                 $view = $this->createViewForHttpNotFoundResponse([
-                    'message' => 'Not Found',
+                    'message' => 'Sight visit not Found',
                 ]);
             } else {
                 $em = $this->getDoctrine()->getManager();

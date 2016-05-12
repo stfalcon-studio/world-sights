@@ -24,7 +24,7 @@ class SightTicketControllerTest extends WebTestCase
 
         parent::setUp();
 
-        $this->client  = static::makeClient();
+        $this->client = static::makeClient();
 
         $this->manager = $this->client->getContainer()->get('doctrine')->getManager();
         $this->client->setServerParameter('HTTP_X_AUTH_TOKEN', '1e5008f3677f7ba2a8bd8e47b8c0c6');
@@ -110,7 +110,7 @@ class SightTicketControllerTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            '/api/v1/sight-tickets/kijiv-kam-yanec-podilskiy-tt',
+            '/api/v1/sight-tickets/minsk-varshava-bt',
             $data,
             [],
             ['Content-Type' => 'application/json'],
@@ -130,7 +130,7 @@ class SightTicketControllerTest extends WebTestCase
 
     public function testDeleteAction()
     {
-        $this->client->request('DELETE', '/api/v1/sight-tickets/kijiv-kam-yanec-podilskiy-tt');
+        $this->client->request('DELETE', '/api/v1/sight-tickets/kijiv-varshava-pt');
 
         $this->assertStatusCode(Response::HTTP_NO_CONTENT, $this->client);
     }

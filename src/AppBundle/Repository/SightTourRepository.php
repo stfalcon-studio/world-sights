@@ -50,18 +50,33 @@ class SightTourRepository extends EntityRepository
     /**
      * Find sight tours with pagination
      *
-     * Pagination $paginator Paginator
+     * @param Pagination $pagination Pagination
      *
      * @return SightTour[]
      */
-    public function findSightToursWithPagination(Pagination $paginator)
+    public function findSightToursWithPagination(Pagination $pagination)
     {
         $qb = $this->createQueryBuilder('s');
 
         return $qb->where($qb->expr()->eq('s.enabled', true))
-                  ->setFirstResult($paginator->getOffset())
-                  ->setMaxResults($paginator->getLimit())
+                  ->setFirstResult($pagination->getOffset())
+                  ->setMaxResults($pagination->getLimit())
                   ->getQuery()
                   ->getResult();
+    }
+
+    /**
+     * Get total number of enabled sight tour
+     *
+     * @return int
+     */
+    public function getTotalNumberOfEnabledSightTours()
+    {
+        $qb = $this->createQueryBuilder('st');
+
+        return (int) $qb->select('COUNT(st)')
+                        ->where($qb->expr()->eq('st.enabled', true))
+                        ->getQuery()
+                        ->getSingleScalarResult();
     }
 }

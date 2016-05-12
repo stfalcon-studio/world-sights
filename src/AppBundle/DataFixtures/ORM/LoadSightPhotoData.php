@@ -70,41 +70,41 @@ class LoadSightPhotoData extends AbstractFixture implements DependentFixtureInte
         $this->prepareDirectories();
         $this->prepareImages();
 
-        $sightPhoto1 = (new SightPhoto())
+        $sightPhoto = (new SightPhoto())
             ->setUser($user1)
             ->setSight($sightKamyanetsCastle)
             ->setPhotoName('kamyanets1.jpg');
-        $manager->persist($sightPhoto1);
+        $manager->persist($sightPhoto);
 
-        $sightPhoto2 = (new SightPhoto())
+        $sightPhoto = (new SightPhoto())
             ->setUser($user1)
             ->setSight($sightWarszawaCastle)
             ->setPhotoName('warszawa1.jpg');
-        $manager->persist($sightPhoto2);
+        $manager->persist($sightPhoto);
 
-        $sightPhoto3 = (new SightPhoto())
+        $sightPhoto = (new SightPhoto())
             ->setUser($user1)
             ->setSight($sightMinskLibrary)
             ->setPhotoName('minsk1.jpg');
-        $manager->persist($sightPhoto3);
+        $manager->persist($sightPhoto);
 
-        $sightPhoto4 = (new SightPhoto())
+        $sightPhoto = (new SightPhoto())
             ->setUser($user2)
             ->setSight($sightMinskLibrary)
             ->setPhotoName('minsk2.jpg');
-        $manager->persist($sightPhoto4);
+        $manager->persist($sightPhoto);
 
-        $sightPhoto5 = (new SightPhoto())
+        $sightPhoto = (new SightPhoto())
             ->setUser($user2)
             ->setSight($sightWarszawaCastle)
             ->setPhotoName('warszawa2.jpg');
-        $manager->persist($sightPhoto5);
+        $manager->persist($sightPhoto);
 
-        $sightPhoto6 = (new SightPhoto())
+        $sightPhoto = (new SightPhoto())
             ->setUser($user3)
             ->setSight($sightKamyanetsCastle)
             ->setPhotoName('kamyanets3.jpg');
-        $manager->persist($sightPhoto6);
+        $manager->persist($sightPhoto);
 
         $manager->flush();
     }

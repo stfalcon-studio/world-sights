@@ -68,7 +68,9 @@ class FriendListener
     public function postUpdate(Friend $friend, LifecycleEventArgs $args)
     {
         if ($friend instanceof Friend) {
-            if ($token = $this->tokenStorage->getToken()) {
+            $token = $this->tokenStorage->getToken();
+
+            if (null !== $token) {
                 /** @var User $user */
                 $user = $token->getUser();
                 if ($user === $friend->getUser()) {
@@ -104,7 +106,9 @@ class FriendListener
     public function postRemove(Friend $friend, LifecycleEventArgs $args)
     {
         if ($friend instanceof Friend) {
-            if ($token = $this->tokenStorage->getToken()) {
+            $token = $this->tokenStorage->getToken();
+
+            if (null !== $token) {
                 /** @var User $user */
                 $user = $token->getUser();
                 if ($user === $friend->getUser()) {
