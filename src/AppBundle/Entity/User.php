@@ -78,6 +78,16 @@ class User extends BaseUser
     private $sightVisits;
 
     /**
+     * @var ArrayCollection|SightPhoto[] $sightPhotos Sight photos
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\SightPhoto", mappedBy="user")
+     *
+     * @JMS\Expose
+     * @JMS\Since("1.0")
+     */
+    private $sightPhotos;
+
+    /**
      * @var string $username Username
      *
      * @JMS\Expose
@@ -468,6 +478,57 @@ class User extends BaseUser
             $sightVisit->setUser($this);
         }
         $this->sightVisits = $sightVisits;
+
+        return $this;
+    }
+
+    /**
+     * Add sight photo
+     *
+     * @param SightPhoto $sightPhoto Sight photo
+     *
+     * @return $this
+     */
+    public function addSightPhoto(SightPhoto $sightPhoto)
+    {
+        $this->sightPhotos[] = $sightPhoto;
+
+        return $this;
+    }
+
+    /**
+     * Remove sight photo
+     *
+     * @param SightPhoto $sightPhoto Sight photo
+     */
+    public function removeSightPhoto(SightPhoto $sightPhoto)
+    {
+        $this->sightPhotos->removeElement($sightPhoto);
+    }
+
+    /**
+     * Get sight photos
+     *
+     * @return ArrayCollection|SightPhoto[] Sight photos
+     */
+    public function getSightPhotos()
+    {
+        return $this->sightPhotos;
+    }
+
+    /**
+     * Set sight photos
+     *
+     * @param ArrayCollection|SightPhoto[] $sightPhotos Sight photos
+     *
+     * @return $this
+     */
+    public function setSightPhotos(ArrayCollection $sightPhotos)
+    {
+        foreach ($sightPhotos as $sightPhoto) {
+            $sightPhoto->setUser($this);
+        }
+        $this->sightPhotos = $sightPhotos;
 
         return $this;
     }

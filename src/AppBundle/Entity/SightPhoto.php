@@ -133,6 +133,15 @@ class SightPhoto
     private $description;
 
     /**
+     * @var boolean $enabled Enabled
+     *
+     * @ORM\Column(type="boolean")
+     *
+     * @Gedmo\Versioned
+     */
+    private $enabled = true;
+
+    /**
      * Get ID
      *
      * @return int ID
@@ -309,6 +318,30 @@ class SightPhoto
     public function setDescription($description)
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Is enabled?
+     *
+     * @return boolean Is enabled?
+     */
+    public function isEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled Enabled
+     *
+     * @return $this
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
 
         return $this;
     }

@@ -2,6 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Sight;
+use AppBundle\Form\Model\Pagination;
+use AppBundle\Form\Type\PaginationType;
 use AppBundle\Form\Type\SightPhotoType;
 use AppBundle\Entity\SightPhoto;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -25,6 +28,64 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 class SightPhotoController extends FOSRestController
 {
     use ControllerHelperTrait, RollbarHelperTrait;
+
+    /**
+     * Return all sight photos
+     *
+     * @param Request $request Request
+     *
+     * @return Response
+     *
+     * @ApiDoc(
+     *     description="Return all sight photos",
+     *     section="Sight Photo",
+     *     statusCodes={
+     *          200="Returned when successful",
+     *          500="Returned when internal error on the server occurred"
+     *      }
+     * )
+     *
+     * @Rest\Get("")
+     */
+    public function getAllAction(Request $request)
+    {
+        try {
+            $sightPhotoRepository = $this->getDoctrine()->getRepository('AppBundle:SightPhoto');
+
+            $form = $this->createForm(PaginationType::class);
+
+            $form->submit($request->query->all());
+            if ($form->isValid()) {
+                /** @var Pagination $pagination */
+                $pagination = $form->getData();
+
+                $sightPhotos = $sightPhotoRepository->findSightPhotosWithPagination($pagination);
+
+                /** @var SightPhoto $sightPhoto */
+                foreach ($sightPhotos as $sightPhoto) {
+                    $url = $this->get('app.sight_photo')->getPathImage($sightPhoto);
+                    $sightPhoto->setPhotoPath($url);
+                }
+
+                $view = $this->createViewForHttpOkResponse([
+                    'sight_photos' => $sightPhotos,
+                    '_metadata'    => [
+                        'total'  => count($sightPhotos),
+                        'limit'  => $pagination->getLimit(),
+                        'offset' => $pagination->getOffset(),
+                    ],
+                ]);
+                $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_photo']));
+            } else {
+                $view = $this->createViewForValidationErrorResponse($form);
+            }
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
+        }
+
+        return $this->handleView($view);
+    }
 
     /**
      * Return sight photo
@@ -53,6 +114,53 @@ class SightPhotoController extends FOSRestController
 
             $view = $this->createViewForHttpOkResponse([
                 'sight_photo' => $sightPhoto,
+            ]);
+            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_photo']));
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * Return sight photos by sight
+     *
+     * @param Sight $sight Sight
+     *
+     * @return Response
+     *
+     * @ApiDoc(
+     *     description="Return sight photos by sight",
+     *     requirements={
+     *          {"name"="slug", "dataType"="string", "requirement"="\w+", "description"="Slug of sight"}
+     *      },
+     *     section="Sight",
+     *     statusCodes={
+     *          200="Returned when successful",
+     *          404="Returned when sight type not found",
+     *          500="Returned when internal error on the server occurred"
+     *      }
+     * )
+     *
+     * @Rest\Get("/sights/{slug}")
+     *
+     * @ParamConverter("sight", class="AppBundle:Sight")
+     */
+    public function getSightAction(Sight $sight)
+    {
+        try {
+            $sightPhotos = $sight->getSightPhotos()->toArray();
+
+            /** @var SightPhoto $sightPhoto */
+            foreach ($sightPhotos as $sightPhoto) {
+                $url = $this->get('app.sight_photo')->getPathImage($sightPhoto);
+                $sightPhoto->setPhotoPath($url);
+            }
+
+            $view = $this->createViewForHttpOkResponse([
+                'sight_photos' => $sightPhotos,
             ]);
             $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_photo']));
         } catch (\Exception $e) {
