@@ -61,13 +61,23 @@ class SightTicketController extends FOSRestController
                 $paginator = $form->getData();
 
                 $sightTickets = $sightTicketRepository->findSightTicketsWithPagination($paginator);
+
+                $view = $this->createViewForHttpOkResponse([
+                    'sight_tickets' => $sightTickets,
+                    '_metadata' => [
+                        'total'  => count($sightTickets),
+                        'limit'  => $paginator->getLimit(),
+                        'offset' => $paginator->getOffset(),
+                    ],
+                ]);
             } else {
                 $sightTickets = $sightTicketRepository->findAllSightTickets();
+
+                $view = $this->createViewForHttpOkResponse([
+                    'sight_tickets' => $sightTickets,
+                ]);
             }
 
-            $view = $this->createViewForHttpOkResponse([
-                'sight_tickets' => $sightTickets,
-            ]);
             $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_ticket']));
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);

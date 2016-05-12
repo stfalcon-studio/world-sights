@@ -57,6 +57,9 @@ class SightVisitControllerTest extends WebTestCase
         $this->assertEquals(200, $data['code']);
         $this->assertCount(3, $data['sight_visits']);
         $this->comparisonSightVisit($data['sight_visits'][0]);
+        $this->assertEquals(3, $data['_metadata']['total']);
+        $this->assertEquals(10, $data['_metadata']['limit']);
+        $this->assertEquals(0, $data['_metadata']['offset']);
     }
 
     public function testGetAllFriendsAction()

@@ -40,6 +40,9 @@ class FriendControllerTest extends WebTestCase
         $this->assertEquals(200, $data['code']);
         $this->assertCount(2, $data['friends']);
         $this->comparisonAcceptedFriend($data['friends'][0]);
+        $this->assertEquals(2, $data['_metadata']['total']);
+        $this->assertEquals(10, $data['_metadata']['limit']);
+        $this->assertEquals(0, $data['_metadata']['offset']);
     }
 
     public function testGetReceivedFriendsAction()

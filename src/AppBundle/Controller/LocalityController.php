@@ -58,13 +58,22 @@ class LocalityController extends FOSRestController
                 $paginator = $form->getData();
 
                 $localities = $localityRepository->findLocalitiesWithPagination($paginator);
+
+                $view = $this->createViewForHttpOkResponse([
+                    'localities' => $localities,
+                    '_metadata'  => [
+                        'total'  => count($localities),
+                        'limit'  => $paginator->getLimit(),
+                        'offset' => $paginator->getOffset(),
+                    ],
+                ]);
             } else {
                 $localities = $localityRepository->findAllLocalities();
-            }
 
-            $view = $this->createViewForHttpOkResponse([
-                'localities' => $localities,
-            ]);
+                $view = $this->createViewForHttpOkResponse([
+                    'localities' => $localities,
+                ]);
+            }
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
             throw $this->createInternalServerErrorException();
