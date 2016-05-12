@@ -18,7 +18,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class FriendStatusService
 {
-    /** @var  EntityManager $em Entity Manager */
+    /**
+     * @var EntityManager $em Entity Manager
+     */
     private $em;
 
     /**
@@ -29,6 +31,14 @@ class FriendStatusService
         $this->em = $em;
     }
 
+    /**
+     * Update friend status
+     *
+     * @param Friend $friend Friend
+     * @param Form   $form   Form
+     *
+     * @return View
+     */
     public function updateFriendStatus(Friend $friend, Form $form)
     {
         $view = new View();

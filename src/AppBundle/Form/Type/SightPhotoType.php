@@ -42,6 +42,9 @@ class SightPhotoType extends AbstractType
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -63,6 +66,9 @@ class SightPhotoType extends AbstractType
         });
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

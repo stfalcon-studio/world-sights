@@ -14,6 +14,10 @@ api_sight:
     resource: AppBundle\Controller\SightController
     type: rest
 
+api_sight_photo:
+    resource: AppBundle\Controller\SightPhotoController
+    type: rest
+
 api_sight_tour:
     resource: AppBundle\Controller\SightTourController
     type: rest

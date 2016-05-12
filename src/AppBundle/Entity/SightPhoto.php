@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -17,6 +18,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *
  * @ORM\Table(name="sight_photos")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\SightPhotoRepository")
+ * @UniqueEntity("photoName")
  *
  * @JMS\ExclusionPolicy("all")
  *
@@ -36,6 +38,7 @@ class SightPhoto
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @JMS\Expose
+     * @JMS\Groups({"sight_photo"})
      * @JMS\Since("1.0")
      */
     private $id;
@@ -49,6 +52,7 @@ class SightPhoto
      * @Assert\NotBlank()
      *
      * @JMS\Expose
+     * @JMS\Groups({"sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -64,6 +68,7 @@ class SightPhoto
      * @Assert\NotBlank()
      *
      * @JMS\Expose
+     * @JMS\Groups({"sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -73,16 +78,29 @@ class SightPhoto
     /**
      * @var File $photoFile Image file
      *
-     * @Vich\UploadableField(mapping="photoName", fileNameProperty="photoName")
+     * @Vich\UploadableField(mapping="sight_image", fileNameProperty="photoName")
      */
     private $photoFile;
 
     /**
      * @var string $photoName Photo of name
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     *
+     * @JMS\Expose
+     * @JMS\Groups({"sight_photo"})
+     * @JMS\Since("1.0")
      */
     private $photoName;
+
+    /**
+     * @var string $photoPath Photo path
+     *
+     * @JMS\Expose
+     * @JMS\Groups({"sight_photo"})
+     * @JMS\Since("1.0")
+     */
+    private $photoPath;
 
     /**
      * @var string $name Name
@@ -92,6 +110,7 @@ class SightPhoto
      * @Assert\Type(type="string")
      *
      * @JMS\Expose
+     * @JMS\Groups({"sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -106,6 +125,7 @@ class SightPhoto
      * @Assert\Type(type="string")
      *
      * @JMS\Expose
+     * @JMS\Groups({"sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -180,9 +200,8 @@ class SightPhoto
     public function setPhotoFile(File $photo = null)
     {
         $this->photoFile = $photo;
-
         if ($photo) {
-            $this->updatedAt = new \DateTime('now');
+            $this->photoName = $this->photoFile->getFilename();
         }
 
         return $this;
@@ -220,6 +239,30 @@ class SightPhoto
     public function getPhotoName()
     {
         return $this->photoName;
+    }
+
+    /**
+     * Get photo path
+     *
+     * @return string Photo path
+     */
+    public function getPhotoPath()
+    {
+        return $this->photoPath;
+    }
+
+    /**
+     * Set photo path
+     *
+     * @param string $photoPath Photo path
+     *
+     * @return $this
+     */
+    public function setPhotoPath($photoPath)
+    {
+        $this->photoPath = $photoPath;
+
+        return $this;
     }
 
     /**

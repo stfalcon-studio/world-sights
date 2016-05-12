@@ -35,7 +35,7 @@ class Sight
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      */
     private $id;
@@ -49,7 +49,7 @@ class Sight
      * @Assert\NotBlank()
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -65,7 +65,7 @@ class Sight
      * @Assert\NotBlank()
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -114,7 +114,7 @@ class Sight
      * @Assert\Type(type="string")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -127,7 +127,7 @@ class Sight
      * @ORM\Column(type="text", nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -140,7 +140,7 @@ class Sight
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -153,7 +153,7 @@ class Sight
      * @ORM\Column(type="string", length=50, nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -166,7 +166,7 @@ class Sight
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -179,7 +179,7 @@ class Sight
      * @ORM\Column(type="text", nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -192,7 +192,7 @@ class Sight
      * @ORM\Column(type="float", nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -205,7 +205,7 @@ class Sight
      * @ORM\Column(type="float", nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -218,7 +218,7 @@ class Sight
      * @ORM\Column(type="string", unique=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      */
     private $slug;
