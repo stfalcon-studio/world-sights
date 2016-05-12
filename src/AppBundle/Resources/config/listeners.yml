@@ -13,6 +13,13 @@ services:
         arguments:
             - "@security.token_storage"
 
+    app.sight_photo.listener:
+        class: AppBundle\EventListener\AddUserToSightPhotoListener
+        tags:
+            - { name: kernel.event_listener, event: event.add_user_to_sight_photo, method: onUserAddToSightPhoto }
+        arguments:
+            - "@doctrine.orm.default_entity_manager"
+
     app.sight_visit.listener:
         class: AppBundle\EventListener\AddUserToSightVisitListener
         tags:

@@ -35,7 +35,7 @@ class Sight
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      */
     private $id;
@@ -49,7 +49,7 @@ class Sight
      * @Assert\NotBlank()
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -65,7 +65,7 @@ class Sight
      * @Assert\NotBlank()
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -105,6 +105,16 @@ class Sight
     private $sightVisits;
 
     /**
+     * @var ArrayCollection|SightPhoto[] $sightPhotos Sight photos
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\SightPhoto", mappedBy="sight")
+     *
+     * @JMS\Expose
+     * @JMS\Since("1.0")
+     */
+    private $sightPhotos;
+
+    /**
      * @var string $name Name
      *
      * @ORM\Column(type="string", length=255, nullable=false)
@@ -114,7 +124,7 @@ class Sight
      * @Assert\Type(type="string")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -127,7 +137,7 @@ class Sight
      * @ORM\Column(type="text", nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -140,7 +150,7 @@ class Sight
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -153,7 +163,7 @@ class Sight
      * @ORM\Column(type="string", length=50, nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -166,7 +176,7 @@ class Sight
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -179,7 +189,7 @@ class Sight
      * @ORM\Column(type="text", nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -192,7 +202,7 @@ class Sight
      * @ORM\Column(type="float", nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -205,7 +215,7 @@ class Sight
      * @ORM\Column(type="float", nullable=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -218,7 +228,7 @@ class Sight
      * @ORM\Column(type="string", unique=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo"})
      * @JMS\Since("1.0")
      */
     private $slug;
@@ -738,6 +748,57 @@ class Sight
             $sightVisit->setSight($this);
         }
         $this->sightVisits = $sightVisits;
+
+        return $this;
+    }
+
+    /**
+     * Add sight photo
+     *
+     * @param SightPhoto $sightPhoto Sight photo
+     *
+     * @return $this
+     */
+    public function addSightPhoto(SightPhoto $sightPhoto)
+    {
+        $this->sightPhotos[] = $sightPhoto;
+
+        return $this;
+    }
+
+    /**
+     * Remove sight photo
+     *
+     * @param SightPhoto $sightPhoto Sight photo
+     */
+    public function removeSightPhoto(SightPhoto $sightPhoto)
+    {
+        $this->sightPhotos->removeElement($sightPhoto);
+    }
+
+    /**
+     * Get sight photos
+     *
+     * @return ArrayCollection|SightPhoto[] Sight photos
+     */
+    public function getSightPhotos()
+    {
+        return $this->sightPhotos;
+    }
+
+    /**
+     * Set sight photos
+     *
+     * @param ArrayCollection|SightPhoto[] $sightPhotos Sight photos
+     *
+     * @return $this
+     */
+    public function setSightPhotos(ArrayCollection $sightPhotos)
+    {
+        foreach ($sightPhotos as $sightPhoto) {
+            $sightPhoto->setSight($this);
+        }
+        $this->sightPhotos = $sightPhotos;
 
         return $this;
     }
