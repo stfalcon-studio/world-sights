@@ -78,6 +78,16 @@ class User extends BaseUser
     private $sightVisits;
 
     /**
+     * @var ArrayCollection|SightReview[] $sightReviews Sight reviews
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\SightReview", mappedBy="user")
+     *
+     * @JMS\Expose
+     * @JMS\Since("1.0")
+     */
+    private $sightReviews;
+
+    /**
      * @var ArrayCollection|SightPhoto[] $sightPhotos Sight photos
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\SightPhoto", mappedBy="user")
@@ -529,6 +539,57 @@ class User extends BaseUser
             $sightPhoto->setUser($this);
         }
         $this->sightPhotos = $sightPhotos;
+
+        return $this;
+    }
+
+    /**
+     * Add sight review
+     *
+     * @param SightReview $sightReview Sight review
+     *
+     * @return $this
+     */
+    public function addSightReview(SightReview $sightReview)
+    {
+        $this->sightReviews[] = $sightReview;
+
+        return $this;
+    }
+
+    /**
+     * Remove sight review
+     *
+     * @param SightReview $sightReview Sight review
+     */
+    public function removeSightReview(SightReview $sightReview)
+    {
+        $this->sightReviews->removeElement($sightReview);
+    }
+
+    /**
+     * Get sight reviews
+     *
+     * @return ArrayCollection|SightReview[] Sight reviews
+     */
+    public function getSightReviews()
+    {
+        return $this->sightReviews;
+    }
+
+    /**
+     * Set sight reviews
+     *
+     * @param ArrayCollection|SightReview[] $sightReviews Sight reviews
+     *
+     * @return $this
+     */
+    public function setSightReviews(ArrayCollection $sightReviews)
+    {
+        foreach ($sightReviews as $sightReview) {
+            $sightReview->setUser($this);
+        }
+        $this->sightReviews = $sightReviews;
 
         return $this;
     }

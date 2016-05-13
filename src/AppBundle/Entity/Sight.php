@@ -115,6 +115,16 @@ class Sight
     private $sightPhotos;
 
     /**
+     * @var ArrayCollection|SightReview[] $sightReviews Sight reviews
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\SightReview", mappedBy="sight")
+     *
+     * @JMS\Expose
+     * @JMS\Since("1.0")
+     */
+    private $sightReviews;
+
+    /**
      * @var string $name Name
      *
      * @ORM\Column(type="string", length=255, nullable=false)
@@ -259,6 +269,8 @@ class Sight
         $this->sightTours   = new ArrayCollection();
         $this->sightTickets = new ArrayCollection();
         $this->sightVisits  = new ArrayCollection();
+        $this->sightPhotos  = new ArrayCollection();
+        $this->sightReviews = new ArrayCollection();
     }
 
     /**
@@ -799,6 +811,57 @@ class Sight
             $sightPhoto->setSight($this);
         }
         $this->sightPhotos = $sightPhotos;
+
+        return $this;
+    }
+
+    /**
+     * Add sight review
+     *
+     * @param SightReview $sightReview Sight review
+     *
+     * @return $this
+     */
+    public function addSightReview(SightReview $sightReview)
+    {
+        $this->sightReviews[] = $sightReview;
+
+        return $this;
+    }
+
+    /**
+     * Remove sight review
+     *
+     * @param SightReview $sightReview Sight review
+     */
+    public function removeSightReview(SightReview $sightReview)
+    {
+        $this->sightReviews->removeElement($sightReview);
+    }
+
+    /**
+     * Get sight reviews
+     *
+     * @return ArrayCollection|SightReview[] Sight reviews
+     */
+    public function getSightReviews()
+    {
+        return $this->sightReviews;
+    }
+
+    /**
+     * Set sight reviews
+     *
+     * @param ArrayCollection|SightReview[] $sightReviews Sight reviews
+     *
+     * @return $this
+     */
+    public function setSightReviews(ArrayCollection $sightReviews)
+    {
+        foreach ($sightReviews as $sightReview) {
+            $sightReview->setSight($this);
+        }
+        $this->sightReviews = $sightReviews;
 
         return $this;
     }
