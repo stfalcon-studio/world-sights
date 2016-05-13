@@ -34,6 +34,7 @@ class SightReview
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @JMS\Expose
+     * @JMS\Groups({"sight_review"})
      * @JMS\Since("1.0")
      */
     private $id;
@@ -47,6 +48,7 @@ class SightReview
      * @Assert\NotBlank()
      *
      * @JMS\Expose
+     * @JMS\Groups({"sight_review"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -62,6 +64,7 @@ class SightReview
      * @Assert\NotBlank()
      *
      * @JMS\Expose
+     * @JMS\Groups({"sight_review"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -76,6 +79,7 @@ class SightReview
      * @Assert\Type(type="string")
      *
      * @JMS\Expose
+     * @JMS\Groups({"sight_review"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -88,6 +92,7 @@ class SightReview
      * @ORM\Column(type="text", nullable=true)
      *
      * @JMS\Expose
+     * @JMS\Groups({"sight_review"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -100,6 +105,7 @@ class SightReview
      * @ORM\Column(type="integer", nullable=false)
      *
      * @JMS\Expose
+     * @JMS\Groups({"sight_review"})
      * @JMS\Since("1.0")
      *
      * @Assert\Type(type="integer")
@@ -108,6 +114,24 @@ class SightReview
      * @Gedmo\Versioned
      */
     private $mark;
+
+    /**
+     * @var bool $enabled Enabled
+     *
+     * @ORM\Column(type="boolean")
+     *
+     * @Gedmo\Versioned
+     */
+    private $enabled = true;
+
+    /**
+     * @var float $averageMark Average mark
+     *
+     * @JMS\Expose
+     * @JMS\Groups({"sight_review"})
+     * @JMS\Since("1.0")
+     */
+    private $averageMark;
 
     /**
      * Get ID
@@ -235,6 +259,54 @@ class SightReview
     public function setMark($mark)
     {
         $this->mark = $mark;
+
+        return $this;
+    }
+
+    /**
+     * Is enabled?
+     *
+     * @return bool Is enabled?
+     */
+    public function isEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param bool $enabled Enabled
+     *
+     * @return $this
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * Get average mark
+     *
+     * @return int Average mark
+     */
+    public function getAverageMark()
+    {
+        return $this->averageMark;
+    }
+
+    /**
+     * Set average mark
+     *
+     * @param int $averageMark Average mark
+     *
+     * @return $this
+     */
+    public function setAverageMark($averageMark)
+    {
+        $this->averageMark = $averageMark;
 
         return $this;
     }
