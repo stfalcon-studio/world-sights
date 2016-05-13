@@ -23,6 +23,7 @@ class AppExtension extends Extension
         $loader->load('services.yml');
         $loader->load('form_types.yml');
         $loader->load('listeners.yml');
+        $loader->load('param_converters.yml');
     }
 
     /**

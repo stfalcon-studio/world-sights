@@ -16,7 +16,6 @@ use JMS\Serializer\Annotation as JMS;
  *
  * @ORM\Table(name="sight_reviews")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\SightReviewRepository")
- * @UniqueEntity("slug")
  *
  * @JMS\ExclusionPolicy("all")
  *
@@ -108,6 +107,7 @@ class SightReview
      * @JMS\Groups({"sight_review"})
      * @JMS\Since("1.0")
      *
+     * @Assert\NotBlank()
      * @Assert\Type(type="integer")
      * @Assert\Range(min=1, max=5)
      *

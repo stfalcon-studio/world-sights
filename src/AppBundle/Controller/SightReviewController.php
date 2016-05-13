@@ -7,6 +7,7 @@ use AppBundle\Entity\SightReview;
 use AppBundle\Entity\User;
 use AppBundle\Form\Model\Pagination;
 use AppBundle\Form\Type\PaginationType;
+use AppBundle\Form\Type\SightReviewType;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use JMS\Serializer\SerializationContext;
@@ -91,7 +92,7 @@ class SightReviewController extends FOSRestController
      *
      * @ApiDoc(
      *     description="Get sight review",
-     *     section="Sight Photo",
+     *     section="Sight Review",
      *     statusCodes={
      *          200="Returned when successful",
      *          404="Returned when sight review not found",
@@ -222,6 +223,58 @@ class SightReviewController extends FOSRestController
                 $view = $this->createViewForHttpOkResponse([
                     'sight_reviews' => $sightReviews,
                 ]);
+                $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_review']));
+            } else {
+                $view = $this->createViewForValidationErrorResponse($form);
+            }
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * Create sight review
+     *
+     * @param Request $request Request
+     *
+     * @return Response
+     *
+     * @ApiDoc(
+     *      section="Sight Review",
+     *      description="Create a new sight review",
+     *      input="AppBundle\Form\Type\SightReviewType",
+     *      output={
+     *          "class"="AppBundle\Entity\SightReview",
+     *          "groups"={"sight_review"}
+     *      },
+     *      statusCodes={
+     *          201="Returned when successful",
+     *          400="Returned when the form has errors or invalid data",
+     *          500="Returned when internal error on the server occurred"
+     *      }
+     * )
+     *
+     * @Rest\Post("")
+     * @ParamConverter(class="AppBundle:SightReview", converter="sight_review_converter")
+     */
+    public function createAction(Request $request)
+    {
+        try {
+            $form = $this->createForm(SightReviewType::class);
+
+            $form->submit($request->request->all());
+            if ($form->isValid()) {
+                /** @var SightReview $sightReview */
+                $sightReview = $form->getData();
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($sightReview);
+                $em->flush();
+
+                $view = $this->createViewForHttpOkResponse(['sight_review' => $sightReview]);
                 $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_review']));
             } else {
                 $view = $this->createViewForValidationErrorResponse($form);
