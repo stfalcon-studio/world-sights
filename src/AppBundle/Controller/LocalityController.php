@@ -7,10 +7,9 @@ use AppBundle\Form\Type\PaginationType;
 use AppBundle\Form\Model\Pagination;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use JMS\Serializer\SerializationContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 /**
@@ -26,16 +25,14 @@ class LocalityController extends FOSRestController
     use ControllerHelperTrait, RollbarHelperTrait;
 
     /**
-     * Return all localities with pagination
+     * Get all localities
      *
      * @param Request $request Request
      *
      * @return Response
      *
-     * @throws ServerInternalErrorException
-     *
      * @ApiDoc(
-     *     description="Return all localities",
+     *     description="Get all localities",
      *     section="Locality",
      *     statusCodes={
      *          200="Returned when successful",
@@ -54,25 +51,22 @@ class LocalityController extends FOSRestController
 
             $form->submit($request->query->all());
             if ($form->isValid()) {
-                /** @var Pagination $paginator */
-                $paginator = $form->getData();
+                /** @var Pagination $pagination */
+                $pagination = $form->getData();
 
-                $localities = $localityRepository->findLocalitiesWithPagination($paginator);
+                $localities = $localityRepository->findLocalitiesWithPagination($pagination);
+                $total      = $localityRepository->getTotalNumberOfEnabledLocalities();
 
                 $view = $this->createViewForHttpOkResponse([
                     'localities' => $localities,
                     '_metadata'  => [
-                        'total'  => count($localities),
-                        'limit'  => $paginator->getLimit(),
-                        'offset' => $paginator->getOffset(),
+                        'total'  => $total,
+                        'limit'  => $pagination->getLimit(),
+                        'offset' => $pagination->getOffset(),
                     ],
                 ]);
             } else {
-                $localities = $localityRepository->findAllLocalities();
-
-                $view = $this->createViewForHttpOkResponse([
-                    'localities' => $localities,
-                ]);
+                $view = $this->createViewForValidationErrorResponse($form);
             }
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
@@ -90,14 +84,14 @@ class LocalityController extends FOSRestController
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return locality by slug",
+     *     description="Get locality by slug",
      *     requirements={
      *          {"name"="slug", "dataType"="string", "requirement"="\w+", "description"="Slug of locality"}
      *      },
      *     section="Locality",
      *     statusCodes={
      *          200="Returned when successful",
-     *          404="Returned when sight not found",
+     *          404="Returned when locality not found",
      *          500="Returned when internal error on the server occurred"
      *      }
      * )
@@ -108,17 +102,22 @@ class LocalityController extends FOSRestController
      */
     public function getAction(Locality $locality)
     {
-        if (!$locality->isEnabled()) {
-            $view = $this->createViewForHttpNotFoundResponse([
-                'message' => 'Not Found',
+        try {
+            if (!$locality->isEnabled()) {
+                $view = $this->createViewForHttpNotFoundResponse([
+                    'message' => 'Locality not Found',
+                ]);
+
+                return $this->handleView($view);
+            }
+
+            $view = $this->createViewForHttpOkResponse([
+                'locality' => $locality,
             ]);
-
-            return $this->handleView($view);
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
         }
-
-        $view = $this->createViewForHttpOkResponse([
-            'locality' => $locality,
-        ]);
 
         return $this->handleView($view);
     }

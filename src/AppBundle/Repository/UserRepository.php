@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\DBAL\Types\FriendStatusType;
 use AppBundle\Entity\User;
 use AppBundle\Form\Model\Pagination;
 use Doctrine\ORM\EntityRepository;
@@ -79,13 +80,13 @@ class UserRepository extends EntityRepository
     /**
      * Find friend users by user and status with pagination
      *
-     * @param User       $user      User
-     * @param string     $status    Friend status type
-     * @param Pagination $paginator Paginator
+     * @param User       $user       User
+     * @param string     $status     Friend status type
+     * @param Pagination $pagination Pagination
      *
      * @return User[]
      */
-    public function findFriendUsersByUserWithPagination(User $user, $status, Pagination $paginator)
+    public function findFriendUsersByUserWithPagination(User $user, $status, Pagination $pagination)
     {
         $qb = $this->createQueryBuilder('u');
 
@@ -96,8 +97,8 @@ class UserRepository extends EntityRepository
                   ->join('u.friendUsers', 'fu')
                   ->join('fu.user', 'fuu')
                   ->join('fu.friend', 'fuf')
-                  ->setFirstResult($paginator->getOffset())
-                  ->setMaxResults($paginator->getLimit())
+                  ->setFirstResult($pagination->getOffset())
+                  ->setMaxResults($pagination->getLimit())
                   ->setParameters([
                       'user'   => $user,
                       'status' => $status,
@@ -139,9 +140,9 @@ class UserRepository extends EntityRepository
      * @param User $user   User
      * @param User $friend Friend
      *
-     * @return User|null
+     * @return string Status
      */
-    public function findFriendStatusByUserAndFriend(User $user, User $friend)
+    public function getFriendStatusByUserAndFriend(User $user, User $friend)
     {
         $qb = $this->createQueryBuilder('u');
 
@@ -156,6 +157,30 @@ class UserRepository extends EntityRepository
                       'friend' => $friend,
                   ])
                   ->getQuery()
-                  ->getOneOrNullResult();
+                  ->getSingleScalarResult();
+    }
+
+    /**
+     * Get total number of enabled users
+     *
+     * @param User $user User
+     *
+     * @return int
+     */
+    public function getTotalNumberOfEnabledUsersWithAcceptedStatus(User $user)
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        return (int) $qb->select('COUNT(u)')
+                        ->where($qb->expr()->eq('u.enabled', true))
+                        ->andWhere($qb->expr()->eq('uf.status', ':status'))
+                        ->andWhere($qb->expr()->eq('u', ':user'))
+                        ->join('u.userFriends', 'uf')
+                        ->setParameters([
+                            'status' => FriendStatusType::ACCEPTED,
+                            'user'   => $user,
+                        ])
+                        ->getQuery()
+                        ->getSingleScalarResult();
     }
 }

@@ -18,29 +18,29 @@ class LoadCountryData extends AbstractFixture
      */
     public function load(ObjectManager $manager)
     {
-        $country1 = (new Country())
+        $country = (new Country())
             ->setName('Україна')
             ->setSlug('ukraine');
-        $this->setReference('country-Ukraine', $country1);
-        $manager->persist($country1);
+        $this->setReference('country-Ukraine', $country);
+        $manager->persist($country);
 
-        $country2 = (new Country())
+        $country = (new Country())
             ->setName('Білорусь')
             ->setSlug('belarus');
-        $this->setReference('country-Belarus', $country2);
-        $manager->persist($country2);
+        $this->setReference('country-Belarus', $country);
+        $manager->persist($country);
 
-        $country3 = (new Country())
+        $country = (new Country())
             ->setName('Польща')
             ->setSlug('poland');
-        $this->setReference('country-Poland', $country3);
-        $manager->persist($country3);
+        $this->setReference('country-Poland', $country);
+        $manager->persist($country);
 
-        $country4 = (new Country())
+        $country = (new Country())
             ->setName('Угорщина')
             ->setSlug('hungary');
-        $this->setReference('country-Hungary', $country4);
-        $manager->persist($country4);
+        $this->setReference('country-Hungary', $country);
+        $manager->persist($country);
 
         $manager->flush();
     }

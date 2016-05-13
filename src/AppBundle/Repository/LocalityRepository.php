@@ -44,18 +44,33 @@ class LocalityRepository extends EntityRepository
     /**
      * Find localities with pagination
      *
-     * @param Pagination $paginator Pagination
+     * @param Pagination $pagination Pagination
      *
      * @return Locality[]
      */
-    public function findLocalitiesWithPagination(Pagination $paginator)
+    public function findLocalitiesWithPagination(Pagination $pagination)
     {
         $qb = $this->createQueryBuilder('l');
 
         return $qb->where($qb->expr()->eq('l.enabled', true))
-                  ->setFirstResult($paginator->getOffset())
-                  ->setMaxResults($paginator->getLimit())
+                  ->setFirstResult($pagination->getOffset())
+                  ->setMaxResults($pagination->getLimit())
                   ->getQuery()
                   ->getResult();
+    }
+
+    /**
+     * Get total number of enabled localities
+     *
+     * @return int
+     */
+    public function getTotalNumberOfEnabledLocalities()
+    {
+        $qb = $this->createQueryBuilder('l');
+
+        return (int) $qb->select('COUNT(l)')
+                        ->where($qb->expr()->eq('l.enabled', true))
+                        ->getQuery()
+                        ->getSingleScalarResult();
     }
 }

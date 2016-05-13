@@ -30,7 +30,7 @@ class AddUserToFriendListener
     /**
      * On user add to friend
      *
-     * @param AddUseToFriendEvent $args
+     * @param AddUserToFriendEvent $args Add user to friend event
      */
     public function onUserAddToFriend(AddUserToFriendEvent $args)
     {

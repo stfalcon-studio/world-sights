@@ -29,4 +29,19 @@ class SightPhotoRepository extends EntityRepository
                   ->getQuery()
                   ->getResult();
     }
+
+    /**
+     * Get total number of enabled sight photos
+     *
+     * @return int
+     */
+    public function getTotalNumberOfEnabledSightPhotos()
+    {
+        $qb = $this->createQueryBuilder('sp');
+
+        return (int) $qb->select('COUNT(sp)')
+                        ->where($qb->expr()->eq('sp.enabled', true))
+                        ->getQuery()
+                        ->getSingleScalarResult();
+    }
 }

@@ -18,7 +18,7 @@ class LoadUserData extends AbstractFixture
      */
     public function load(ObjectManager $manager)
     {
-        $user1 = (new User())
+        $user = (new User())
             ->setEmail('user@gmail.com')
             ->setUsername('user')
             ->setPlainPassword('1234')
@@ -26,10 +26,10 @@ class LoadUserData extends AbstractFixture
             ->setRefreshToken('c25e0d5e51271b4a03364961dc9335')
             ->setExpiredAt((new \DateTime())->modify('12 hour'))
             ->setEnabled(true);
-        $this->setReference('user-1', $user1);
-        $manager->persist($user1);
+        $this->setReference('user-1', $user);
+        $manager->persist($user);
 
-        $user2 = (new User())
+        $user = (new User())
             ->setEmail('admin@gmail.com')
             ->setUsername('admin')
             ->addRole('ROLE_ADMIN')
@@ -38,48 +38,48 @@ class LoadUserData extends AbstractFixture
             ->setRefreshToken('4b49d69b365b290ececc9f00edaa29')
             ->setExpiredAt((new \DateTime())->modify('12 hour'))
             ->setEnabled(true);
-        $this->setReference('user-2', $user2);
-        $manager->persist($user2);
+        $this->setReference('user-2', $user);
+        $manager->persist($user);
 
-        $user3 = (new User())
+        $user = (new User())
             ->setEmail('user3@gmail.com')
             ->setUsername('user3')
             ->setPlainPassword('1234')
             ->setEnabled(true);
-        $this->setReference('user-3', $user3);
-        $manager->persist($user3);
+        $this->setReference('user-3', $user);
+        $manager->persist($user);
 
-        $user4 = (new User())
+        $user = (new User())
             ->setEmail('user4@gmail.com')
             ->setUsername('user4')
             ->setPlainPassword('1234')
             ->setEnabled(true);
-        $this->setReference('user-4', $user4);
-        $manager->persist($user4);
+        $this->setReference('user-4', $user);
+        $manager->persist($user);
 
-        $user5 = (new User())
+        $user = (new User())
             ->setEmail('user5@gmail.com')
             ->setUsername('user5')
             ->setPlainPassword('1234')
             ->setEnabled(true);
-        $this->setReference('user-5', $user5);
-        $manager->persist($user5);
+        $this->setReference('user-5', $user);
+        $manager->persist($user);
 
-        $user6 = (new User())
+        $user = (new User())
             ->setEmail('user6@gmail.com')
             ->setUsername('user6')
             ->setPlainPassword('1234')
             ->setEnabled(true);
-        $this->setReference('user-6', $user6);
-        $manager->persist($user6);
+        $this->setReference('user-6', $user);
+        $manager->persist($user);
 
-        $user7 = (new User())
+        $user = (new User())
             ->setEmail('user7@gmail.com')
             ->setUsername('user7')
             ->setPlainPassword('1234')
             ->setEnabled(true);
-        $this->setReference('user-7', $user7);
-        $manager->persist($user7);
+        $this->setReference('user-7', $user);
+        $manager->persist($user);
 
         $manager->flush();
     }

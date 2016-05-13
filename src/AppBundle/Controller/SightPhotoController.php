@@ -30,14 +30,14 @@ class SightPhotoController extends FOSRestController
     use ControllerHelperTrait, RollbarHelperTrait;
 
     /**
-     * Return all sight photos
+     * Get all sight photos
      *
      * @param Request $request Request
      *
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return all sight photos",
+     *     description="Get all sight photos",
      *     section="Sight Photo",
      *     statusCodes={
      *          200="Returned when successful",
@@ -60,6 +60,7 @@ class SightPhotoController extends FOSRestController
                 $pagination = $form->getData();
 
                 $sightPhotos = $sightPhotoRepository->findSightPhotosWithPagination($pagination);
+                $total       = $sightPhotoRepository->getTotalNumberOfEnabledSightPhotos();
 
                 /** @var SightPhoto $sightPhoto */
                 foreach ($sightPhotos as $sightPhoto) {
@@ -70,7 +71,7 @@ class SightPhotoController extends FOSRestController
                 $view = $this->createViewForHttpOkResponse([
                     'sight_photos' => $sightPhotos,
                     '_metadata'    => [
-                        'total'  => count($sightPhotos),
+                        'total'  => $total,
                         'limit'  => $pagination->getLimit(),
                         'offset' => $pagination->getOffset(),
                     ],
@@ -88,17 +89,18 @@ class SightPhotoController extends FOSRestController
     }
 
     /**
-     * Return sight photo
+     * Get sight photo
      *
      * @param SightPhoto $sightPhoto Sight photo
      *
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return sight photo",
+     *     description="Get sight photo",
      *     section="Sight Photo",
      *     statusCodes={
      *          200="Returned when successful",
+     *          404="Returned when sight photo not found",
      *          500="Returned when internal error on the server occurred"
      *      }
      * )
@@ -125,14 +127,14 @@ class SightPhotoController extends FOSRestController
     }
 
     /**
-     * Return sight photos by sight
+     * Get sight photos by sight
      *
      * @param Sight $sight Sight
      *
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return sight photos by sight",
+     *     description="Get sight photos by sight",
      *     requirements={
      *          {"name"="slug", "dataType"="string", "requirement"="\w+", "description"="Slug of sight"}
      *      },

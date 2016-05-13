@@ -30,6 +30,9 @@ class LoadSightVisitData extends AbstractFixture implements DependentFixtureInte
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function load(ObjectManager $manager)
     {
         /** @var User $user1 */
@@ -44,17 +47,17 @@ class LoadSightVisitData extends AbstractFixture implements DependentFixtureInte
         $sightMinskLibrary    = $this->getReference('sight-Minsk-library');
         $sightWarzavaCastle   = $this->getReference('sight-Warszawa-castle');
 
-        $sightVisit1 = (new SightVisit())
+        $sightVisit = (new SightVisit())
             ->setUser($user1)
             ->setSight($sightKamyanetsCastle)
             ->setDate((new \DateTime())->modify('-5 day'));
-        $manager->persist($sightVisit1);
+        $manager->persist($sightVisit);
 
-        $sightVisit2 = (new SightVisit())
+        $sightVisit = (new SightVisit())
             ->setUser($user1)
             ->setSight($sightMinskLibrary)
             ->setDate((new \DateTime())->modify('-7 day'));
-        $manager->persist($sightVisit2);
+        $manager->persist($sightVisit);
 
         $sightVisit3 = (new SightVisit())
             ->setUser($user1)
@@ -62,17 +65,17 @@ class LoadSightVisitData extends AbstractFixture implements DependentFixtureInte
             ->setDate((new \DateTime())->modify('-2 month'));
         $manager->persist($sightVisit3);
 
-        $sightVisit4 = (new SightVisit())
+        $sightVisit = (new SightVisit())
             ->setUser($user2)
             ->setSight($sightWarzavaCastle)
             ->setDate((new \DateTime())->modify('-1 month'));
-        $manager->persist($sightVisit4);
+        $manager->persist($sightVisit);
 
-        $sightVisit5 = (new SightVisit())
+        $sightVisit = (new SightVisit())
             ->setUser($user2)
             ->setSight($sightKamyanetsCastle)
             ->setDate((new \DateTime())->modify('-5 day'));
-        $manager->persist($sightVisit5);
+        $manager->persist($sightVisit);
 
         $manager->flush();
     }

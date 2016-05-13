@@ -44,65 +44,65 @@ class LoadFriendData extends AbstractFixture implements DependentFixtureInterfac
         $user5 = $this->getReference('user-5');
         $user6 = $this->getReference('user-6');
 
-        $friend1 = (new Friend())
+        $friend = (new Friend())
             ->setUser($user1)
             ->setFriend($user2)
             ->setStatus(FriendStatusType::ACCEPTED);
-        $manager->persist($friend1);
+        $manager->persist($friend);
 
-        $friend2 = (new Friend())
+        $friend = (new Friend())
             ->setUser($user1)
             ->setFriend($user3)
             ->setStatus(FriendStatusType::ACCEPTED);
-        $manager->persist($friend2);
+        $manager->persist($friend);
 
-        $friend3 = (new Friend())
+        $friend = (new Friend())
             ->setUser($user1)
             ->setFriend($user4)
             ->setStatus(FriendStatusType::REJECTED);
-        $manager->persist($friend3);
+        $manager->persist($friend);
 
-        $friend4 = (new Friend())
+        $friend = (new Friend())
             ->setUser($user1)
             ->setFriend($user5)
             ->setStatus(FriendStatusType::SENT);
-        $manager->persist($friend4);
+        $manager->persist($friend);
 
-        $friend5 = (new Friend())
+        $friend = (new Friend())
             ->setUser($user2)
             ->setFriend($user1)
             ->setStatus(FriendStatusType::ACCEPTED);
-        $manager->persist($friend5);
+        $manager->persist($friend);
 
-        $friend6 = (new Friend())
+        $friend = (new Friend())
             ->setUser($user3)
             ->setFriend($user1)
             ->setStatus(FriendStatusType::ACCEPTED);
-        $manager->persist($friend6);
+        $manager->persist($friend);
 
-        $friend7 = (new Friend())
+        $friend = (new Friend())
             ->setUser($user4)
             ->setFriend($user1)
             ->setStatus(FriendStatusType::SENT);
-        $manager->persist($friend7);
+        $manager->persist($friend);
 
-        $friend8 = (new Friend())
+        $friend = (new Friend())
             ->setUser($user5)
             ->setFriend($user1)
             ->setStatus(FriendStatusType::RECEIVED);
-        $manager->persist($friend8);
+        $manager->persist($friend);
 
-        $friend9 = (new Friend())
+        $friend = (new Friend())
             ->setUser($user6)
             ->setFriend($user1)
             ->setStatus(FriendStatusType::SENT);
-        $manager->persist($friend9);
+        $manager->persist($friend);
 
-        $friend10 = (new Friend())
+        $friend = (new Friend())
             ->setUser($user1)
             ->setFriend($user6)
             ->setStatus(FriendStatusType::RECEIVED);
-        $manager->persist($friend10);
+        $manager->persist($friend);
 
         $manager->flush();
     }

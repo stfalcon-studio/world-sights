@@ -40,37 +40,37 @@ class LoadSightTourData extends AbstractFixture implements DependentFixtureInter
         $sightMinskLibrary    = $this->getReference('sight-Minsk-library');
         $sightWarzavaCastle   = $this->getReference('sight-Warszawa-castle');
 
-        $sightTour1 = (new SightTour())
+        $sightTour = (new SightTour())
             ->setName('Екскурсійна програма по місту Кам’янець-Подільському')
             ->setCompanyName('7 днів')
             ->setTourLink('http://www.7dniv.ua/ua/tourism-directions')
             ->setPrice(500)
             ->setSight($sightKamyanetsCastle);
-        $manager->persist($sightTour1);
+        $manager->persist($sightTour);
 
-        $sightTour2 = (new SightTour())
+        $sightTour = (new SightTour())
             ->setName('Вікенд у Мінську')
             ->setCompanyName('Аккорд-тур')
             ->setTourLink('http://www.akkord-tour.com.ua/product.php/product_id/8152/category_id/109/land_id/42/lang/ua')
             ->setPrice(1900)
             ->setSight($sightMinskLibrary);
-        $manager->persist($sightTour2);
+        $manager->persist($sightTour);
 
-        $sightTour3 = (new SightTour())
+        $sightTour = (new SightTour())
             ->setName('Подорож в минуле')
             ->setCompanyName('Тамтур')
             ->setTourLink('http://tamtour.com.ua/7')
             ->setPrice(2100)
             ->setSight($sightMinskLibrary);
-        $manager->persist($sightTour3);
+        $manager->persist($sightTour);
 
-        $sightTour4 = (new SightTour())
+        $sightTour = (new SightTour())
             ->setName('Королівський шлях')
             ->setCompanyName('Rich tour')
             ->setTourLink('http://rich-tour.com/publ/ekskursijni_turi/korolivskij_shljakh/5-1-0-134')
             ->setPrice(4500)
             ->setSight($sightWarzavaCastle);
-        $manager->persist($sightTour4);
+        $manager->persist($sightTour);
 
         $manager->flush();
     }

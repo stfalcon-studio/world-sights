@@ -298,7 +298,7 @@ class User extends BaseUser
     /**
      * Get status
      *
-     * @return FriendStatusType Status
+     * @return string Status
      */
     public function getStatus()
     {
@@ -308,7 +308,7 @@ class User extends BaseUser
     /**
      * Set status
      *
-     * @param FriendStatusType $status Status
+     * @param string $status Status
      *
      * @return $this
      */

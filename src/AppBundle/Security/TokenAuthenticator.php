@@ -31,6 +31,8 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     }
 
     /**
+     * Get credentials
+     *
      * Called on every request. Return whatever credentials you want, or exception
      *
      * @param Request $request Request
@@ -76,6 +78,8 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     }
 
     /**
+     * Check credentials
+     *
      * Check credentials - e.g. make sure the password is valid
      * no credential check is needed in this case
      *

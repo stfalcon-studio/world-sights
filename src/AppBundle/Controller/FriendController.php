@@ -5,7 +5,6 @@ namespace AppBundle\Controller;
 use AppBundle\DBAL\Types\FriendStatusType;
 use AppBundle\Entity\Friend;
 use AppBundle\Entity\User;
-use AppBundle\Exception\ServerInternalErrorException;
 use AppBundle\Form\Model\Pagination;
 use AppBundle\Form\Type\FriendType;
 use AppBundle\Form\Type\PaginationType;
@@ -32,16 +31,14 @@ class FriendController extends FOSRestController
     use ControllerHelperTrait, RollbarHelperTrait;
 
     /**
-     * Return accepted friends with pagination
+     * Get accepted friends
      *
      * @param Request $request Request
      *
      * @return Response
      *
-     * @throws ServerInternalErrorException
-     *
      * @ApiDoc(
-     *     description="Return accepted friends",
+     *     description="Get accepted friends",
      *     section="Friend",
      *     statusCodes={
      *          200="Returned when successful",
@@ -51,7 +48,7 @@ class FriendController extends FOSRestController
      *
      * @Rest\Get("")
      */
-    public function getAllAction(Request $request)
+    public function getAcceptedFriendsAction(Request $request)
     {
         try {
             $userRepository = $this->getDoctrine()->getRepository('AppBundle:User');
@@ -63,30 +60,25 @@ class FriendController extends FOSRestController
 
             $form->submit($request->query->all());
             if ($form->isValid()) {
-                /** @var Pagination $paginator */
-                $paginator = $form->getData();
+                /** @var Pagination $pagination */
+                $pagination = $form->getData();
 
-                $friends = $userRepository->findFriendUsersByUserWithPagination($user, $statusFriend, $paginator);
+                $friends = $userRepository->findFriendUsersByUserWithPagination($user, $statusFriend, $pagination);
+                $total   = $userRepository->getTotalNumberOfEnabledUsersWithAcceptedStatus($user);
 
                 $view = $this->createViewForHttpOkResponse([
                     'friends'            => $friends,
                     'friend_status_type' => $statusFriend,
                     '_metadata'          => [
-                        'total'  => count($friends),
-                        'limit'  => $paginator->getLimit(),
-                        'offset' => $paginator->getOffset(),
+                        'total'  => $total,
+                        'limit'  => $pagination->getLimit(),
+                        'offset' => $pagination->getOffset(),
                     ],
                 ]);
+                $view->setSerializationContext(SerializationContext::create()->setGroups(['friend']));
             } else {
-                $friends = $userRepository->findFriendUsersByUser($user, $statusFriend);
-
-                $view = $this->createViewForHttpOkResponse([
-                    'friends'            => $friends,
-                    'friend_status_type' => $statusFriend,
-                ]);
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-
-            $view->setSerializationContext(SerializationContext::create()->setGroups(['friend']));
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
             throw $this->createInternalServerErrorException();
@@ -96,13 +88,7 @@ class FriendController extends FOSRestController
     }
 
     /**
-     * Return received friends with pagination
-     *
-     * @param Request $request Request
-     *
-     * @return Response
-     *
-     * @throws ServerInternalErrorException
+     * Get received friends
      *
      * @param Request $request Request
      *
@@ -131,19 +117,19 @@ class FriendController extends FOSRestController
 
             $form->submit($request->query->all());
             if ($form->isValid()) {
-                /** @var Pagination $paginator */
-                $paginator = $form->getData();
+                /** @var Pagination $pagination */
+                $pagination = $form->getData();
 
-                $friends = $userRepository->findFriendUsersByUserWithPagination($user, $statusFriend, $paginator);
+                $friends = $userRepository->findFriendUsersByUserWithPagination($user, $statusFriend, $pagination);
+
+                $view = $this->createViewForHttpOkResponse([
+                    'friends'            => $friends,
+                    'friend_status_type' => $statusFriend,
+                ]);
+                $view->setSerializationContext(SerializationContext::create()->setGroups(['friend']));
             } else {
-                $friends = $userRepository->findFriendUsersByUser($user, $statusFriend);
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-
-            $view = $this->createViewForHttpOkResponse([
-                'friends'            => $friends,
-                'friend_status_type' => $statusFriend,
-            ]);
-            $view->setSerializationContext(SerializationContext::create()->setGroups(['friend']));
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
             throw $this->createInternalServerErrorException();
@@ -153,20 +139,14 @@ class FriendController extends FOSRestController
     }
 
     /**
-     * Return rejected friends with pagination
-     *
-     * @param Request $request Request
-     *
-     * @return Response
-     *
-     * @throws ServerInternalErrorException
+     * Get rejected friends
      *
      * @param Request $request Request
      *
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return rejected friends",
+     *     description="Get rejected friends",
      *     section="Friend",
      *     statusCodes={
      *          200="Returned when successful",
@@ -188,19 +168,19 @@ class FriendController extends FOSRestController
 
             $form->submit($request->query->all());
             if ($form->isValid()) {
-                /** @var Pagination $paginator */
-                $paginator = $form->getData();
+                /** @var Pagination $pagination */
+                $pagination = $form->getData();
 
-                $friends = $userRepository->findFriendUsersByUserWithPagination($user, $statusFriend, $paginator);
+                $friends = $userRepository->findFriendUsersByUserWithPagination($user, $statusFriend, $pagination);
+
+                $view = $this->createViewForHttpOkResponse([
+                    'friends'            => $friends,
+                    'friend_status_type' => $statusFriend,
+                ]);
+                $view->setSerializationContext(SerializationContext::create()->setGroups(['friend']));
             } else {
-                $friends = $userRepository->findFriendUsersByUser($user, $statusFriend);
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-
-            $view = $this->createViewForHttpOkResponse([
-                'friends'            => $friends,
-                'friend_status_type' => $statusFriend,
-            ]);
-            $view->setSerializationContext(SerializationContext::create()->setGroups(['friend']));
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
             throw $this->createInternalServerErrorException();
@@ -210,20 +190,14 @@ class FriendController extends FOSRestController
     }
 
     /**
-     * Return friends with status sent and pagination
-     *
-     * @param Request $request Request
-     *
-     * @return Response
-     *
-     * @throws ServerInternalErrorException
+     * Get friends with status sent
      *
      * @param Request $request Request
      *
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return friends with status sent",
+     *     description="Get friends with status sent",
      *     section="Friend",
      *     statusCodes={
      *          200="Returned when successful",
@@ -245,19 +219,19 @@ class FriendController extends FOSRestController
 
             $form->submit($request->query->all());
             if ($form->isValid()) {
-                /** @var Pagination $paginator */
-                $paginator = $form->getData();
+                /** @var Pagination $pagination */
+                $pagination = $form->getData();
 
-                $friends = $userRepository->findFriendUsersByUserWithPagination($user, $statusFriend, $paginator);
+                $friends = $userRepository->findFriendUsersByUserWithPagination($user, $statusFriend, $pagination);
+
+                $view = $this->createViewForHttpOkResponse([
+                    'friends'            => $friends,
+                    'friend_status_type' => $statusFriend,
+                ]);
+                $view->setSerializationContext(SerializationContext::create()->setGroups(['friend']));
             } else {
-                $friends = $userRepository->findFriendUsersByUser($user, $statusFriend);
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-
-            $view = $this->createViewForHttpOkResponse([
-                'friends'            => $friends,
-                'friend_status_type' => $statusFriend,
-            ]);
-            $view->setSerializationContext(SerializationContext::create()->setGroups(['friend']));
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
             throw $this->createInternalServerErrorException();
@@ -267,14 +241,14 @@ class FriendController extends FOSRestController
     }
 
     /**
-     * Return friend by id
+     * Get friend by id
      *
      * @param User $friend Friend
      *
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return friend by id",
+     *     description="Get friend by id",
      *     requirements={
      *          {"name"="id", "dataType"="int", "requirement"="\d+", "description"="ID of friend"}
      *      },
@@ -292,35 +266,40 @@ class FriendController extends FOSRestController
      */
     public function getAction(User $friend)
     {
-        $userRepository = $this->getDoctrine()->getRepository('AppBundle:User');
+        try {
+            $userRepository = $this->getDoctrine()->getRepository('AppBundle:User');
 
-        $user   = $this->getUser();
-        $friend = $userRepository->findUserByUserFriend($user, $friend);
+            $user   = $this->getUser();
+            $friend = $userRepository->findUserByUserFriend($user, $friend);
 
-        if (null === $friend) {
-            $view = $this->createViewForHttpNotFoundResponse([
-                'message' => 'Not Found',
-            ]);
-        } else {
-            $status = $userRepository->findFriendStatusByUserAndFriend($user, $friend);
+            if (null === $friend) {
+                $view = $this->createViewForHttpNotFoundResponse([
+                    'message' => 'Friend not found',
+                ]);
+            } else {
+                $status = $userRepository->getFriendStatusByUserAndFriend($user, $friend);
 
-            $friend->setStatus($status['status']);
-            $view = $this->createViewForHttpOkResponse([
-                'friend' => $friend,
-            ]);
-            $view->setSerializationContext(SerializationContext::create()->setGroups(['friend']));
+                $friend->setStatus($status);
+                $view = $this->createViewForHttpOkResponse([
+                    'friend' => $friend,
+                ]);
+                $view->setSerializationContext(SerializationContext::create()->setGroups(['friend']));
+            }
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
         }
 
         return $this->handleView($view);
     }
 
     /**
-     * Return friends status
+     * Get friends status
      *
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return friend status types",
+     *     description="Get friend status types",
      *     section="Friend",
      *     statusCodes={
      *          200="Returned when successful",
@@ -353,8 +332,6 @@ class FriendController extends FOSRestController
      *
      * @return Response
      *
-     * @throws ServerInternalErrorException
-     *
      * @ApiDoc(
      *      section="Friend",
      *      description="Create a new friend",
@@ -374,11 +351,12 @@ class FriendController extends FOSRestController
      */
     public function createAction(Request $request)
     {
-        $form = $this->createForm(FriendType::class);
+        try {
+            $form = $this->createForm(FriendType::class);
 
-        $form->submit($request->request->all());
-        if ($form->isValid()) {
-            try {
+            $form->submit($request->request->all());
+
+            if ($form->isValid()) {
                 /** @var Friend $friend */
                 $friend = $form->getData();
                 if (FriendStatusType::SENT === $friend->getStatus()) {
@@ -392,24 +370,24 @@ class FriendController extends FOSRestController
                     $form->get('status')->addError(new FormError('Status must be sent'));
                     $view = $this->createViewForValidationErrorResponse($form);
                 }
-            } catch (\Exception $e) {
-                $this->sendExceptionToRollbar($e);
-                throw $this->createInternalServerErrorException();
+            } else {
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-        } else {
-            $view = $this->createViewForValidationErrorResponse($form);
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
         }
 
         return $this->handleView($view);
     }
 
     /**
-     * @param Request $request Request
-     * @param Friend  $friend  Friend
+     * Update friend
+     *
+     * @param Request $request    Request
+     * @param User    $userFriend Friend
      *
      * @return Response
-     *
-     * @throws ServerInternalErrorException
      *
      * @ApiDoc(
      *      section="Friend",
@@ -432,26 +410,32 @@ class FriendController extends FOSRestController
      */
     public function updateAction(Request $request, User $userFriend)
     {
-        $user   = $this->getUser();
-        $friend = $this->getDoctrine()->getRepository('AppBundle:Friend')->findFriendByUserFriend($user, $userFriend);
-        if (null === $friend) {
-            $view = $this->createViewForHttpNotFoundResponse([
-                'message' => 'Not Found',
-            ]);
-        } else {
-            $form = $this->createForm(FriendType::class, $friend);
-
-            $form->submit($request->request->all(), false);
-            if ($form->isValid()) {
-                /** @var Friend $friend */
-                $friend = $form->getData();
-
-                /** @var View $view */
-                $view = $this->get('app.friend_status')->updateFriendStatus($friend, $form);
-                $view->setSerializationContext(SerializationContext::create()->setGroups(['friend']));
+        try {
+            $user   = $this->getUser();
+            $friend = $this->getDoctrine()->getRepository('AppBundle:Friend')
+                           ->findFriendByUserFriend($user, $userFriend);
+            if (null === $friend) {
+                $view = $this->createViewForHttpNotFoundResponse([
+                    'message' => 'Friend not Found',
+                ]);
             } else {
-                $view = $this->createViewForValidationErrorResponse($form);
+                $form = $this->createForm(FriendType::class, $friend);
+
+                $form->submit($request->request->all(), false);
+                if ($form->isValid()) {
+                    /** @var Friend $friend */
+                    $friend = $form->getData();
+
+                    /** @var View $view */
+                    $view = $this->get('app.friend_status')->updateFriendStatus($friend, $form);
+                    $view->setSerializationContext(SerializationContext::create()->setGroups(['friend']));
+                } else {
+                    $view = $this->createViewForValidationErrorResponse($form);
+                }
             }
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
         }
 
         return $this->handleView($view);
@@ -463,8 +447,6 @@ class FriendController extends FOSRestController
      * @param User $friend Friend
      *
      * @return Response
-     *
-     * @throws ServerInternalErrorException
      *
      * @ApiDoc(
      *       requirements={
@@ -483,25 +465,30 @@ class FriendController extends FOSRestController
      */
     public function deleteAction(User $friend)
     {
-        $user   = $this->getUser();
-        $friend = $this->getDoctrine()->getRepository('AppBundle:Friend')->findFriendByUserFriend($user, $friend);
+        try {
+            $user   = $this->getUser();
+            $friend = $this->getDoctrine()->getRepository('AppBundle:Friend')->findFriendByUserFriend($user, $friend);
 
-        if (null === $friend) {
-            $view = $this->createViewForHttpNotFoundResponse([
-                'message' => 'Not Found',
-            ]);
-        } else {
-            if (FriendStatusType::SENT === $friend->getStatus()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($friend);
-                $em->flush();
-
-                $view = $this->createViewForHttpNoContentResponse();
-            } else {
-                $view = $this->createViewForInvalidErrorResponse([
-                    'message' => 'For delete friend status must be sent',
+            if (null === $friend) {
+                $view = $this->createViewForHttpNotFoundResponse([
+                    'message' => 'Friend not Found',
                 ]);
+            } else {
+                if (FriendStatusType::SENT === $friend->getStatus()) {
+                    $em = $this->getDoctrine()->getManager();
+                    $em->remove($friend);
+                    $em->flush();
+
+                    $view = $this->createViewForHttpNoContentResponse();
+                } else {
+                    $view = $this->createViewForInvalidErrorResponse([
+                        'message' => 'For delete friend status must be sent',
+                    ]);
+                }
             }
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
         }
 
         return $this->handleView($view);

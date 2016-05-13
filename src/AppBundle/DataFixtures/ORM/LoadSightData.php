@@ -55,16 +55,15 @@ class LoadSightData extends AbstractFixture implements DependentFixtureInterface
         $sightTypeLibrary     = $this->getReference('sight-type-library');
         $sightTypeIsland      = $this->getReference('sight-type-island');
 
-        $sight1 = (new Sight())
+        $sight = (new Sight())
             ->setName('Кам\'янець-подільська фортеця')
-            ->setDescription(
-                <<<Heredoc
+            ->setDescription(<<<TEXT
     Кам'яне́ць-Поді́льська форте́ця — фортеця у місті Кам'янець-Подільський (Хмельницької області України).
 Відома з XIV століття як частина оборонної системи міста Кам'янець, колишньої столиці
 Подільського князівства XIV–XV ст., Подільського воєводства XV–XVIII ст.,
 а далі Подільської губернії (1793–1924 pp.). Є складовою частиною Національного
 історико-архітектурного заповідника «Кам'янець», що належить до «Семи чудес України».
-Heredoc
+TEXT
             )
             ->setPhone('(03849)2-55-33')
             ->setWebsite('http://muzeum.in.ua/')
@@ -72,13 +71,12 @@ Heredoc
             ->setLongitude(26.563411)
             ->setSightType($sightTypeCastle)
             ->setLocality($localityKamyanets);
-        $this->setReference('sight-Kamianets-Podilskyi-castle', $sight1);
-        $manager->persist($sight1);
+        $this->setReference('sight-Kamianets-Podilskyi-castle', $sight);
+        $manager->persist($sight);
 
-        $sight2 = (new Sight())
+        $sight = (new Sight())
             ->setName('Хотинська фортеця')
-            ->setDescription(
-                <<<Heredoc
+            ->setDescription(<<<TEXT
     Хотинська фортеця (рум. Cetatea Hotinului) — фортеця XIII–XVIII століть у місті Хотині на Дністрі,
 що у Чернівецькій області, Україна. Сьогодні на території фортеці розташований Державний
 історико-архітектурний заповідник «Хотинська фортеця». Одне з семи чудес України.
@@ -86,7 +84,7 @@ Heredoc
 Володимиром Святославичем як одне із порубіжних укріплень південного заходу Русі, у зв'язку з
 приєднанням до неї буковинських земель. Форт, який згодом було перебудовано у фортецю, розміщувався
 на важливих транспортних шляхах, що з'єднували Київ із Пониззям (пізнішим Поділлям) і Придунав'ям.
-Heredoc
+TEXT
             )
             ->setPhone('(03731)2-29-32')
             ->setWebsite('http://www.hottur.org.ua/')
@@ -94,13 +92,12 @@ Heredoc
             ->setLongitude(26.498382)
             ->setSightType($sightTypeCastle)
             ->setLocality($localityHotin);
-        $this->setReference('sight-Hotin', $sight2);
-        $manager->persist($sight2);
+        $this->setReference('sight-Hotin', $sight);
+        $manager->persist($sight);
 
-        $sight3 = (new Sight())
+        $sight = (new Sight())
             ->setName('острів Хортиця')
-            ->setDescription(
-                <<<Heredoc
+            ->setDescription(<<<TEXT
     Хо́ртиця — найбільший острів на Дніпрі, розташований у районі міста Запоріжжя, нижче Дніпрогесу.
 Унікальний природний та історичний комплекс. Хортиця є одним із Семи чудес України. На північній
 стороні острова був останній дніпровський поріг. Хортиця витягнута із північого-заходу на
@@ -109,7 +106,7 @@ Heredoc
 лісовим господарством в північній частині, де ґрунти є піщаними. В південній частині зберігається
 степ з багатьма реліктовими видами рослин, які збереглися тільки на острові, але в давнину зростали
 на всій території півдня України. На крайньому півдні острова існують плавні.
-Heredoc
+TEXT
             )
             ->setPhone('+38(095)914-77-06')
             ->setWebsite('http://hortica.zp.ua/')
@@ -117,20 +114,19 @@ Heredoc
             ->setLongitude(35.087736)
             ->setSightType($sightTypeIsland)
             ->setLocality($localityZaporizhia);
-        $this->setReference('sight-Hortitsa', $sight3);
-        $manager->persist($sight3);
+        $this->setReference('sight-Hortitsa', $sight);
+        $manager->persist($sight);
 
-        $sight4 = (new Sight())
+        $sight = (new Sight())
             ->setName('Національна бібліотека Білорусі')
-            ->setDescription(
-                <<<Heredoc
+            ->setDescription(<<<TEXT
 Національна бібліотека Білорусі (біл. Нацыянальная бібліятэка Беларусі) — найбільша наукова бібліотека
 країни, провідний бібліотечно-інформаційний, соціокультурний та соціополітичний центр Білорусі.
 Заснована 15 вересня 1922 р. як білоруська державна та університетська бібліотека. Розташована у Мінську.
 Згідно з указом Президента республіки Білорусь Олександра Лукашенка 1 листопада 2002 р. розпочалося
 будівництво нового приміщення для Бібліотеки. Нова будівля була здана в експлуатацію 16 червня 2006 р.
 Вона являє собою ромбокубооктаедр («діамант») висотою 73,7 м. (20 поверхів) та вагою 115 000 тонн.
-Heredoc
+TEXT
             )
             ->setPhone('(+375 17) 266 37 37')
             ->setWebsite('http://www.nlb.by/')
@@ -138,13 +134,12 @@ Heredoc
             ->setLongitude(27.646043)
             ->setSightType($sightTypeLibrary)
             ->setLocality($localityMinsk);
-        $this->setReference('sight-Minsk-library', $sight4);
-        $manager->persist($sight4);
+        $this->setReference('sight-Minsk-library', $sight);
+        $manager->persist($sight);
 
-        $sight5 = (new Sight())
+        $sight = (new Sight())
             ->setName('Королівський замок у Варшаві')
-            ->setDescription(
-                <<<Heredoc
+            ->setDescription(<<<TEXT
 Королі́вський за́мок у Варша́ві — бароко-класичний королівський замок, розташований на Замковій площі у Варшаві.
 Розташування Королівського замку на замковій площі. Ліворуч - Колона короля Сигізмунда
 Спочатку він виконував функції резиденції династії Мазовецьких П'ястів, а від XVI століття — садиба владарів Першої
@@ -155,7 +150,7 @@ Heredoc
 Замок, спалений і пограбований німцями у 1939 році, був дощенту знищений у 1944. У 1971 році відбудований та
 реконструйований. Королівський замок носить статус пам'ятки історії та культури Польщі.
 На даний час використовується як музей (входить до Польського реєстру музеїв).
-Heredoc
+TEXT
             )
             ->setPhone('(+48 22) 35 55 170')
             ->setWebsite('https://www.zamek-krolewski.pl/')
@@ -163,17 +158,16 @@ Heredoc
             ->setLongitude(21.015481)
             ->setSightType($sightTypeCastle)
             ->setLocality($localityWarszawa);
-        $this->setReference('sight-Warszawa-castle', $sight5);
-        $manager->persist($sight5);
+        $this->setReference('sight-Warszawa-castle', $sight);
+        $manager->persist($sight);
 
-        $sight6 = (new Sight())
+        $sight = (new Sight())
             ->setName('Купальні Сечені')
-            ->setDescription(
-                <<<Heredoc
+            ->setDescription(<<<TEXT
 Купальня Сечені - це найбільша у всій Європі термальна купальня. Знаходиться вона в самому центрі мальовничого
 будапештського парку Варошлігет, в оточенні чудової краси місцевості з парковими деревами.Купальня Сечені є
 найпопулярнішою купальнею не тільки серед гостей Будапешта, а й серед його постійних жителів.
-Heredoc
+TEXT
             )
             ->setPhone('(+36-1)363-3210')
             ->setWebsite('http://www.szechenyifurdo.hu/')
@@ -181,8 +175,8 @@ Heredoc
             ->setLongitude(19.082358)
             ->setSightType($sightTypeThermalBath)
             ->setLocality($localityBudapest);
-        $this->setReference('sight-Szechenyi', $sight6);
-        $manager->persist($sight6);
+        $this->setReference('sight-Szechenyi', $sight);
+        $manager->persist($sight);
 
         $manager->flush();
     }

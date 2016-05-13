@@ -29,16 +29,14 @@ class SightTicketController extends FOSRestController
     use ControllerHelperTrait, RollbarHelperTrait;
 
     /**
-     * Return all sight tickets with pagination
+     * Get all sight tickets
      *
      * @param Request $request Request
      *
      * @return Response
      *
-     * @throws ServerInternalErrorException
-     *
      * @ApiDoc(
-     *     description="Return all sight ticket",
+     *     description="Get all sight ticket",
      *     section="Sight Ticket",
      *     statusCodes={
      *          200="Returned when successful",
@@ -57,28 +55,24 @@ class SightTicketController extends FOSRestController
 
             $form->submit($request->query->all());
             if ($form->isValid()) {
-                /** @var Pagination $paginator */
-                $paginator = $form->getData();
+                /** @var Pagination $pagination */
+                $pagination = $form->getData();
 
-                $sightTickets = $sightTicketRepository->findSightTicketsWithPagination($paginator);
+                $sightTickets = $sightTicketRepository->findSightTicketsWithPagination($pagination);
+                $total        = $sightTicketRepository->getTotalNumberOfEnabledSightTickets();
 
                 $view = $this->createViewForHttpOkResponse([
                     'sight_tickets' => $sightTickets,
-                    '_metadata' => [
-                        'total'  => count($sightTickets),
-                        'limit'  => $paginator->getLimit(),
-                        'offset' => $paginator->getOffset(),
+                    '_metadata'     => [
+                        'total'  => $total,
+                        'limit'  => $pagination->getLimit(),
+                        'offset' => $pagination->getOffset(),
                     ],
                 ]);
+                $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_ticket']));
             } else {
-                $sightTickets = $sightTicketRepository->findAllSightTickets();
-
-                $view = $this->createViewForHttpOkResponse([
-                    'sight_tickets' => $sightTickets,
-                ]);
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-
-            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_ticket']));
         } catch (\Exception $e) {
             $this->sendExceptionToRollbar($e);
             throw $this->createInternalServerErrorException();
@@ -88,21 +82,21 @@ class SightTicketController extends FOSRestController
     }
 
     /**
-     * Return sight ticket by slug
+     * Get sight ticket by slug
      *
      * @param SightTicket $sightTicket SightTicket
      *
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return sight ticket by slug",
+     *     description="Get sight ticket by slug",
      *     requirements={
      *          {"name"="slug", "dataType"="string", "requirement"="\w+", "description"="Slug of sight ticket"}
      *      },
      *     section="Sight Ticket",
      *     statusCodes={
      *          200="Returned when successful",
-     *          404="Returned when sight not found",
+     *          404="Returned when sight ticket not found",
      *          500="Returned when internal error on the server occurred"
      *      }
      * )
@@ -115,27 +109,25 @@ class SightTicketController extends FOSRestController
     {
         if (!$sightTicket->isEnabled()) {
             $view = $this->createViewForHttpNotFoundResponse([
-                'message' => 'Not Found',
+                'message' => 'Sight ticket not Found',
             ]);
-
-            return $this->handleView($view);
+        } else {
+            $view = $this->createViewForHttpOkResponse([
+                'sight_ticket' => $sightTicket,
+            ]);
+            $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_ticket']));
         }
-
-        $view = $this->createViewForHttpOkResponse([
-            'sight_ticket' => $sightTicket,
-        ]);
-        $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_ticket']));
 
         return $this->handleView($view);
     }
 
     /**
-     * Return sight ticket types
+     * Get sight ticket types
      *
      * @return Response
      *
      * @ApiDoc(
-     *     description="Return sight ticket types",
+     *     description="Get sight ticket types",
      *     section="Sight Ticket",
      *     statusCodes={
      *          200="Returned when successful",
@@ -168,8 +160,6 @@ class SightTicketController extends FOSRestController
      *
      * @return Response
      *
-     * @throws ServerInternalErrorException
-     *
      * @ApiDoc(
      *      section="Sight Ticket",
      *      description="Create a new sight ticket",
@@ -189,11 +179,11 @@ class SightTicketController extends FOSRestController
      */
     public function createAction(Request $request)
     {
-        $form = $this->createForm(SightTicketType::class);
+        try {
+            $form = $this->createForm(SightTicketType::class);
 
-        $form->submit($request->request->all());
-        if ($form->isValid()) {
-            try {
+            $form->submit($request->request->all());
+            if ($form->isValid()) {
                 /** @var SightTicket $sightTicket */
                 $sightTicket = $form->getData();
 
@@ -203,12 +193,12 @@ class SightTicketController extends FOSRestController
 
                 $view = $this->createViewForHttpCreatedResponse(['sight_ticket' => $sightTicket]);
                 $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_ticket']));
-            } catch (\Exception $e) {
-                $this->sendExceptionToRollbar($e);
-                throw $this->createInternalServerErrorException();
+            } else {
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-        } else {
-            $view = $this->createViewForValidationErrorResponse($form);
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
         }
 
         return $this->handleView($view);
@@ -246,11 +236,11 @@ class SightTicketController extends FOSRestController
      */
     public function updateAction(Request $request, SightTicket $sightTicket)
     {
-        $form = $this->createForm(SightTicketType::class, $sightTicket);
+        try {
+            $form = $this->createForm(SightTicketType::class, $sightTicket);
 
-        $form->submit($request->request->all());
-        if ($form->isValid()) {
-            try {
+            $form->submit($request->request->all());
+            if ($form->isValid()) {
                 /** @var SightTicket $sightTicket */
                 $sightTicket = $form->getData();
 
@@ -260,12 +250,12 @@ class SightTicketController extends FOSRestController
 
                 $view = $this->createViewForHttpOkResponse(['sight_ticket' => $sightTicket]);
                 $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_ticket']));
-            } catch (\Exception $e) {
-                $this->sendExceptionToRollbar($e);
-                throw $this->createInternalServerErrorException();
+            } else {
+                $view = $this->createViewForValidationErrorResponse($form);
             }
-        } else {
-            $view = $this->createViewForValidationErrorResponse($form);
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
         }
 
         return $this->handleView($view);
@@ -277,8 +267,6 @@ class SightTicketController extends FOSRestController
      * @param SightTicket $sightTicket Sight ticket
      *
      * @return Response
-     *
-     * @throws ServerInternalErrorException
      *
      * @ApiDoc(
      *       requirements={
@@ -307,8 +295,6 @@ class SightTicketController extends FOSRestController
             throw $this->createInternalServerErrorException();
         }
 
-        $view = $this->createViewForHttpNoContentResponse();
-
-        return $view;
+        return $this->createViewForHttpNoContentResponse();
     }
 }

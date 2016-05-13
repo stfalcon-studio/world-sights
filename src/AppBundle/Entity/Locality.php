@@ -105,7 +105,7 @@ class Locality
     private $slug;
 
     /**
-     * @var boolean $enabled Enabled
+     * @var bool $enabled Enabled
      *
      * @ORM\Column(type="boolean")
      *
@@ -224,7 +224,7 @@ class Locality
     /**
      * Is enabled?
      *
-     * @return boolean Is enabled?
+     * @return bool Is enabled?
      */
     public function isEnabled()
     {
@@ -234,7 +234,7 @@ class Locality
     /**
      * Set enabled
      *
-     * @param boolean $enabled Enabled
+     * @param bool $enabled Enabled
      *
      * @return $this
      */
