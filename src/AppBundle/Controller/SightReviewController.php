@@ -12,6 +12,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use JMS\Serializer\SerializationContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -285,5 +286,107 @@ class SightReviewController extends FOSRestController
         }
 
         return $this->handleView($view);
+    }
+
+    /**
+     * Update sight review
+     *
+     * @param Request     $request     Request
+     * @param SightReview $sightReview Sight review
+     *
+     * @return Response
+     *
+     * @ApiDoc(
+     *      section="Sight Review",
+     *      description="Update sight review",
+     *      input="AppBundle\Form\Type\SightReviewType",
+     *      output={
+     *          "class"="AppBundle\Entity\SightReview",
+     *          "groups"={"sight"}
+     *      },
+     *      requirements={
+     *          {"name"="id", "dataType"="integer", "requirement"="\d+", "description"="ID of sight"}
+     *      },
+     *      statusCodes={
+     *          200="Returned when successful",
+     *          400="Returned when the form has errors or invalid data",
+     *          500="Returned when internal error on the server occurred"
+     *      }
+     * )
+     *
+     * @Rest\Put("/{id}")
+     *
+     * @ParamConverter(class="AppBundle:SightReview", converter="sight_review_converter")
+     * @ParamConverter("sight", class="AppBundle:SightReview")
+     */
+    public function updateAction(Request $request, SightReview $sightReview)
+    {
+        try {
+            $form = $this->createForm(SightReviewType::class, $sightReview);
+
+            $form->submit($request->request->all(), false);
+            if ($form->isValid()) {
+                $user = $this->getUser();
+                if ($user === $sightReview->getUser()) {
+                    /** @var SightReview $sightReview */
+                    $sightReview = $form->getData();
+
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($sightReview);
+                    $em->flush();
+
+                    $view = $this->createViewForHttpOkResponse(['sight_review' => $sightReview]);
+                    $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_review']));
+                } else {
+                    $form->get('user')->addError(new FormError('User must be author review'));
+
+                    $view = $this->createViewForValidationErrorResponse($form);
+                }
+            } else {
+                $view = $this->createViewForValidationErrorResponse($form);
+            }
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * Delete sight review
+     *
+     * @param SightReview $sightReview Sight review
+     *
+     * @return Response
+     *
+     * @ApiDoc(
+     *       requirements={
+     *          {"name"="id", "dataType"="integer", "requirement"="\d+", "description"="ID of sight review"}
+     *      },
+     *      section="Sight Review",
+     *      statusCodes={
+     *          204="Returned when successful",
+     *          500="Returned when an error has occurred",
+     *      }
+     * )
+     *
+     * @Rest\Delete("/{id}")
+     *
+     * @ParamConverter("id", class="AppBundle:SightReview")
+     */
+    public function deleteAction(SightReview $sightReview)
+    {
+        try {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($sightReview);
+
+            $em->flush();
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
+        }
+
+        return $this->createViewForHttpNoContentResponse();
     }
 }
