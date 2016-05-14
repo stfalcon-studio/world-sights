@@ -275,7 +275,7 @@ class SightReviewController extends FOSRestController
                 $em->persist($sightReview);
                 $em->flush();
 
-                $view = $this->createViewForHttpOkResponse(['sight_review' => $sightReview]);
+                $view = $this->createViewForHttpCreatedResponse(['sight_review' => $sightReview]);
                 $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_review']));
             } else {
                 $view = $this->createViewForValidationErrorResponse($form);
