@@ -89,7 +89,7 @@ class SightControllerTest extends WebTestCase
         $sightType = $this->manager->getRepository('AppBundle:SightType')->findSightTypeFirstResult();
         $locality  = $this->manager->getRepository('AppBundle:Locality')->findLocalityFirstResult();
 
-        $data = [
+        $dataRequest = [
             'name'       => 'Кам\'яна фортеця',
             'phone'      => '(03849)2-55-33',
             'website'    => 'http://muzeum.in.ua/',
@@ -102,7 +102,7 @@ class SightControllerTest extends WebTestCase
         $this->client->request(
             'POST',
             '/api/v1/sights',
-            $data,
+            $dataRequest,
             [],
             ['Content-Type' => 'application/json'],
             []
@@ -113,10 +113,10 @@ class SightControllerTest extends WebTestCase
 
         $this->assertStatusCode(Response::HTTP_CREATED, $this->client);
         $this->assertEquals(201, $data['code']);
-
-        foreach ($data as $key => $element) {
-            $this->assertEquals($element, $data[$key]);
-        }
+        $this->assertEquals($dataRequest['name'], $data['sight']['name']);
+        $this->assertEquals($dataRequest['phone'], $data['sight']['phone']);
+        $this->assertEquals($dataRequest['sight_type'], $data['sight']['sight_type']['id']);
+        $this->assertEquals($dataRequest['locality'], $data['sight']['locality']['id']);
     }
 
     public function testUpdateAction()
@@ -126,7 +126,7 @@ class SightControllerTest extends WebTestCase
         $sightType = $this->manager->getRepository('AppBundle:SightType')->findSightTypeFirstResult();
         $locality  = $this->manager->getRepository('AppBundle:Locality')->findLocalityFirstResult();
 
-        $data = [
+        $dataRequest = [
             'name'       => 'Кам\'яна фоssdfртеця',
             'phone'      => '(03849)2-55-4433',
             'website'    => 'http://muzeumvv.in.ua/',
@@ -139,7 +139,7 @@ class SightControllerTest extends WebTestCase
         $this->client->request(
             'PUT',
             '/api/v1/sights/hotinska-fortecya',
-            $data,
+            $dataRequest,
             [],
             ['Content-Type' => 'application/json'],
             []
@@ -150,10 +150,10 @@ class SightControllerTest extends WebTestCase
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $this->assertEquals(200, $data['code']);
-
-        foreach ($data as $key => $element) {
-            $this->assertEquals($element, $data[$key]);
-        }
+        $this->assertEquals($dataRequest['name'], $data['sight']['name']);
+        $this->assertEquals($dataRequest['phone'], $data['sight']['phone']);
+        $this->assertEquals($dataRequest['sight_type'], $data['sight']['sight_type']['id']);
+        $this->assertEquals($dataRequest['locality'], $data['sight']['locality']['id']);
     }
 
     public function testDeleteAction()

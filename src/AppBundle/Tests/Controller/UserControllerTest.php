@@ -27,6 +27,19 @@ class UserControllerTest extends WebTestCase
         $this->client->setServerParameter('HTTP_X_AUTH_TOKEN', '1e5008f3677f7ba2a8bd8e47b8c0c6');
     }
 
+    public function testGetAction()
+    {
+        $this->client->request('GET', '/api/v1/users');
+
+        $response = $this->client->getResponse();
+        $data     = json_decode($response->getContent(), true);
+
+        $this->assertStatusCode(Response::HTTP_OK, $this->client);
+        $this->assertEquals(200, $data['code']);
+        $this->assertEquals('user', $data['user']['username']);
+        $this->assertEquals('user@gmail.com', $data['user']['email']);
+    }
+
     public function testRegistrationAction()
     {
         $data = [

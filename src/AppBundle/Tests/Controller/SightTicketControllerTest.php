@@ -65,7 +65,7 @@ class SightTicketControllerTest extends WebTestCase
         $sight    = $this->manager->getRepository('AppBundle:Sight')->findSightFirstResult();
         $locality = $this->manager->getRepository('AppBundle:Locality')->findLocalityFirstResult();
 
-        $data = [
+        $dataRequest = [
             'type'     => SightTicketType::BUS_TICKET,
             'link_buy' => 'https://my-ticket',
             'sight'    => $sight->getId(),
@@ -76,7 +76,7 @@ class SightTicketControllerTest extends WebTestCase
         $this->client->request(
             'POST',
             '/api/v1/sight-tickets',
-            $data,
+            $dataRequest,
             [],
             ['Content-Type' => 'application/json'],
             []
@@ -87,10 +87,10 @@ class SightTicketControllerTest extends WebTestCase
 
         $this->assertStatusCode(Response::HTTP_CREATED, $this->client);
         $this->assertEquals(201, $data['code']);
-
-        foreach ($data as $key => $element) {
-            $this->assertEquals($element, $data[$key]);
-        }
+        $this->assertEquals($dataRequest['type'], $data['sight_ticket']['type']);
+        $this->assertEquals($dataRequest['sight'], $data['sight_ticket']['sight']['id']);
+        $this->assertEquals($dataRequest['from'], $data['sight_ticket']['from']['id']);
+        $this->assertEquals($dataRequest['to'], $data['sight_ticket']['to']['id']);
     }
 
     public function testUpdateAction()
@@ -100,7 +100,7 @@ class SightTicketControllerTest extends WebTestCase
         $sight    = $this->manager->getRepository('AppBundle:Sight')->findSightFirstResult();
         $locality = $this->manager->getRepository('AppBundle:Locality')->findLocalityFirstResult();
 
-        $data = [
+        $dataRequest = [
             'type'     => SightTicketType::BUS_TICKET,
             'link_buy' => 'https://my-ticket',
             'sight'    => $sight->getId(),
@@ -111,7 +111,7 @@ class SightTicketControllerTest extends WebTestCase
         $this->client->request(
             'PUT',
             '/api/v1/sight-tickets/minsk-varshava-bt',
-            $data,
+            $dataRequest,
             [],
             ['Content-Type' => 'application/json'],
             []
@@ -122,10 +122,10 @@ class SightTicketControllerTest extends WebTestCase
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $this->assertEquals(200, $data['code']);
-
-        foreach ($data as $key => $element) {
-            $this->assertEquals($element, $data[$key]);
-        }
+        $this->assertEquals($dataRequest['type'], $data['sight_ticket']['type']);
+        $this->assertEquals($dataRequest['sight'], $data['sight_ticket']['sight']['id']);
+        $this->assertEquals($dataRequest['from'], $data['sight_ticket']['from']['id']);
+        $this->assertEquals($dataRequest['to'], $data['sight_ticket']['to']['id']);
     }
 
     public function testDeleteAction()

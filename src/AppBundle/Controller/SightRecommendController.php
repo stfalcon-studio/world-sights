@@ -23,7 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
  * @author Yevgeniy Zholkevskiy <zhenya.zholkevskiy@gmail.com>
  *
  * @Rest\NamePrefix("api_sight_recommend_")
- * @Rest\Prefix("/v1/sight-recommend")
+ * @Rest\Prefix("/v1/sight-recommends")
  */
 class SightRecommendController extends FOSRestController
 {
@@ -59,10 +59,8 @@ class SightRecommendController extends FOSRestController
                 /** @var Pagination $pagination */
                 $pagination = $form->getData();
 
-                $user = $this->getUser();
-
-                $sightRecommends = $sightRecommendRepository->findSightRecommendsByUserWithPagination($user, $pagination);
-                $total           = $sightRecommendRepository->getTotalNumberOfEnabledSightRecommendsByUser($user);
+                $sightRecommends = $sightRecommendRepository->findSightRecommendsWithPagination($pagination);
+                $total           = $sightRecommendRepository->getTotalNumberOfEnabledSightRecommends();
 
                 $view = $this->createViewForHttpOkResponse([
                     'sight_recommends' => $sightRecommends,

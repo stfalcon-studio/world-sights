@@ -22,7 +22,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
  *
  * @author Yevgeniy Zholkevskiy <blackbullet@i.ua>
  *
- * @Rest\NamePrefix("api_sights_")
+ * @Rest\NamePrefix("api_sight_review_")
  * @Rest\Prefix("/v1/sight-reviews")
  */
 class SightReviewController extends FOSRestController
@@ -59,10 +59,8 @@ class SightReviewController extends FOSRestController
                 /** @var Pagination $pagination */
                 $pagination = $form->getData();
 
-                $user = $this->getUser();
-
                 $sightsReviews = $sightsReviewRepository->findSightReviewsWithPagination($pagination);
-                $total         = $sightsReviewRepository->getTotalNumberOfEnabledSightReviewsByUser($user);
+                $total         = $sightsReviewRepository->getTotalNumberOfEnabledSightReviews();
 
                 $view = $this->createViewForHttpOkResponse([
                     'sight_reviews' => $sightsReviews,

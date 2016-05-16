@@ -60,6 +60,9 @@ class SightPhotoControllerTest extends WebTestCase
         $this->assertEquals(200, $data['code']);
         $this->assertCount(6, $data['sight_photos']);
         $this->comparisonSightPhoto($data['sight_photos'][0]);
+        $this->assertEquals(6, $data['_metadata']['total']);
+        $this->assertEquals(10, $data['_metadata']['limit']);
+        $this->assertEquals(0, $data['_metadata']['offset']);
     }
 
     public function testGetAction()

@@ -8,7 +8,7 @@ use Liip\FunctionalTestBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\HttpFoundation\Response;
 
-class SightReviewControllerTest extends WebTestCase
+class SightRecommendControllerTest extends WebTestCase
 {
     /** @var Client $client */
     private $client;
@@ -30,15 +30,15 @@ class SightReviewControllerTest extends WebTestCase
 
     public function testGetAllAction()
     {
-        $this->client->request('GET', '/api/v1/sight-reviews?limit=10&offset=0');
+        $this->client->request('GET', '/api/v1/sight-recommends?limit=10&offset=0');
 
         $response = $this->client->getResponse();
         $data     = json_decode($response->getContent(), true);
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $this->assertEquals(200, $data['code']);
-        $this->assertCount(7, $data['sight_reviews']);
-        $this->comparisonSightReviews($data['sight_reviews'][0]);
+        $this->assertCount(7, $data['sight_recommends']);
+        $this->comparisonSightRecommend($data['sight_recommends'][0]);
         $this->assertEquals(7, $data['_metadata']['total']);
         $this->assertEquals(10, $data['_metadata']['limit']);
         $this->assertEquals(0, $data['_metadata']['offset']);
@@ -46,52 +46,50 @@ class SightReviewControllerTest extends WebTestCase
 
     public function testGetAction()
     {
-        $sightReview = $this->manager->getRepository('AppBundle:SightReview')->findOneBy([
-            'topic' => 'Чудовий Кам\'янецький замок',
+        $sightRecommend = $this->manager->getRepository('AppBundle:SightRecommend')->findOneBy([
+            'message' => 'Всім рекомендую це місце, краса заворожує',
         ]);
 
-        $this->client->request('GET', '/api/v1/sight-reviews/'.$sightReview->getId());
+        $this->client->request('GET', '/api/v1/sight-recommends/'.$sightRecommend->getId());
 
         $response = $this->client->getResponse();
         $data     = json_decode($response->getContent(), true);
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $this->assertEquals(200, $data['code']);
-        $this->comparisonSightReviews($data['sight_review']);
+        $this->comparisonSightRecommend($data['sight_recommend']);
     }
 
-    public function testGetSightAction()
-    {
-        $slug = 'kam-yanec-podilska-fortecya';
-
-        $this->client->request('GET', '/api/v1/sight-reviews/sights/'.$slug.'?limit=10&offset=0');
-
-        $response = $this->client->getResponse();
-        $data     = json_decode($response->getContent(), true);
-
-        $this->assertStatusCode(Response::HTTP_OK, $this->client);
-        $this->assertEquals(200, $data['code']);
-        $this->assertCount(3, $data['sight_reviews']);
-        $this->comparisonSightReviews($data['sight_reviews'][0]);
-        $this->assertEquals(3, $data['_metadata']['total']);
-        $this->assertEquals(10, $data['_metadata']['limit']);
-        $this->assertEquals(0, $data['_metadata']['offset']);
-    }
-
-    public function testGetUserAction()
+    public function testUserAction()
     {
         $user = $this->manager->getRepository('AppBundle:User')->findOneBy([
             'username' => 'admin',
         ]);
 
-        $this->client->request('GET', '/api/v1/sight-reviews/users/'.$user->getId().'?limit=10&offset=0');
+        $this->client->request('GET', '/api/v1/sight-recommends/users/'.$user->getId().'?limit=10&offset=0');
 
         $response = $this->client->getResponse();
         $data     = json_decode($response->getContent(), true);
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $this->assertEquals(200, $data['code']);
-        $this->assertCount(3, $data['sight_reviews']);
+        $this->assertCount(2, $data['sight_recommends']);
+        $this->assertEquals(2, $data['_metadata']['total']);
+        $this->assertEquals(10, $data['_metadata']['limit']);
+        $this->assertEquals(0, $data['_metadata']['offset']);
+    }
+
+    public function testGetSightAction()
+    {
+        $slug = 'kam-yanec-podilska-fortecya';
+        $this->client->request('GET', '/api/v1/sight-recommends/sights/'.$slug.'?limit=10&offset=0');
+
+        $response = $this->client->getResponse();
+        $data     = json_decode($response->getContent(), true);
+
+        $this->assertStatusCode(Response::HTTP_OK, $this->client);
+        $this->assertEquals(200, $data['code']);
+        $this->assertCount(3, $data['sight_recommends']);
         $this->assertEquals(3, $data['_metadata']['total']);
         $this->assertEquals(10, $data['_metadata']['limit']);
         $this->assertEquals(0, $data['_metadata']['offset']);
@@ -99,21 +97,19 @@ class SightReviewControllerTest extends WebTestCase
 
     public function testCreateAction()
     {
-        /** @var Sight $sightType */
+        /** @var Sight $sight */
         $sight = $this->manager->getRepository('AppBundle:Sight')->findOneBy([
             'slug' => 'ostriv-horticya',
         ]);
 
         $dataRequest = [
-            'topic'       => 'topic',
-            'description' => 'message',
-            'mark'        => 4,
-            'sight'       => $sight->getId(),
+            'message' => 'message',
+            'sight'   => $sight->getId(),
         ];
 
         $this->client->request(
             'POST',
-            '/api/v1/sight-reviews',
+            '/api/v1/sight-recommends',
             $dataRequest,
             [],
             ['Content-Type' => 'application/json'],
@@ -125,24 +121,23 @@ class SightReviewControllerTest extends WebTestCase
 
         $this->assertStatusCode(Response::HTTP_CREATED, $this->client);
         $this->assertEquals(201, $data['code']);
-        $this->assertEquals($dataRequest['topic'], $data['sight_review']['topic']);
-        $this->assertEquals($dataRequest['mark'], $data['sight_review']['mark']);
-        $this->assertEquals($dataRequest['sight'], $data['sight_review']['sight']['id']);
+        $this->assertEquals($dataRequest['sight'], $data['sight_recommend']['sight']['id']);
+        $this->assertEquals($dataRequest['message'], $data['sight_recommend']['message']);
     }
 
     public function testUpdateAction()
     {
-        $sightReview = $this->manager->getRepository('AppBundle:SightReview')->findOneBy([
-            'topic' => 'Неймовірна бібліотека у столиці Білорусі',
+        $sightRecommend = $this->manager->getRepository('AppBundle:SightRecommend')->findOneBy([
+            'message' => 'Розміри бібліотеки зашкалюють',
         ]);
 
         $dataRequest = [
-            'mark' => 2,
+            'message' => 'Здоровцька бібліотека',
         ];
 
         $this->client->request(
             'PUT',
-            '/api/v1/sight-reviews/'.$sightReview->getId(),
+            '/api/v1/sight-recommends/'.$sightRecommend->getId(),
             $dataRequest,
             [],
             ['Content-Type' => 'application/json'],
@@ -154,41 +149,24 @@ class SightReviewControllerTest extends WebTestCase
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $this->assertEquals(200, $data['code']);
-        $this->assertEquals($dataRequest['mark'], $data['sight_review']['mark']);
+        $this->assertEquals($dataRequest['message'], $data['sight_recommend']['message']);
     }
 
     public function testDeleteAction()
     {
-        $sightReview = $this->manager->getRepository('AppBundle:SightReview')->findOneBy([
-            'topic' => 'Замок у самому центрі Варшами',
+        $sightRecommend = $this->manager->getRepository('AppBundle:SightRecommend')->findOneBy([
+            'message' => 'Замок прямо у центрі міста, по-моєуму не погано? Усім рекомендую!',
         ]);
 
-        $this->client->request('DELETE', '/api/v1/sight-reviews/'.$sightReview->getId());
+        $this->client->request('DELETE', '/api/v1/sight-recommends/'.$sightRecommend->getId());
 
         $this->assertStatusCode(Response::HTTP_NO_CONTENT, $this->client);
     }
 
-    /**
-     * Load fixtures for tests
-     */
-    private function getFixtures()
-    {
-        $fixtures = [
-            'AppBundle\DataFixtures\ORM\LoadCountryData',
-            'AppBundle\DataFixtures\ORM\LoadLocalityData',
-            'AppBundle\DataFixtures\ORM\LoadSightTypeData',
-            'AppBundle\DataFixtures\ORM\LoadSightData',
-            'AppBundle\DataFixtures\ORM\LoadUserData',
-            'AppBundle\DataFixtures\ORM\LoadSightReviewData',
-        ];
-
-        $this->loadFixtures($fixtures);
-    }
-
-    private function comparisonSightReviews(array $data)
+    private function comparisonSightRecommend(array $data)
     {
         $sight = [
-            'sight' => [
+            'sight'   => [
                 'name'       => 'Кам\'янець-подільська фортеця',
                 'phone'      => '(03849)2-55-33',
                 'website'    => 'http://muzeum.in.ua/',
@@ -203,8 +181,7 @@ class SightReviewControllerTest extends WebTestCase
                     ],
                 ],
             ],
-            "topic" => "Чудовий Кам'янецький замок",
-            "mark"  => 5,
+            "message" => "Всім рекомендую це місце, краса заворожує",
         ];
 
         foreach ($sight as $key => $el) {
@@ -216,5 +193,22 @@ class SightReviewControllerTest extends WebTestCase
                 $this->assertEquals($el, $data[$key]);
             }
         }
+    }
+
+    /**
+     * Load fixtrues
+     */
+    public function getFixtures()
+    {
+        $fixtures = [
+            'AppBundle\DataFixtures\ORM\LoadCountryData',
+            'AppBundle\DataFixtures\ORM\LoadLocalityData',
+            'AppBundle\DataFixtures\ORM\LoadSightTypeData',
+            'AppBundle\DataFixtures\ORM\LoadSightData',
+            'AppBundle\DataFixtures\ORM\LoadUserData',
+            'AppBundle\DataFixtures\ORM\LoadSightRecommendData',
+        ];
+
+        $this->loadFixtures($fixtures);
     }
 }

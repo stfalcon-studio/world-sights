@@ -134,4 +134,19 @@ class SightReviewRepository extends EntityRepository
                         ->getQuery()
                         ->getSingleScalarResult();
     }
+
+    /**
+     * Get total number of enabled sight reviews
+     *
+     * @return int
+     */
+    public function getTotalNumberOfEnabledSightReviews()
+    {
+        $qb = $this->createQueryBuilder('s');
+
+        return (int) $qb->select('COUNT(s)')
+                        ->where($qb->expr()->eq('s.enabled', true))
+                        ->getQuery()
+                        ->getSingleScalarResult();
+    }
 }

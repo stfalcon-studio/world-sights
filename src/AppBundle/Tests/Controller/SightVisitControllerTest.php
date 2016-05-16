@@ -112,7 +112,7 @@ class SightVisitControllerTest extends WebTestCase
         $sight = $this->manager->getRepository('AppBundle:Sight')->findOneBy([
             'name' => 'острів Хортиця',
         ]);
-        $data  = [
+        $dataRequest  = [
             'sight' => $sight->getId(),
             'date'  => '2015-06-05 13:00',
         ];
@@ -120,7 +120,7 @@ class SightVisitControllerTest extends WebTestCase
         $this->client->request(
             'POST',
             '/api/v1/sight-visits',
-            $data,
+            $dataRequest,
             [],
             ['Content-Type' => 'application/json'],
             []

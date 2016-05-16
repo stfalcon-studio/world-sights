@@ -94,4 +94,37 @@ class SightRecommendRepository extends EntityRepository
                         ->getQuery()
                         ->getSingleScalarResult();
     }
+
+    /**
+     * Find sight recommends with pagination
+     *
+     * @param Pagination $pagination Pagination
+     *
+     * @return SightRecommend[]
+     */
+    public function findSightRecommendsWithPagination(Pagination $pagination)
+    {
+        $qb = $this->createQueryBuilder('sr');
+
+        return $qb->where($qb->expr()->eq('sr.enabled', true))
+                  ->setFirstResult($pagination->getOffset())
+                  ->setMaxResults($pagination->getLimit())
+                  ->getQuery()
+                  ->getResult();
+    }
+
+    /**
+     * Get total number of enabled sight recommends
+     *
+     * @return int
+     */
+    public function getTotalNumberOfEnabledSightRecommends()
+    {
+        $qb = $this->createQueryBuilder('sp');
+
+        return (int) $qb->select('COUNT(sp)')
+                        ->where($qb->expr()->eq('sp.enabled', true))
+                        ->getQuery()
+                        ->getSingleScalarResult();
+    }
 }
