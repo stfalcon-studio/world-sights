@@ -42,7 +42,7 @@ class User extends BaseUser
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @JMS\Expose
-     * @JMS\Groups({"user", "friend", "sight_visits", "sight_photo", "sight_review"})
+     * @JMS\Groups({"user", "friend", "sight_visits", "sight_photo", "sight_review", "sight_recommend"})
      * @JMS\Since("1.0")
      */
     protected $id;
@@ -111,7 +111,7 @@ class User extends BaseUser
      * @var string $username Username
      *
      * @JMS\Expose
-     * @JMS\Groups({"user", "friend", "sight_visits", "sight_photo", "sight_review"})
+     * @JMS\Groups({"user", "friend", "sight_visits", "sight_photo", "sight_review", "sight_recommend"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -122,7 +122,7 @@ class User extends BaseUser
      * @var string $email Email
      *
      * @JMS\Expose
-     * @JMS\Groups({"user", "friend", "sight_visits", "sight_photo", "sight_review"})
+     * @JMS\Groups({"user", "friend", "sight_visits", "sight_photo", "sight_review", "sight_recommend"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned

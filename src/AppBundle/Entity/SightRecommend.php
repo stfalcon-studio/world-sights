@@ -37,6 +37,7 @@ class SightRecommend
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @JMS\Expose
+     * @JMS\Groups({"sight_recommend"})
      * @JMS\Since("1.0")
      */
     private $id;
@@ -50,6 +51,7 @@ class SightRecommend
      * @Assert\NotBlank()
      *
      * @JMS\Expose
+     * @JMS\Groups({"sight_recommend"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -65,6 +67,7 @@ class SightRecommend
      * @Assert\NotBlank()
      *
      * @JMS\Expose
+     * @JMS\Groups({"sight_recommend"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -79,11 +82,21 @@ class SightRecommend
      * @Assert\Type(type="string")
      *
      * @JMS\Expose
+     * @JMS\Groups({"sight_recommend"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
      */
     private $message;
+
+    /**
+     * @var bool $enabled Enabled
+     *
+     * @ORM\Column(type="boolean")
+     *
+     * @Gedmo\Versioned
+     */
+    private $enabled = true;
 
     /**
      * Get ID
@@ -177,6 +190,30 @@ class SightRecommend
     public function setUser($user)
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Is enabled?
+     *
+     * @return bool Is enabled?
+     */
+    public function isEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param bool $enabled Enabled
+     *
+     * @return $this
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
 
         return $this;
     }

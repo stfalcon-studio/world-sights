@@ -166,10 +166,16 @@ class SightReviewController extends FOSRestController
 
                 $sightReviews = $sightReviewRepository->findSightReviewsBySightWithPagination($sight, $pagination);
                 $averageMark  = $sightReviewRepository->getAverageMarkBySight($sight);
+                $total        = $sightReviewRepository->getTotalNumberOfEnabledSightReviewsBySight($sight);
 
                 $view = $this->createViewForHttpOkResponse([
                     'sight_reviews' => $sightReviews,
                     'average_mark'  => $averageMark,
+                    '_metadata'     => [
+                        'total'  => $total,
+                        'limit'  => $pagination->getLimit(),
+                        'offset' => $pagination->getOffset(),
+                    ],
                 ]);
                 $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_review']));
             } else {
@@ -194,7 +200,7 @@ class SightReviewController extends FOSRestController
      * @ApiDoc(
      *     description="Get sight reviews by user",
      *     requirements={
-     *          {"name"="slug", "dataType"="string", "requirement"="\w+", "description"="Slug of user"}
+     *          {"name"="id", "dataType"="integer", "requirement"="\wd", "description"="ID of user"}
      *      },
      *     section="Sight",
      *     statusCodes={
@@ -211,6 +217,8 @@ class SightReviewController extends FOSRestController
     public function getUserAction(Request $request, User $user)
     {
         try {
+            $sightReviewRepository = $this->getDoctrine()->getRepository('AppBundle:SightReview');
+
             $form = $this->createForm(PaginationType::class);
 
             $form->submit($request->query->all());
@@ -218,11 +226,16 @@ class SightReviewController extends FOSRestController
                 /** @var Pagination $pagination */
                 $pagination = $form->getData();
 
-                $sightReviews = $this->getDoctrine()->getRepository('AppBundle:SightReview')
-                                     ->findSightReviewsByUserWithPagination($user, $pagination);
+                $sightReviews = $sightReviewRepository->findSightReviewsByUserWithPagination($user, $pagination);
+                $total        = $sightReviewRepository->getTotalNumberOfEnabledSightReviewsByUser($user);
 
                 $view = $this->createViewForHttpOkResponse([
                     'sight_reviews' => $sightReviews,
+                    '_metadata'     => [
+                        'total'  => $total,
+                        'limit'  => $pagination->getLimit(),
+                        'offset' => $pagination->getOffset(),
+                    ],
                 ]);
                 $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_review']));
             } else {
