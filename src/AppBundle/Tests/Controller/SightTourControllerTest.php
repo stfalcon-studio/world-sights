@@ -76,7 +76,7 @@ class SightTourControllerTest extends WebTestCase
         /** @var Sight $sight */
         $sight = $this->manager->getRepository('AppBundle:Sight')->findSightFirstResult();
 
-        $data = [
+        $dataRequest = [
             'name'         => '3 дні у Празі',
             'company_name' => 'Аккорд',
             'tour_link'    => 'http://www.accord.com.ua/tour-y-pragy',
@@ -87,7 +87,7 @@ class SightTourControllerTest extends WebTestCase
         $this->client->request(
             'POST',
             '/api/v1/sight-tours',
-            $data,
+            $dataRequest,
             [],
             ['Content-Type' => 'application/json'],
             []
@@ -98,10 +98,10 @@ class SightTourControllerTest extends WebTestCase
 
         $this->assertStatusCode(Response::HTTP_CREATED, $this->client);
         $this->assertEquals(201, $data['code']);
-
-        foreach ($data as $key => $element) {
-            $this->assertEquals($element, $data[$key]);
-        }
+        $this->assertEquals($dataRequest['name'], $data['sight_tour']['name']);
+        $this->assertEquals($dataRequest['company_name'], $data['sight_tour']['company_name']);
+        $this->assertEquals($dataRequest['price'], $data['sight_tour']['price']);
+        $this->assertEquals($dataRequest['sight'], $data['sight_tour']['sight']['id']);
     }
 
     public function testUpdateAction()
@@ -109,7 +109,7 @@ class SightTourControllerTest extends WebTestCase
         /** @var Sight $sight */
         $sight = $this->manager->getRepository('AppBundle:Sight')->findSightFirstResult();
 
-        $data = [
+        $dataRequest = [
             'name'         => '4 дні у Празі',
             'company_name' => '5-Аккорд',
             'company_link' => 'http://www.one.com',
@@ -121,7 +121,7 @@ class SightTourControllerTest extends WebTestCase
         $this->client->request(
             'PUT',
             '/api/v1/sight-tours/ekskursiyna-programa-po-mistu-kam-yanec-podilskomu',
-            $data,
+            $dataRequest,
             [],
             ['Content-Type' => 'application/json'],
             []
@@ -132,10 +132,10 @@ class SightTourControllerTest extends WebTestCase
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $this->assertEquals(200, $data['code']);
-
-        foreach ($data as $key => $element) {
-            $this->assertEquals($element, $data[$key]);
-        }
+        $this->assertEquals($dataRequest['name'], $data['sight_tour']['name']);
+        $this->assertEquals($dataRequest['company_name'], $data['sight_tour']['company_name']);
+        $this->assertEquals($dataRequest['price'], $data['sight_tour']['price']);
+        $this->assertEquals($dataRequest['sight'], $data['sight_tour']['sight']['id']);
     }
 
     private function comparisonSightTour(array $data)

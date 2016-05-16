@@ -42,7 +42,7 @@ class User extends BaseUser
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @JMS\Expose
-     * @JMS\Groups({"user", "friend", "sight_visits", "sight_photo", "sight_review"})
+     * @JMS\Groups({"user", "friend", "sight_visits", "sight_photo", "sight_review", "sight_recommend"})
      * @JMS\Since("1.0")
      */
     protected $id;
@@ -98,10 +98,20 @@ class User extends BaseUser
     private $sightPhotos;
 
     /**
+     * @var ArrayCollection|SightRecommend[] $sightRecommends Sight recommends
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\SightRecommend", mappedBy="user")
+     *
+     * @JMS\Expose
+     * @JMS\Since("1.0")
+     */
+    private $sightRecommends;
+
+    /**
      * @var string $username Username
      *
      * @JMS\Expose
-     * @JMS\Groups({"user", "friend", "sight_visits", "sight_photo", "sight_review"})
+     * @JMS\Groups({"user", "friend", "sight_visits", "sight_photo", "sight_review", "sight_recommend"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -112,7 +122,7 @@ class User extends BaseUser
      * @var string $email Email
      *
      * @JMS\Expose
-     * @JMS\Groups({"user", "friend", "sight_visits", "sight_photo", "sight_review"})
+     * @JMS\Groups({"user", "friend", "sight_visits", "sight_photo", "sight_review", "sight_recommend"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -590,6 +600,57 @@ class User extends BaseUser
             $sightReview->setUser($this);
         }
         $this->sightReviews = $sightReviews;
+
+        return $this;
+    }
+
+    /**
+     * Add sight recommend
+     *
+     * @param SightRecommend $sightRecommend Sight recommend
+     *
+     * @return $this
+     */
+    public function addSightRecommend(SightRecommend $sightRecommend)
+    {
+        $this->sightRecommends[] = $sightRecommend;
+
+        return $this;
+    }
+
+    /**
+     * Remove sight recommend
+     *
+     * @param SightRecommend $sightRecommend Sight recommend
+     */
+    public function removeSightRecommend(SightRecommend $sightRecommend)
+    {
+        $this->sightRecommends->removeElement($sightRecommend);
+    }
+
+    /**
+     * Get sight recommends
+     *
+     * @return ArrayCollection|SightRecommend[] Sight recommends
+     */
+    public function getSightRecommends()
+    {
+        return $this->sightRecommends;
+    }
+
+    /**
+     * Set sight recommends
+     *
+     * @param ArrayCollection|SightRecommend[] $sightRecommends Sight recommends
+     *
+     * @return $this
+     */
+    public function setSightRecommends(ArrayCollection $sightRecommends)
+    {
+        foreach ($sightRecommends as $sightRecommend) {
+            $sightRecommend->setUser($this);
+        }
+        $this->sightRecommends = $sightRecommends;
 
         return $this;
     }

@@ -38,9 +38,6 @@ class LoadSightReviewData extends AbstractFixture implements DependentFixtureInt
         /** @var User $user1 */
         /** @var User $user2 */
         /** @var User $user3 */
-        /** @var User $user4 */
-        /** @var User $user5 */
-        /** @var User $user6 */
         $user1 = $this->getReference('user-1');
         $user2 = $this->getReference('user-2');
         $user3 = $this->getReference('user-3');

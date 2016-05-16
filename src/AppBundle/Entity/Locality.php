@@ -35,7 +35,7 @@ class Locality
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_ticket", "sight_tour", "sight_ticket_for_sight", "sight_visits", "sight_photo", "sight_review"})
+     * @JMS\Groups({"sight", "sight_ticket", "sight_tour", "sight_ticket_for_sight", "sight_visits", "sight_photo", "sight_review", "sight_recommend"})
      * @JMS\Since("1.0")
      */
     private $id;
@@ -49,7 +49,7 @@ class Locality
      * @Assert\NotBlank()
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_ticket", "sight_tour", "sight_ticket_for_sight", "sight_visits", "sight_visits_friends", "sight_photo", "sight_review"})
+     * @JMS\Groups({"sight", "sight_ticket", "sight_tour", "sight_ticket_for_sight", "sight_visits", "sight_visits_friends", "sight_photo", "sight_review", "sight_recommend"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -87,7 +87,7 @@ class Locality
      * @Assert\Type(type="string")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_ticket", "sight_tour", "sight_ticket_for_sight", "sight_visits", "sight_visits_friends", "sight_photo", "sight_review"})
+     * @JMS\Groups({"sight", "sight_ticket", "sight_tour", "sight_ticket_for_sight", "sight_visits", "sight_visits_friends", "sight_photo", "sight_review", "sight_recommend"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned
@@ -100,7 +100,7 @@ class Locality
      * @ORM\Column(type="string", unique=true)
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_ticket", "sight_tour", "sight_ticket_for_sight", "sight_visits", "sight_visits_friends", "sight_photo", "sight_review"})
+     * @JMS\Groups({"sight", "sight_ticket", "sight_tour", "sight_ticket_for_sight", "sight_visits", "sight_visits_friends", "sight_photo", "sight_review", "sight_recommend"})
      * @JMS\Since("1.0")
      */
     private $slug;

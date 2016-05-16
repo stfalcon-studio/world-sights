@@ -25,6 +25,37 @@ class UserController extends FOSRestController
     use ControllerHelperTrait, RollbarHelperTrait;
 
     /**
+     * Get information about user
+     *
+     * @return Response
+     *
+     * @ApiDoc(
+     *     description="Get information about user",
+     *     section="Locality",
+     *     statusCodes={
+     *          200="Returned when successful",
+     *          500="Returned when internal error on the server occurred"
+     *      }
+     * )
+     *
+     * @Rest\Get("")
+     */
+    public function getAction()
+    {
+        try {
+            $user = $this->getUser();
+
+            $view = $this->createViewForHttpOkResponse(['user' => $user]);
+            $view->setSerializationContext(SerializationContext::create()->setGroups(['user']));
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
      * Registration new user
      *
      * @param Request $request Request

@@ -33,7 +33,7 @@ class SightType
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo", "sight_review"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo", "sight_review", "sight_recommend"})
      * @JMS\Since("1.0")
      */
     private $id;
@@ -55,7 +55,7 @@ class SightType
      * @Assert\Type(type="string")
      *
      * @JMS\Expose
-     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo", "sight_review"})
+     * @JMS\Groups({"sight", "sight_tour", "sight_ticket", "sight_visits", "sight_visits_friends", "sight_photo", "sight_review", "sight_recommend"})
      * @JMS\Since("1.0")
      *
      * @Gedmo\Versioned

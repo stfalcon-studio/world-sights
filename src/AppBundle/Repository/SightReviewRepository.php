@@ -34,9 +34,9 @@ class SightReviewRepository extends EntityRepository
     }
 
     /**
-     * @param User $user User
-     *
      * Get total number of enabled sight reviews by user
+     *
+     * @param User $user User
      *
      * @return int
      */
@@ -114,5 +114,39 @@ class SightReviewRepository extends EntityRepository
                   ->setMaxResults($pagination->getLimit())
                   ->getQuery()
                   ->getResult();
+    }
+
+    /**
+     * Get total number of enabled sight reviews by sight
+     *
+     * @param Sight $sight Sight
+     *
+     * @return int
+     */
+    public function getTotalNumberOfEnabledSightReviewsBySight(Sight $sight)
+    {
+        $qb = $this->createQueryBuilder('s');
+
+        return (int) $qb->select('COUNT(s)')
+                        ->where($qb->expr()->eq('s.sight', ':sight'))
+                        ->andWhere($qb->expr()->eq('s.enabled', true))
+                        ->setParameter('sight', $sight)
+                        ->getQuery()
+                        ->getSingleScalarResult();
+    }
+
+    /**
+     * Get total number of enabled sight reviews
+     *
+     * @return int
+     */
+    public function getTotalNumberOfEnabledSightReviews()
+    {
+        $qb = $this->createQueryBuilder('s');
+
+        return (int) $qb->select('COUNT(s)')
+                        ->where($qb->expr()->eq('s.enabled', true))
+                        ->getQuery()
+                        ->getSingleScalarResult();
     }
 }
