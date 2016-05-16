@@ -7,9 +7,11 @@ use AppBundle\Entity\SightRecommend;
 use AppBundle\Entity\User;
 use AppBundle\Form\Model\Pagination;
 use AppBundle\Form\Type\PaginationType;
+use AppBundle\Form\Type\SightRecommendType;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use JMS\Serializer\SerializationContext;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -243,5 +245,159 @@ class SightRecommendController extends FOSRestController
         }
 
         return $this->handleView($view);
+    }
+
+    /**
+     * Update sight recommend
+     *
+     * @param Request $request Request
+     *
+     * @return Response
+     *
+     * @ApiDoc(
+     *      section="Sight Recommend",
+     *      description="Create a new sight recommend",
+     *      input="AppBundle\Form\Type\SightRecommendType",
+     *      output={
+     *          "class"="AppBundle\Entity\SightRecommend",
+     *          "groups"={"sight_recommend"}
+     *      },
+     *      statusCodes={
+     *          201="Returned when successful",
+     *          400="Returned when the form has errors or invalid data",
+     *          500="Returned when internal error on the server occurred"
+     *      }
+     * )
+     *
+     * @Rest\Post("")
+     * @ParamConverter(class="AppBundle:SightRecommend", converter="sight_recommend_converter")
+     */
+    public function createAction(Request $request)
+    {
+        try {
+            $form = $this->createForm(SightRecommendType::class);
+
+            $form->submit($request->request->all());
+            if ($form->isValid()) {
+                /** @var SightRecommend $sightRecommend */
+                $sightRecommend = $form->getData();
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($sightRecommend);
+                $em->flush();
+
+                $view = $this->createViewForHttpCreatedResponse(['sight_recommend' => $sightRecommend]);
+                $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_recommend']));
+            } else {
+                $view = $this->createViewForValidationErrorResponse($form);
+            }
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * Update sight recommend
+     *
+     * @param Request        $request        Request
+     * @param SightRecommend $sightRecommend Sight recommend
+     *
+     * @return Response
+     *
+     * @ApiDoc(
+     *      section="Sight Recommend",
+     *      description="Update sight recommend",
+     *      input="AppBundle\Form\Type\SightRecommendType",
+     *      output={
+     *          "class"="AppBundle\Entity\SightRecommend",
+     *          "groups"={"sight_recommend"}
+     *      },
+     *      requirements={
+     *          {"name"="id", "dataType"="integer", "requirement"="\d+", "description"="ID of sight recommend"}
+     *      },
+     *      statusCodes={
+     *          200="Returned when successful",
+     *          400="Returned when the form has errors or invalid data",
+     *          500="Returned when internal error on the server occurred"
+     *      }
+     * )
+     *
+     * @Rest\Put("/{id}")
+     *
+     * @ParamConverter(class="AppBundle:SightRecommend", converter="sight_recommend_converter")
+     * @ParamConverter("sight", class="AppBundle:SightRecommend")
+     */
+    public function updateAction(Request $request, SightRecommend $sightRecommend)
+    {
+        try {
+            $form = $this->createForm(SightRecommendType::class, $sightRecommend);
+
+            $form->submit($request->request->all(), false);
+            if ($form->isValid()) {
+                $user = $this->getUser();
+                if ($user === $sightRecommend->getUser()) {
+                    /** @var SightRecommend $sightRecommend */
+                    $sightRecommend = $form->getData();
+
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($sightRecommend);
+                    $em->flush();
+
+                    $view = $this->createViewForHttpOkResponse(['sight_recommend' => $sightRecommend]);
+                    $view->setSerializationContext(SerializationContext::create()->setGroups(['sight_recommend']));
+                } else {
+                    $form->get('user')->addError(new FormError('User must be author sight recommend'));
+
+                    $view = $this->createViewForValidationErrorResponse($form);
+                }
+            } else {
+                $view = $this->createViewForValidationErrorResponse($form);
+            }
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * Delete sight recommend
+     *
+     * @param SightRecommend $sightRecommend Sight recommend
+     *
+     * @return Response
+     *
+     * @ApiDoc(
+     *       requirements={
+     *          {"name"="id", "dataType"="integer", "requirement"="\d+", "description"="ID of sight recommend"}
+     *      },
+     *      section="Sight Recommend",
+     *      statusCodes={
+     *          204="Returned when successful",
+     *          500="Returned when an error has occurred",
+     *      }
+     * )
+     *
+     * @Rest\Delete("/{id}")
+     *
+     * @ParamConverter("id", class="AppBundle:SightRecommend")
+     */
+    public function deleteAction(SightRecommend $sightRecommend)
+    {
+        try {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($sightRecommend);
+
+            $em->flush();
+        } catch (\Exception $e) {
+            $this->sendExceptionToRollbar($e);
+            throw $this->createInternalServerErrorException();
+        }
+
+        return $this->createViewForHttpNoContentResponse();
     }
 }
