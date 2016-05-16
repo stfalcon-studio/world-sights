@@ -6,6 +6,7 @@ framework:
     session:
         storage_id: session.storage.mock_file
     profiler:
+        enabled: true
         collect: false
 
 web_profiler:
@@ -14,3 +15,5 @@ web_profiler:
 
 swiftmailer:
     disable_delivery: true
+
+liip_functional_test: ~

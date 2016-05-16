@@ -1,0 +1,36 @@
+services:
+    app.add_user.listener:
+        class: AppBundle\EventListener\AddUserToFriendListener
+        tags:
+            - { name: kernel.event_listener, event: event.add_user_to_friend, method: onUserAddToFriend }
+        arguments:
+            - "@doctrine.orm.default_entity_manager"
+
+    app.friend.listener:
+        class: AppBundle\EntityListener\FriendListener
+        tags:
+            -  { name: doctrine.orm.entity_listener }
+        arguments:
+            - "@security.token_storage"
+
+    app.sight_photo.listener:
+        class: AppBundle\EventListener\AddUserToSightPhotoListener
+        tags:
+            - { name: kernel.event_listener, event: event.add_user_to_sight_photo, method: onUserAddToSightPhoto }
+        arguments:
+            - "@doctrine.orm.default_entity_manager"
+
+    app.sight_visit.listener:
+        class: AppBundle\EventListener\AddUserToSightVisitListener
+        tags:
+            - { name: kernel.event_listener, event: event.add_user_to_sight_visit, method: onUserAddToSightVisit }
+        arguments:
+            - "@doctrine.orm.default_entity_manager"
+
+    app.slug.listener:
+        class: AppBundle\EntityListener\SlugListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }
+        arguments:
+            - "@app.slug"

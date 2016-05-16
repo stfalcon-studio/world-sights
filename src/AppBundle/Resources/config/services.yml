@@ -1,0 +1,24 @@
+services:
+    app.friend_status:
+        class: AppBundle\Service\FriendStatusService
+        arguments: ['@doctrine.orm.entity_manager']
+
+    app.security.authentication_rest_handler:
+        class: AppBundle\Handler\AuthenticationRestHandler
+        arguments: ['@doctrine.orm.entity_manager']
+
+    app.sight_photo:
+        class: AppBundle\Service\SightPhotoService
+        arguments:
+            - '@vich_uploader.templating.helper.uploader_helper'
+            - '@router'
+
+    app.slug:
+        class: AppBundle\Service\SlugService
+        arguments:
+            - '@slugify'
+
+    app.token_authenticator:
+        class: AppBundle\Security\TokenAuthenticator
+        arguments: ['@doctrine.orm.entity_manager']
+
