@@ -1,0 +1,43 @@
+api_country:
+    resource: AppBundle\Controller\CountryController
+    type: rest
+
+api_friend:
+    resource: AppBundle\Controller\FriendController
+    type: rest
+
+api_locality:
+    resource: AppBundle\Controller\LocalityController
+    type: rest
+
+api_sight:
+    resource: AppBundle\Controller\SightController
+    type: rest
+
+api_sight_photo:
+    resource: AppBundle\Controller\SightPhotoController
+    type: rest
+
+api_sight_recommend:
+    resource: AppBundle\Controller\SightRecommendController
+    type: rest
+
+api_sight_review:
+    resource: AppBundle\Controller\SightReviewController
+    type: rest
+
+api_sight_tour:
+    resource: AppBundle\Controller\SightTourController
+    type: rest
+
+api_sight_ticket:
+    resource: AppBundle\Controller\SightTicketController
+    type: rest
+
+api_sight_user:
+    resource: AppBundle\Controller\UserController
+    type: rest
+
+api_sight_visit:
+    resource: AppBundle\Controller\SightVisitController
+    type: rest

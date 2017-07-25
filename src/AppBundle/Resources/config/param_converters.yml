@@ -1,0 +1,16 @@
+services:
+    app.param_converter.sight_recommend_converter:
+        class:  AppBundle\Request\ParamConverter\SightRecommendConverter
+        tags:
+            - { name: request.param_converter, converter: sight_recommend_converter }
+        arguments:
+            - '@doctrine.orm.default_entity_manager'
+            - '@security.token_storage'
+
+    app.param_converter.sight_review_converter:
+        class:  AppBundle\Request\ParamConverter\SightReviewConverter
+        tags:
+            - { name: request.param_converter, converter: sight_review_converter }
+        arguments:
+            - '@doctrine.orm.default_entity_manager'
+            - '@security.token_storage'

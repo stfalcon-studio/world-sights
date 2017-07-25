@@ -1,24 +1,41 @@
-# To get started with security, check out the documentation:
-# http://symfony.com/doc/current/book/security.html
 security:
+    encoders:
+        AppBundle\Entity\User:
+            algorithm: bcrypt
 
-    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username
         in_memory:
             memory: ~
 
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
         main:
+            pattern: ^/
+            form_login:
+                provider: fos_userbundle
+                check_path: /api/v1/users/login
+                failure_handler: app.security.authentication_rest_handler
+                success_handler: app.security.authentication_rest_handler
+                username_parameter: username
+                password_parameter: password
+                remember_me: false
+                require_previous_session: false
+
+            guard:
+                authenticators:
+                    - app.token_authenticator
+
             anonymous: ~
-            # activate different ways to authenticate
+            logout: ~
 
-            # http_basic: ~
-            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
+    access_control:
+        - { path: ^/api/v1/users/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/v1/users/registration$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/doc$, role: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/api/, role: ROLE_USER }
 
-            # form_login: ~
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html

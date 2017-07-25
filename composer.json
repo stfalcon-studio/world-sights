@@ -1,6 +1,6 @@
 {
-    "name": "zenmate/my_project",
-    "license": "proprietary",
+    "name": "stfalcon/world-sights",
+    "license": "MIT",
     "type": "project",
     "autoload": {
         "psr-4": {
@@ -28,11 +28,17 @@
         "sonata-project/doctrine-orm-admin-bundle": "^2.3",
         "friendsofsymfony/rest-bundle": "^1.7",
         "jms/serializer-bundle": "^1.1",
-        "nelmio/api-doc-bundle": "^2.12"
+        "nelmio/api-doc-bundle": "^2.12",
+        "cocur/slugify": "^1.4",
+        "fresh/doctrine-enum-bundle": "4.5",
+        "friendsofsymfony/user-bundle": "~2.0@dev",
+        "vich/uploader-bundle": "^0.14.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
-        "symfony/phpunit-bridge": "~2.7"
+        "symfony/phpunit-bridge": "~2.7",
+        "doctrine/doctrine-fixtures-bundle": "^2.3",
+        "liip/functional-test-bundle": "^1.6"
     },
     "scripts": {
         "post-install-cmd": [

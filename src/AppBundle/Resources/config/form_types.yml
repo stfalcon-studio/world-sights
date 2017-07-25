@@ -1,0 +1,24 @@
+services:
+    app.form.friend:
+        class: AppBundle\Form\Type\FriendType
+        tags:
+            - { name: form.type, alias: friend }
+        arguments:
+            - "@security.token_storage"
+            - "@event_dispatcher"
+
+    app.form.sight_photo:
+        class: AppBundle\Form\Type\SightPhotoType
+        tags:
+            - { name: form.type, alias: sight_photo }
+        arguments:
+            - "@security.token_storage"
+            - "@event_dispatcher"
+
+    app.form.sight_visit:
+        class: AppBundle\Form\Type\SightVisitType
+        tags:
+            - { name: form.type, alias: sight_visit }
+        arguments:
+            - "@security.token_storage"
+            - "@event_dispatcher"
